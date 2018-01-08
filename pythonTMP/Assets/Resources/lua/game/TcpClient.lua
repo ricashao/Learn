@@ -1,0 +1,339 @@
+
+local socket = require("socket")
+
+local protobuf = require 'lua/protobuf'
+--lua 字节操作
+--http://giderosmobile.com/forum/discussion/1083/any-demo-code-for-lua-socket/p1
+local bit32 = require "lua/numberlua".bit32
+
+local msgEventManager = require "lua/utils/events"
+
+local pbtable = {}
+
+local this = scriptEnv
+
+this.msm = msgEventManager
+this.proto = protobuf
+this.pb = pbtable
+
+local client
+--///////////////////////////////////////////// byte function /////////////////////////////////////////////
+function int32_big_endian(str)
+  return string.byte(str, 1) * 16777216 + string.byte(str, 2) * 65536 + string.byte(str, 3) * 256 + string.byte(str, 4)
+end 
+
+function int32_little_endian(str)
+  return string.byte(str, 4) * 16777216 + string.byte(str, 3) * 65536 + string.byte(str, 2) * 256 + string.byte(str, 1)
+end
+
+-- Integer 32 bit serialization (big-endian)
+function serialize_int32_big_endian(value)
+  local a = bit32.band(bit32.rshift(value, 24), 255)
+  local b = bit32.band(bit32.rshift(value, 16), 255)
+  local c = bit32.band(bit32.rshift(value, 8), 255)
+  local d = bit32.band(value, 255)
+  return string.char(a, b, c, d)
+end
+
+-- Integer 32 bit serialization (little-endian)
+function serialize_int32_little_endian(value)
+  local a = bit32.band(bit32.rshift(value, 24), 255)
+  local b = bit32.band(bit32.rshift(value, 16), 255)
+  local c = bit32.band(bit32.rshift(value, 8), 255)
+  local d = bit32.band(value, 255)
+  return string.char(d, c, b, a)
+end
+
+--///////////////////////////////////////// end byte function ///////////////////////////////////////////// 
+
+--/////////////////////////////////////// tcp socket function /////////////////////////////////////////////
+--连接服务器
+function connect(host,port)
+    
+    --host = "127.0.0.1"
+    --port = 9888
+    -- 打开一个TCP连接
+    -- client = assert (socket.connect (host, port))
+    client = socket.connect (host, port)
+    if client == nil then 
+        print("connect:"..host..port.." fail !")
+        return
+    end
+    -- non-blocking 非阻塞 
+    client:settimeout(0);
+end
+
+--发送数据
+function send(msg)
+    --client:send ("GET \n")
+    if client == nil then 
+        print("connect:"..host..port.." fail !")
+        return
+    end
+    client:send (msg)
+end
+
+--本次接受的字节数
+local len = 4
+-- 0 表示包体长度
+-- 1 表示包体数据
+local msgtype = 0
+
+--消息接受方法
+function receive() 
+    
+    if client == nil then return end
+    --轮询缓冲区 len 为字节长度
+    local msg, status, partial = client:receive(len)
+
+    if msg ~= nil then
+
+        print("lua socket receive len->"..#msg)
+
+        if msgtype == 0 then
+            --反序列化包体长度
+            len = int32_little_endian(msg)
+            print("数据包长度->"..len)
+            --设置读取状态为读取包体数据
+            msgtype = 1;
+        else
+            --print("数据包内容->"..msg)
+            --调用解包函数
+            --unpacket(msg)
+            unpacketpbc(msg)
+            --重置读取状态为读取包头长度
+            msgtype = 0; 
+            len = 4
+        end
+    end
+
+    if status == "closed" then 
+        --服务器关闭！
+        print("server closed!!")
+        client:close() 
+        client = nil
+    end
+    
+end
+
+--解包
+function unpacket(body)
+    string.sub(packet, 2)
+end
+
+--打包
+function packet(body)
+  local size = #body + 4
+  return serialize_int32_little_endian(size) .. body
+end
+
+--关闭当前连接
+function close()
+    if client == nil then return end
+    client:close() 
+end
+
+--清理数据
+function clear()
+    close()
+end
+
+--//////////////////////////////////// end tcp socket function /////////////////////////////////////////////
+
+--///////////////////////////////////////////// Behaviour Call ///////////////////////////////////////////// 
+function start()
+
+	print("TcpClinet start...")
+
+    --register()
+
+    --connect()
+
+    --testPbc()
+    --testPbc2()
+
+    --发送测试消息！
+    --send("GET \n")
+end
+
+function update()
+	--消息接受循环
+    receive() 
+end
+
+function ondestroy()
+    clear()
+    print("LuaSocketBehaviour destroy")
+end
+
+--///////////////////////////////////////// end Behaviour Call ///////////////////////////////////////////// 
+
+--///////////////////////////////////////////// pbc function ///////////////////////////////////////////////
+
+function testPbc2()
+
+    --local protobuf = require 'protobuf' 
+
+    buffer = CS.UnityEngine.Resources.Load('proto/addressbook.pb').bytes
+
+    protobuf.register(buffer)
+
+    t = protobuf.decode("google.protobuf.FileDescriptorSet", buffer)
+
+    proto = t.file[1]
+
+    print(proto.name)
+    print(proto.package)
+
+    message = proto.message_type
+
+    for _,v in ipairs(message) do
+        print(v.name)
+        for _,v in ipairs(v.field) do
+            print("\t".. v.name .. " ["..v.number.."] " .. v.label)
+        end
+    end
+
+    addressbook = {
+        name = "Alice",
+        id = 12345,
+        phone = {
+            { number = "1301234567" },
+            { number = "87654321", type = "WORK" },
+        }
+    }
+
+    code = protobuf.encode("tutorial.Person", addressbook)
+
+    decode = protobuf.decode("tutorial.Person" , code)
+
+    print(decode.name)
+    print(decode.id)
+    
+    for _,v in ipairs(decode.phone) do
+        print("\t"..v.number, v.type)
+    end
+
+    phonebuf = protobuf.pack("tutorial.Person.PhoneNumber number","87654321")
+    buffer = protobuf.pack("tutorial.Person name id phone", "Alice", 123, { phonebuf })
+    print(protobuf.unpack("tutorial.Person name id phone", buffer))
+
+    --发送测试！
+    send(packetpbc(1,2,code));
+end
+
+function testPbc()
+
+    local protobuf = require 'protobuf' 
+    protobuf.register(CS.UnityEngine.Resources.Load('proto/UserInfo.pb').bytes)
+    protobuf.register(CS.UnityEngine.Resources.Load('proto/User.pb').bytes)
+
+    local userInfo = {}
+    userInfo.name = 'world'
+    userInfo.diamond = 998
+    userInfo.level = 100
+
+    local user = {}
+    user.id = 1
+    user.status = {1,0,2,4}
+    user.pwdMd5 = 'md5'
+    user.regTime = '2017-03-29 12:00:00'
+    user.info = userInfo
+
+    -- 序列化
+    local encode = protobuf.encode('User', user)
+
+    -- 反序列化
+    local user_decode = protobuf.decode('User', encode)
+
+    assert(user.id == user_decode.id and user.info.diamond == user_decode.info.diamond)
+        
+    print('name', user_decode.info.name)
+    print('diamond', user_decode.info.diamond)
+
+end
+
+--pbc 注册方法
+function register()
+    --[[
+    protobuf.register(CS.UnityEngine.Resources.Load('proto/UserInfo.pb').bytes)
+    protobuf.register(CS.UnityEngine.Resources.Load('proto/User.pb').bytes)
+    protobuf.register(CS.UnityEngine.Resources.Load('proto/addressbook.pb').bytes)
+
+    pbtable [string.char(1, 2)] = "tutorial.Person"
+    ]]
+end
+
+function sendmsg(msgKey,data)
+   
+    --print("send len->".. pbtable[msgKey])
+
+    pbbody = protobuf.encode(pbtable[msgKey], data )
+
+    packet = msgKey..pbbody
+
+    print("send len->".. #packet)
+
+    send( serialize_int32_little_endian(#packet) .. packet )
+end
+
+--解包方法
+function unpacketpbc(packet)
+
+    local key = string.byte(packet, 1)
+    local code = string.byte(packet, 2)
+
+    local msgKey = string.char(key,code)
+
+    print("key = "..key..",code = "..code)
+    -- string 下标从 1 开始
+    pbbody = string.sub(packet, 3)
+
+    --pbbody = packet 
+    --print("pbbody = "..pbbody)
+
+    -- 反序列化
+    --decode = protobuf.decode("tutorial.Person" , pbbody)
+    --decode = protobuf.decode(pbtable[string.char(1, 2)] , pbbody);
+    local decode = protobuf.decode(pbtable[msgKey] , pbbody);
+
+    --print(protobuf.unpack("tutorial.Person name id phone", decode))
+
+    --for key, v in pairs(decode) do      
+    --    print(v)
+    --end  
+
+    --print(decode.name)
+    --print(decode.id)
+    --print(decode.email)
+
+    --[[
+    for _,v in ipairs(decode.phone) do
+        print("\t"..v.number, v.type)
+    end
+    ]]
+
+    --分发消息
+    this.msm.Send(msgKey,decode)
+
+end 
+
+--打包方法
+function packetpbc(key,code,pbbody)
+    
+    packet = key..code..pbbody
+
+    print("send len->".. #packet)
+
+    return serialize_int32_little_endian(#packet) .. packet
+end 
+
+function addlistener(msgcmd,fun)
+    this.msm.AddListener(msgcmd,fun)
+end 
+
+function removelistener(msgcmd,fun)
+    this.msm.RemoveListener(msgcmd,fun)
+end 
+
+--///////////////////////////////////////// end pbc function ///////////////////////////////////////////////

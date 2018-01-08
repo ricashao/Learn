@@ -1,0 +1,10 @@
+DemoGameHudPanel=ui/demogamehudpanel.panel
+Assets/UI/DemoGameHudPanel.prefab=ui/demogamehudpanel.panel
+DemoListPanel=ui/demolistpanel.panel
+Assets/UI/DemoListPanel.prefab=ui/demolistpanel.panel
+DemoPanel=ui/demopanel.panel
+Assets/UI/DemoPanel.prefab=ui/demopanel.panel
+MessageBoxPrefab=ui/messageboxprefab.panel
+Assets/Libs/UGUIExt/PopWindow/MessageBoxPkg/Resources/MessageBoxPrefab.prefab=ui/messageboxprefab.panel
+ScalingToast=ui/scalingtoast.panel
+Assets/Libs/UGUIExt/PopWindow/MessageBoxPkg/Resources/ScalingToast.prefab=ui/scalingtoast.panel

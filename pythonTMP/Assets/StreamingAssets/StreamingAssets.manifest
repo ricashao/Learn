@@ -1,0 +1,19 @@
+ManifestFileVersion: 0
+CRC: 2523101698
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: ui/demopanel.panel
+      Dependencies: {}
+    Info_1:
+      Name: ui/messageboxprefab.panel
+      Dependencies: {}
+    Info_2:
+      Name: ui/demogamehudpanel.panel
+      Dependencies: {}
+    Info_3:
+      Name: ui/demolistpanel.panel
+      Dependencies: {}
+    Info_4:
+      Name: ui/scalingtoast.panel
+      Dependencies: {}

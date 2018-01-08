@@ -1,0 +1,38 @@
+--[[file = io.open('D:/iotest.lua.txt','w')
+io.output(file);
+io.write(11)
+file = io.open('D:/iotest.lua.txt','a')
+io.write('\n')
+io.write(22)]]
+
+--file = io.open('D:/iotest.lua.txt','r')
+-- for line in io.lines('D:/iotest.lua.txt') do
+	-- print(k,v)
+-- end
+
+-- file = io.open('D:/iotest.lua.txt','r')
+-- print(file:seek("set",2))
+-- print(file:read(4))
+
+-- test  = function (a,b)
+	-- print(a+b)
+-- end
+
+-- print(debug.getupvalue(test,1))
+-- newFunc = function ()
+	-- local n=0;
+	-- return function()
+		-- n=n+1
+		-- print(n);
+	-- end
+-- end
+-- test1 = newFunc()
+-- test2 = newFunc()
+-- test1()
+-- test1()
+-- test2()
+-- -- print(collectgarbage("count"))
+-- -- print(collectgarbage("collect"))
+-- -- print(collectgarbage("count"))
+-- print(collectgarbage("setstepmul"))
+-- print(collectgarbage("setpause"))
