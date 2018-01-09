@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2015
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pythonTMP", "pythonTMP.csproj", "{239B7571-D601-41DA-C297-963A73E542B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pythonTMP.Editor", "pythonTMP.Editor.csproj", "{FC3E232E-BB83-44ED-CDA9-74EFEFE06EBD}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{239B7571-D601-41DA-C297-963A73E542B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{239B7571-D601-41DA-C297-963A73E542B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{239B7571-D601-41DA-C297-963A73E542B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{239B7571-D601-41DA-C297-963A73E542B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC3E232E-BB83-44ED-CDA9-74EFEFE06EBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC3E232E-BB83-44ED-CDA9-74EFEFE06EBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC3E232E-BB83-44ED-CDA9-74EFEFE06EBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC3E232E-BB83-44ED-CDA9-74EFEFE06EBD}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
