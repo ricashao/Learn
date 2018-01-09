@@ -2,118 +2,129 @@
 using System.Collections.Generic;
 using UnityEngine;
 using XLua;
+using System;
 
-namespace ZhuYuU3d
-{
+namespace ZhuYuU3d{
 
-    public delegate void OnGameCmp(string assetName);
+	public class LuaManager : MonoBehaviour {
 
-    class UIManagerLoadItem
-    {
+		static LuaManager instance;
 
-        public string layer;
-        public OnGameCmp onGameCmp;
+		static public LuaManager GetInstance(){
 
-        public UIManagerLoadItem(string layer, OnGameCmp onGameCmp)
-        {
-            this.layer = layer;
-            this.onGameCmp = onGameCmp;
-        }
-    }
+			if(instance){
+				return instance;
+			}
+			GameObject gameObject = new GameObject (typeof(LuaManager).Name);
+			GameObject.DontDestroyOnLoad (gameObject);
 
-    public class UIManager : MonoBehaviour
-    {
+			instance = gameObject.AddComponent<LuaManager>();
+			return instance;
+		}
 
-        static UIManager instance;
+		internal static float lastGCTime = 0;
+		internal const float GCInterval = 1;//1 second 
 
-        static public UIManager GetInstance()
-        {
+		private	Action luaUpdate;
 
-            if (instance)
-            {
-                return instance;
-            }
-            GameObject gameObject = new GameObject(typeof(UIManager).Name);
-            GameObject.DontDestroyOnLoad(gameObject);
+		string _initDoString;
 
-            instance = gameObject.AddComponent<UIManager>();
-            return instance;
-        }
+		public string InitDoString {
+			set{
+				_initDoString = value;
+			}
+			get{
+				return _initDoString;
+			}
+		}
 
-        Dictionary<string, UIManagerLoadItem> luaCallBackDic = new Dictionary<string, UIManagerLoadItem>();
+		LuaEnv _env;
 
-        OnGameCmp onGameCmp;
+		public LuaEnv env {
+			get{
+				return _env;
+			}
+		}
 
-        LuaEnv env;
+		void Awake(){
+			if(instance == null)
+				instance = this;
+		}
 
-        string dfLayer = "Canvas";
+		public LuaEnv LuaEnvGetOrNew(){
+			if (_env == null)
+				return LuaEnvNew();
+			
+			return _env;
+		}
 
-        void Awake()
-        {
-            if (instance == null)
-                instance = this;
-            env = LuaManager.GetInstance().env;
-        }
-        // Use this for initialization
-        void Start()
-        {
-            //Load ();
-        }
-        /// <summary>
-        /// Load the specified panelName and funName.
-        /// </summary>
-        /// <param name="panelName">Panel name.</param>
-        /// <param name="funName">Fun name. 默认在 GameState.curLuaScene 找，如果没有在 Global 找 </param>
-        public void Load(string panelName, string funName, string layer)
-        {
+		public LuaEnv LuaEnvNew(){
 
-            LuaTable gameState = env.Global.Get<LuaTable>("GameState");
-            LuaTable curLuaScene = gameState.Get<LuaTable>("curLuaScene");
+			if (_env != null) {
+				Debug.LogWarning ("LuaManager New luaenv != NULL !");
+				_env.Dispose ();
+				_env = null;
+			}
+			_env = new LuaEnv();
+			LuaEnvInit ();
+			_env.DoString (_initDoString);
+			return _env;
+		}
 
-            onGameCmp = curLuaScene.Get<OnGameCmp>(funName);
+		public void LuaEnvDispose(){
 
-            if (onGameCmp == null)
-            {
-                Debug.LogWarningFormat("can not find lua function {0} in GameState.curLuaScene ", funName);
-                onGameCmp = env.Global.Get<OnGameCmp>(funName);
-            }
-            if (onGameCmp == null)
-            {
-                Debug.LogErrorFormat("can not find lua function {0} ", funName);
-                return;
-            }
-            luaCallBackDic.Add(panelName, new UIManagerLoadItem(layer, onGameCmp));
+			if (_env == null) {
+				Debug.LogError ("Error LuaManager Dispose luaenv == NULL !");
+				return;
+			}
+			_env.Dispose ();
+			_env = null;
+		}
 
-            Libs.AM.I.CreateFromCache(panelName, OnCmp);
-        }
+		void LuaEnvInit(){
+			//lua 文件查找目录
+			#if UNITY_EDITOR
+			_env.AddSearcher(ExtStaticLuaCallbacks.LoadFromResourceLuaFile, -1);
+			#endif
+			//模块注册
+			_env.AddBuildin("rapidjson", XLua.LuaDLL.Lua.LoadRapidJson);
+			_env.AddBuildin("lpeg", XLua.LuaDLL.Lua.LoadLpeg);
+			_env.AddBuildin("protobuf.c", XLua.LuaDLL.Lua.LoadProtobufC);
+		}
 
-        void OnCmp(string assetName, Object objInstantiateTp)
-        {
+		public void SetLuaUpdate(string luaUpdateFunName){
+			
+			if(_env == null){
+				Debug.LogErrorFormat("_env is null !");
+				return;
+			}
+			_env.Global.Get(luaUpdateFunName, out luaUpdate);
+			//luaUpdate = _env.Global.Get<Action> (luaUpdateFunName);
+			if (luaUpdate == null) {
+				Debug.LogErrorFormat ("not find {0} function !",luaUpdateFunName);
+			}
+		}
 
-            UIManagerLoadItem curLoadItem;
+		// Use this for initialization
+		void Start () {
 
-            luaCallBackDic.TryGetValue(assetName, out curLoadItem);
+		}
 
-            string Layer = dfLayer;
+		// Update is called once per frame
+		void Update () {
 
-            if (curLoadItem.layer != null && curLoadItem.layer != "")
-                Layer = curLoadItem.layer;
+			if (_env == null)
+				return;
 
-            GameObject objInstantiate = Instantiate((GameObject)objInstantiateTp);
-            objInstantiate.name = objInstantiate.name.Replace("(Clone)", "");
-            objInstantiate.transform.SetParent(GameObject.Find(Layer).transform, false);
+			if (luaUpdate != null)
+				luaUpdate ();
 
-            if (curLoadItem != null)
-                curLoadItem.onGameCmp(assetName);
-
-            luaCallBackDic.Remove(assetName);
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-
-        }
-    }
+			if (Time.time - lastGCTime > GCInterval)
+			{
+				_env.Tick();
+				lastGCTime = Time.time;
+			}
+		}
+	}
 
 }

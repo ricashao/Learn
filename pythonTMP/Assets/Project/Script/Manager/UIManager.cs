@@ -3,85 +3,117 @@ using System.Collections.Generic;
 using UnityEngine;
 using XLua;
 
-namespace ZhuYuU3d{
+namespace ZhuYuU3d
+{
 
-	public delegate void OnGameCmp(string assetName);
+    public delegate void OnGameCmp(string assetName);
 
-	public class UIManager : MonoBehaviour {
+    class UIManagerLoadItem
+    {
 
-		static UIManager instance;
+        public string layer;
+        public OnGameCmp onGameCmp;
 
-		static public UIManager GetInstance(){
+        public UIManagerLoadItem(string layer, OnGameCmp onGameCmp)
+        {
+            this.layer = layer;
+            this.onGameCmp = onGameCmp;
+        }
+    }
 
-			if(instance){
-				return instance;
-			}
-			GameObject gameObject = new GameObject (typeof(UIManager).Name);
-			GameObject.DontDestroyOnLoad (gameObject);
+    public class UIManager : MonoBehaviour
+    {
 
-			instance = gameObject.AddComponent<UIManager>();
-			return instance;
-		}
-			
-		Dictionary <string,OnGameCmp> luaCallBackDic = new Dictionary<string, OnGameCmp> ();
+        static UIManager instance;
 
-		OnGameCmp onGameCmp;
+        static public UIManager GetInstance()
+        {
 
-		LuaEnv	env;
+            if (instance)
+            {
+                return instance;
+            }
+            GameObject gameObject = new GameObject(typeof(UIManager).Name);
+            GameObject.DontDestroyOnLoad(gameObject);
 
-		void Awake(){
-			if(instance == null)
-				instance = this;
-			env = LuaManager.GetInstance ().env;
-		}
-		// Use this for initialization
-		void Start () {
-			//Load ();
-		}
-		/// <summary>
-		/// Load the specified panelName and funName.
-		/// </summary>
-		/// <param name="panelName">Panel name.</param>
-		/// <param name="funName">Fun name. 默认在 GameState.curLuaScene 找，如果没有在 Global 找 </param>
-		public void Load(string panelName,string funName){
+            instance = gameObject.AddComponent<UIManager>();
+            return instance;
+        }
 
-			LuaTable gameState = env.Global.Get<LuaTable> ("GameState");
-			LuaTable curLuaScene = gameState.Get<LuaTable> ("curLuaScene");
+        Dictionary<string, UIManagerLoadItem> luaCallBackDic = new Dictionary<string, UIManagerLoadItem>();
 
-			onGameCmp = curLuaScene.Get<OnGameCmp> (funName);
+        OnGameCmp onGameCmp;
 
-			if (onGameCmp == null) {
-				Debug.LogWarningFormat("can not find lua function {0} in GameState.curLuaScene ",funName);
-				onGameCmp = env.Global.Get<OnGameCmp> (funName);
-			}
-			if (onGameCmp == null) {
-				Debug.LogErrorFormat ("can not find lua function {0} ",funName);
-				return;
-			}
-			luaCallBackDic.Add (panelName,onGameCmp);
+        LuaEnv env;
 
-			Libs.AM.I.CreateFromCache (panelName, OnCmp);
-		}
+        string dfLayer = "Canvas";
 
-		void OnCmp (string assetName, Object objInstantiateTp){
+        void Awake()
+        {
+            if (instance == null)
+                instance = this;
+            env = LuaManager.GetInstance().env;
+        }
+        // Use this for initialization
+        void Start()
+        {
+            //Load ();
+        }
+        /// <summary>
+        /// Load the specified panelName and funName.
+        /// </summary>
+        /// <param name="panelName">Panel name.</param>
+        /// <param name="funName">Fun name. 默认在 GameState.curLuaScene 找，如果没有在 Global 找 </param>
+        public void Load(string panelName, string funName, string layer)
+        {
 
-			GameObject objInstantiate = Instantiate((GameObject)objInstantiateTp);
-			objInstantiate.name = objInstantiate.name.Replace("(Clone)","");
-			objInstantiate.transform.SetParent(GameObject.Find("Canvas").transform,false);
+            LuaTable gameState = env.Global.Get<LuaTable>("GameState");
+            LuaTable curLuaScene = gameState.Get<LuaTable>("curLuaScene");
 
-			OnGameCmp curOnGameCmp;
+            onGameCmp = curLuaScene.Get<OnGameCmp>(funName);
 
-			luaCallBackDic.TryGetValue (assetName,out curOnGameCmp);
-			if(curOnGameCmp != null)
-				curOnGameCmp (assetName);
-			
-			luaCallBackDic.Remove (assetName);
-		}
+            if (onGameCmp == null)
+            {
+                Debug.LogWarningFormat("can not find lua function {0} in GameState.curLuaScene ", funName);
+                onGameCmp = env.Global.Get<OnGameCmp>(funName);
+            }
+            if (onGameCmp == null)
+            {
+                Debug.LogErrorFormat("can not find lua function {0} ", funName);
+                return;
+            }
+            luaCallBackDic.Add(panelName, new UIManagerLoadItem(layer, onGameCmp));
 
-		// Update is called once per frame
-		void Update () {
+            Libs.AM.I.CreateFromCache(panelName, OnCmp);
+        }
 
-		}
-	}
+        void OnCmp(string assetName, Object objInstantiateTp)
+        {
+
+            UIManagerLoadItem curLoadItem;
+
+            luaCallBackDic.TryGetValue(assetName, out curLoadItem);
+
+            string Layer = dfLayer;
+
+            if (curLoadItem.layer != null && curLoadItem.layer != "")
+                Layer = curLoadItem.layer;
+
+            GameObject objInstantiate = Instantiate((GameObject)objInstantiateTp);
+            objInstantiate.name = objInstantiate.name.Replace("(Clone)", "");
+            objInstantiate.transform.SetParent(GameObject.Find(Layer).transform, false);
+
+            if (curLoadItem != null)
+                curLoadItem.onGameCmp(assetName);
+
+            luaCallBackDic.Remove(assetName);
+        }
+
+        // Update is called once per frame
+        void Update()
+        {
+
+        }
+    }
 
 }
