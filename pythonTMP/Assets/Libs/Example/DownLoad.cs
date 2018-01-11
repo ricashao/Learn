@@ -11,7 +11,8 @@ public class DownLoad : MonoBehaviour {
 	void Start () {
 		//DownLoadManager.I.Add();
 
-        DownLoadBatch downLoadBatch = new DownLoadBatch ("DownLoadBatch", OnDownLoadBatchCmp,OnDownLoadBatchError);
+		DownLoadBatch downLoadBatch = new DownLoadBatch ("DownLoadBatch",
+														OnDownLoadBatchCmp,OnDownLoadBatchError,OnDownLoadProgress);
 		string url = "https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo_top_ca79a146.png";
 		string saveFile = Application.streamingAssetsPath + "/" + System.IO.Path.GetFileName(url);
 		downLoadBatch.Add(url, saveFile);
@@ -28,11 +29,15 @@ public class DownLoad : MonoBehaviour {
 		UpZip("/Library/WebServer/Documents/data.zip","/Users/zhuyuu3d/Documents/webroot/unzip");
 	}
 
+	void OnDownLoadProgress(DownLoadBatch downLoadBatch,DownLoaderBese downLoaderBese){
+	
+	}
+
 	void OnDownLoadBatchCmp(DownLoadBatch downLoadBatch){
 		Debug.Log ("下载完成: " + downLoadBatch.name);
 	}
 
-    void OnDownLoadBatchError(DownLoadBatch downLoadBatch){
+	void OnDownLoadBatchError(DownLoadBatch downLoadBatch,DownLoaderBese downLoaderBese){
 		Debug.LogError ("下载错误! "+downLoadBatch.name);
     }
 

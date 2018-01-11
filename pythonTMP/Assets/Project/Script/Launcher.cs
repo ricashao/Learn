@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using PureMVC;
 
 public class Launcher : MonoBehaviour {
 
 	public string url = "file:///Users/zhuyuu3d/Documents/svn/U3D/u3d_xlua_project/Assets/StreamingAssets/md5filelist.txt";
+
+	AsyncOperation asyncOperation ;
 
 	void Awake(){
 		//热更新url
@@ -20,7 +23,7 @@ public class Launcher : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		CheckVersions ();
+		//CheckVersions ();
 	}
 
 	/* 检查版本更新 */
@@ -28,13 +31,21 @@ public class Launcher : MonoBehaviour {
 		AssetsUpdateManager.I.Check(url,OnAssetsUpdateCmp);
 	}
 
+    public void BeginUpdateResource()
+    {
+        
+    }
+
 	// Update is called once per frame
 	void OnAssetsUpdateCmp () {
 
-		Loom.QueueOnMainThread(()=>{
+		Loom.QueueOnMainThread(()=>
+        {
 			Debug.LogWarning("更新成功！");
 			/* 跳转到 loading */
-			AsyncOperation asyncOperation = SceneManager.LoadSceneAsync (1, LoadSceneMode.Single);
+			asyncOperation = SceneManager.LoadSceneAsync (1, LoadSceneMode.Single);
+
+
 
 		});
 			

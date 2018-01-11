@@ -100,9 +100,11 @@ public class Packager {
 			if(file.EndsWith(".meta") || file.EndsWith(".DS_Store") || file.IndexOf("/.svn") > -1  ){
                 continue;
             }
+			string srespath = file.Replace (Application.streamingAssetsPath, "");
+			srespath=srespath.Replace (@"\", "/");
             md5Str.AppendLine( string.Format("{0}={1}", 
                                //file.Substring(file.LastIndexOf("/") + 1 ),
-                               file.Replace(Application.streamingAssetsPath,""),
+							   srespath,
                                Md5Tools.md5file(file) ) );
         }
         /*

@@ -303,8 +303,7 @@ namespace Libs{
         public void Release(string assetName){
             Object gotp = null;
             assetPrefabDic.TryGetValue(assetName ,out gotp);
-            if (gotp)
-            {
+            if (gotp){
                 //1.删除Resources区 模板 在 缓存中的引用
                 assetPrefabDic.Remove(assetName);
                 //2.卸载Resources区
@@ -316,6 +315,23 @@ namespace Libs{
                 ABM.I.Release(FindAbPathByAssetName(assetName));
             }
         }
+
+		public void ReleaseAllGameObject(){
+			Object gotp = null;
+			foreach(string assetName in assetPrefabDic.Keys){
+				//Release (assetName);
+				gotp = assetPrefabDic[assetName];
+				//2.卸载Resources区
+				if(!( gotp is GameObject))
+					Resources.UnloadAsset(gotp);
+				//Destroy(gotp);
+				Debug.LogWarningFormat("AssetManager Release {0}" , assetName);
+				//3.ab镜像区引用计数-1
+				//ABM.I.Release(FindAbPathByAssetName(assetName));
+				//AssetBundleManagar.getInstance().Release(assetName);
+			}
+			assetPrefabDic.Clear ();
+		}
 
         public void Pop(){
             if (loadStack.Count > 0)
@@ -524,6 +540,46 @@ namespace Libs{
             }
         }//end Update()
             
+		void OnDestroy(){
+
+			ReleaseAllGameObject ();
+
+			//Dictionary<string,string> assetName2abPathDic = new Dictionary<string, string>();
+			assetName2abPathDic.Clear();
+			assetName2abPathDic = null;
+
+			//Dictionary<string,Object> assetPrefabDic = new Dictionary<string, Object>();
+			assetPrefabDic.Clear();
+			assetPrefabDic = null;
+
+			//Queue<AssetCreatorBase> assetLoading = new Queue<AssetCreatorBase>();
+			assetLoading.Clear ();
+			assetLoading = null;
+
+			//Stack<HashSet<string>> loadStack = new Stack<HashSet<string>>(); 
+			loadStack.Clear();
+			loadStack = null;
+
+			//string[] curReleaseArr;
+			curReleaseArr = null;
+
+			//Hashtable assetLoadingTable = new Hashtable();
+			assetLoadingTable = null;
+
+			instance = null;
+
+			Debug.LogWarning ("AssetManager OnDestroy");
+		}
+		/// <summary>
+		/// Destroy this instance.销毁
+		/// </summary>
+		public static void Destroy(){
+
+			if (instance != null) {
+				DestroyObject (instance);
+			}
+		}
+
         static List<Material> listMat = new List<Material>();
         public static void ResetShader(UnityEngine.Object obj)
         {

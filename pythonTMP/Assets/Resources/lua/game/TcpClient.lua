@@ -47,9 +47,12 @@ end
 --///////////////////////////////////////// end byte function ///////////////////////////////////////////// 
 
 --/////////////////////////////////////// tcp socket function /////////////////////////////////////////////
+local curHost
+local curPort
 --连接服务器
 function connect(host,port)
-    
+    curHost = host
+    curPort = port
     --host = "127.0.0.1"
     --port = 9888
     -- 打开一个TCP连接
@@ -62,12 +65,19 @@ function connect(host,port)
     -- non-blocking 非阻塞 
     client:settimeout(0);
 end
+--[[
+0,0,0,31,0,0,3,235,10,11,49,51,53,56,53,53,53,48,50,57,49,16,192,196,7,24,7,34,6,55,49,
 
+0,0,0,31,0,0,3,235,10,11,49,51,53,56,53,53,53,48,50,57,49,16,192,196,7,24,7,34,6,55,49,
+0 0 0 31 0 0 3 235 10 11 49 51 53 56 53 53 53 48 50 57 49 16 192 196 7 26 6 55 49 50 54 50 49 32 7 
+0,0,0,31,0,0,3,235,24,7,34,6,55,49,50,54,50,49,16,192,196,7,10,11,49,51,53,56,53,53,53,48,50,57,49  >> len:35
+0,0,0,31,0,0,3,235,32,7,10,11,49,51,53,56,53,53,53,48,50,57,49,26,6,55,49,50,54,50,49,16,192,196,7, >> len:35
+]]
 --发送数据
 function send(msg)
     --client:send ("GET \n")
     if client == nil then 
-        print("connect:"..host..port.." fail !")
+        print("connect:".. curHost..curPort.." fail !")
         return
     end
     client:send (msg)
@@ -92,7 +102,8 @@ function receive()
 
         if msgtype == 0 then
             --反序列化包体长度
-            len = int32_little_endian(msg)
+            --len = int32_little_endian(msg)
+            len = int32_big_endian(msg)
             print("数据包长度->"..len)
             --设置读取状态为读取包体数据
             msgtype = 1;
@@ -100,7 +111,8 @@ function receive()
             --print("数据包内容->"..msg)
             --调用解包函数
             --unpacket(msg)
-            unpacketpbc(msg)
+            --unpacketpbc(msg)
+            unpbc4b(msg)
             --重置读取状态为读取包头长度
             msgtype = 0; 
             len = 4
@@ -144,7 +156,6 @@ end
 function start()
 
 	print("TcpClinet start...")
-
     --register()
 
     --connect()
@@ -169,6 +180,53 @@ end
 --///////////////////////////////////////// end Behaviour Call ///////////////////////////////////////////// 
 
 --///////////////////////////////////////////// pbc function ///////////////////////////////////////////////
+
+--发送接口
+function sendmsg(msgKey,data)
+    --print("send len->".. pbtable[msgKey])
+    --编码
+    pbbody = protobuf.encode(pbtable[msgKey], data )
+    --解包
+    local  unpacketdata = protobuf.decode(pbtable[msgKey],pbbody)
+    --加id
+    packet = msgKey..pbbody
+    --包长度
+    print("sendmsg len->".. #packet)
+    --send( serialize_int32_little_endian(#packet) .. packet )
+    --[[
+    local msg =  serialize_int32_big_endian(#packet) .. packet 
+    local barr = ''
+    for i=1,#msg do
+        print("byte "..i..' = '..string.byte(msg, i))
+        barr = barr..string.byte(msg, i)..","
+    end
+    ]]
+    --print("send:"..barr.." >> len:"..#msg)
+
+    send( serialize_int32_big_endian(#packet) .. packet )
+end
+
+--解包方法 pbc 4 字节
+function unpbc4b(packet)
+
+    local key0 = string.byte(packet, 1)
+    local key1 = string.byte(packet, 2)
+    local key2 = string.byte(packet, 3)
+    local key3 = string.byte(packet, 4)
+
+    print("key0:"..key0.." >> key1:"..key1.." >> key2:"..key2.." >> key3:"..key3)
+
+    --4字节标识
+    local msgKey = string.char(key0,key1,key2,key3)
+    -- string 下标从 1 开始
+    pbbody = string.sub(packet, 5)
+
+    print(pbtable[msgKey] )
+
+    local decode = protobuf.decode(pbtable[msgKey] , pbbody);
+    --分发消息
+    this.msm.Send(msgKey,decode)
+end
 
 function testPbc2()
 
@@ -264,19 +322,6 @@ function register()
     ]]
 end
 
-function sendmsg(msgKey,data)
-   
-    --print("send len->".. pbtable[msgKey])
-
-    pbbody = protobuf.encode(pbtable[msgKey], data )
-
-    packet = msgKey..pbbody
-
-    print("send len->".. #packet)
-
-    send( serialize_int32_little_endian(#packet) .. packet )
-end
-
 --解包方法
 function unpacketpbc(packet)
 
@@ -312,7 +357,6 @@ function unpacketpbc(packet)
         print("\t"..v.number, v.type)
     end
     ]]
-
     --分发消息
     this.msm.Send(msgKey,decode)
 

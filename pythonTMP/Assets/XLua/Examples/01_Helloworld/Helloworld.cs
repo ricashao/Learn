@@ -13,7 +13,7 @@ public class Helloworld : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
         LuaEnv luaenv = new LuaEnv();
-        luaenv.DoString("require 'testLua'");
+        luaenv.DoString("CS.UnityEngine.Debug.Log('hello world')");
         luaenv.Dispose();
 	}
 	

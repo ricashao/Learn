@@ -18,7 +18,9 @@ function awake()
 
 	DemoPanelview.fun('>>>> DemoPanelview.fun Call')
 	--事件监听
-	EventManager.AddListener("OnButtonClicked",on_click)
+	--EventManager.AddListener("OnButtonClicked",on_click)
+	EventManager.AddListener("OnButtonClicked",on_button_click)
+	
 	--EventManager.RemoveListener("OnButtonClicked",on_click)
 	DemoPanelview.button:GetComponent("Button").onClick:AddListener(function()
 		--print("clicked, you input is '" ..input:GetComponent("InputField").text .."'")
@@ -29,8 +31,11 @@ function awake()
  		--事件发送
  		--EventManager.Brocast("OnButtonClicked",DemoPanelview.text)
  		--EventManager.Send("OnButtonClicked",DemoPanelview.text)
- 		es("OnButtonClicked",DemoPanelview.text)
+ 		--es("OnButtonClicked",DemoPanelview.text)
  		--EventManager.Update()
+		EventManager.Send("OnButtonClicked",DemoPanelview.text)
+ 		
+ 		--game_state_jump_to_scene(SceneName.Lobby)
 	end)
 
 	--GameState.tcpClinet.msm.AddListener(msgCmd.user_para,on_msg)
@@ -38,6 +43,10 @@ function awake()
 
 	--GameData.DemoData = { viewstate = 'init_state' }
 end	
+--事件处理函数
+function on_button_click(event,textp)
+	game_state_jump_to_scene(SceneName.Lobby)
+end
 --事件处理函数
 function on_click(event,textp)
 

@@ -1,0 +1,25 @@
+syntax = "proto2";
+
+import "ZCommon.proto";
+
+package ZProto;
+
+message CS_Test
+{
+    enum enumID
+    {
+        ID = 1000;
+    }
+
+    optional string s_in = 1;
+}
+
+message SC_Test
+{
+    enum enumID
+    {
+        ID = 10010;
+    }
+
+    optional string s_out = 1;
+}

@@ -2,6 +2,10 @@
 using System.Collections;
 using System;
 using UnityEngine.UI;
+using System.Timers;
+using System.Collections.Generic;
+using ZhuYuU3d.Game;
+using Libs;
 
 namespace ZhuYuU3d
 {
@@ -178,22 +182,36 @@ public class MessageBox:MonoBehaviour {
         if (isActive)
             return;
 
-            var prefab = ResourceLoader.Instance.LoadInstanceAsset("MessageBoxPrefab",
-                 (UnityEngine.Object objins) =>
-                 {
-                     if (objins == null)
-                     {
-                         Debug.LogAssertion("Prefab missing!");
-                     }
-                     messageBoxCanvas = (GameObject)objins;
-                     MessageBox MBInstance = messageBoxCanvas.GetComponent<MessageBox>();
-                     if (MBInstance != null)
-                     {
-                         MBInstance.ShowYesNo(title, message, callback);
-                     }
-                 },
-                 LoadResourceWay.FromAssetbundle
-             );
+            string strFileName = "/ui/MessageBoxPrefab.panel";
+
+            ABLoaderHelper.Instance.LoadAB
+                    (
+                    strFileName,
+                    null,
+                    "MessageBoxPrefab",
+                    (GameObject objins) =>
+                    {
+                        if (objins == null)
+                        {
+                            Debug.LogAssertion("Prefab missing!");
+                        }
+                        messageBoxCanvas = (GameObject)objins;
+                        MessageBox MBInstance = messageBoxCanvas.GetComponent<MessageBox>();
+                        if (MBInstance != null)
+                        {
+                            MBInstance.ShowYesNo(title, message, callback);
+                        }
+                    }
+                    );
+
+
+                 //       var prefab = assetbuhelp l("",
+                 //(UnityEngine.Object objins) =>
+                 //{
+                     
+                 //},
+                 //LoadResourceWay.FromAssetbundle
+             //);
       
     }
 

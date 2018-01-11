@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System;
 
+public delegate void OnDownLoadProgress(DownLoaderBese downLoader);
 public delegate void OnDownLoadComplete(DownLoaderBese downLoader);
 public delegate void OnDownLoadError(DownLoaderBese downLoader,Exception e);
 //public delegate void OnDownLoadProgress();
@@ -20,12 +21,19 @@ public class DownLoaderBese{
 	public long contentLength = 1;
 	public long readLength = 0;
 
+	public OnDownLoadProgress onDownLoadProgress;
 	public OnDownLoadComplete onDownLoadComplete;
 	public OnDownLoadError onDownLoadError;
 
     public virtual void Execute(){
     
     }
+
+	public virtual void Update(){
+		if (onDownLoadProgress != null) {
+			onDownLoadProgress (this);
+		}
+	}
 
     public virtual bool IsComplete(){
 
@@ -55,7 +63,7 @@ public class HttpWebRequestDownLoader:DownLoaderBese{
     bool isComplete = false;
     bool executeSync = false;
 
-    public HttpWebRequestDownLoader(string urlp ,string saveFilep, bool executeSyncp = true){
+	public HttpWebRequestDownLoader(string urlp ,string saveFilep, bool executeSyncp = true){
         
         url = urlp;
         saveFile = saveFilep;
@@ -64,15 +72,14 @@ public class HttpWebRequestDownLoader:DownLoaderBese{
     } 
 
     public override void Execute(){
-        //异步执行
+       // 异步执行
         if (executeSync)
         {
-            Loom.RunAsync(()=>{
+			Loom.QueueOnMainThread(()=>{
                 
                 HttpDownload(url, saveFile);
-
                 Loom.QueueOnMainThread(()=>{
-                    Free();
+					Free();
                 });
 
             });
@@ -91,7 +98,7 @@ public class HttpWebRequestDownLoader:DownLoaderBese{
     bool HttpDownload(string url, string path)
     {
         string tempPath = System.IO.Path.GetDirectoryName(path);
-        string fileName = path.Substring(path.LastIndexOf("/") + 1); //System.IO.Path.GetFileNameWithoutExtension(path);
+        string fileName = System.IO.Path.GetFileNameWithoutExtension(path);
         //System.IO.Directory.CreateDirectory(tempPath);  //创建临时文件目录
         string tempFile = tempPath + "/" + fileName + ".temp"; //临时文件
 
@@ -184,8 +191,10 @@ public class UnityWWWRequest:DownLoaderBese{
 
 }
 
+public delegate void OnDownLoadBatchProgress(DownLoadBatch downLoadBatch,DownLoaderBese downLoaderBese);
+public delegate void OnDownLoadBatchOneComplete(DownLoadBatch downLoadBatch,DownLoaderBese downLoaderBese);
 public delegate void OnDownLoadBatchComplete(DownLoadBatch downLoadBatch);
-public delegate void OnDownLoadBatchError(DownLoadBatch downLoadBatch);
+public delegate void OnDownLoadBatchError(DownLoadBatch downLoadBatch,DownLoaderBese downLoaderBese);
 /// <summary>
 /// 下载批
 /// </summary>
@@ -193,32 +202,66 @@ public class DownLoadBatch{
 	
 	public string name;
 	public List<DownLoaderBese> downLoaderArr = new List<DownLoaderBese> ();
+	public OnDownLoadBatchProgress onDownLoadBatchProgress;
+	public OnDownLoadBatchOneComplete onDownLoadBatchOneComplete;
 	public OnDownLoadBatchComplete onDownLoadBatchComplete;
     public OnDownLoadBatchError onDownLoadBatchError;
 	public int completeCount = 0;
 
     public string exception;
 
-    public DownLoadBatch(string namep , OnDownLoadBatchComplete onDownLoadBatchCompletep , OnDownLoadBatchError onDownLoadBatchErrorp){
+	public DownLoadBatch(string namep , OnDownLoadBatchComplete onDownLoadBatchCompletep , OnDownLoadBatchError onDownLoadBatchErrorp,OnDownLoadBatchProgress onDownLoadBatchProgressp){
 		name = namep;
+
 		onDownLoadBatchComplete = onDownLoadBatchCompletep;
         onDownLoadBatchError = onDownLoadBatchErrorp;
+		onDownLoadBatchProgress = onDownLoadBatchProgressp;
 	}
 
-    public void Add(string url ,string saveFile,string md5 = null,OnDownLoadComplete onDownLoadComplete = null,OnDownLoadError onDownLoadError = null){
+	public void Add(string url ,string saveFile,string md5 = null,OnDownLoadComplete onDownLoadComplete = null,OnDownLoadError onDownLoadError = null,OnDownLoadProgress onDownLoadProgress = null){
 
 		HttpWebRequestDownLoader downLoader = new HttpWebRequestDownLoader (url, saveFile, true);
         downLoader.md5 = md5;
+
 		downLoader.onDownLoadComplete = OnDownLoadComplete;
-		downLoader.onDownLoadComplete += onDownLoadComplete;
-        downLoader.onDownLoadError = OnDownLoadError;
-		downLoader.onDownLoadError += onDownLoadError;
+		if (onDownLoadComplete != null) {
+			downLoader.onDownLoadComplete += onDownLoadComplete;
+		}
+        
+		downLoader.onDownLoadError = OnDownLoadError;
+		if (onDownLoadError != null) {
+			downLoader.onDownLoadError += onDownLoadError;
+		}
+
+		downLoader.onDownLoadProgress = OnDownLoadProgress;
+		if (onDownLoadProgress != null) {
+			downLoader.onDownLoadProgress += onDownLoadProgress;
+		}
 
 		downLoaderArr.Add (downLoader);
 	}
 
+	public Double progress{
+		get { 
+			return downLoaderArr.Count == 0 ? 0 : (Double)completeCount / (Double)downLoaderArr.Count;
+		}
+	}
+
+	void OnDownLoadProgress(DownLoaderBese downLoaderBese){
+		
+		if (onDownLoadBatchProgress != null) {
+			onDownLoadBatchProgress (this,downLoaderBese);
+		}
+	}
+
 	void OnDownLoadComplete(DownLoaderBese downLoaderBese){
+
+		if (onDownLoadBatchOneComplete != null) {
+			onDownLoadBatchOneComplete (this,downLoaderBese);
+		}
+
 		completeCount++;
+
 		if (completeCount == downLoaderArr.Count) {
 			if (onDownLoadBatchComplete != null) {
 				onDownLoadBatchComplete (this);
@@ -235,7 +278,7 @@ public class DownLoadBatch{
         Debug.LogErrorFormat(" 批下载错误 {0} " ,name);
 
         if (onDownLoadBatchError != null){
-            onDownLoadBatchError(this);
+			onDownLoadBatchError(this,downLoaderBese);
         }
     }
 
@@ -282,7 +325,7 @@ public class DownLoadManager : MonoBehaviour {
 	List<DownLoadBatch> downLoadBatchs = new List<DownLoadBatch>();
 
 	// Use this for initialization
-	void Start () {
+	//void Start () {
 		/*
 		DownLoadBatch downLoadBatch = new DownLoadBatch ("DownLoadBatch", OnDownLoadBatchCmp);
 		string url = "https://ss0.bdstatic.com/5aV1bjqh_Q23odCf/static/superman/img/logo_top_ca79a146.png";
@@ -294,7 +337,7 @@ public class DownLoadManager : MonoBehaviour {
         string saveFile = Application.streamingAssetsPath + "/" + System.IO.Path.GetFileName(url);//url.Substring(url.LastIndexOf("/") + 1);
         Add(url,saveFile);
         */
-	}
+	//}
 
     /*
 	void OnDownLoadBatchCmp(DownLoadBatch downLoadBatch){
@@ -382,6 +425,7 @@ public class DownLoadManager : MonoBehaviour {
 						queueWorking [i] = downLoaderBese;
 					}
 				} else {
+					queueWorking [i].Update ();
 					Debug.LogFormat ("downLoader progress : "+queueWorking [i].url +" >>>> "+ queueWorking [i].progress);
 				}
 

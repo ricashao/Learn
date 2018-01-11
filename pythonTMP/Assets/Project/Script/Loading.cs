@@ -27,7 +27,11 @@ namespace ZhuYuU3d{
 
 		void Init(){
 			if (isInit) {
-				Libs.AssetManager.getInstance ().InitAssetName2abPathDic ("StreamingAssets_u3d_xlua_project");
+				/*
+				Libs.ABM.I.LoadAssetBundleManifestAdd ("StreamingAssets_u3d_res_project");
+				Libs.AM.I.InitAssetName2abPathDic ("StreamingAssets_u3d_xlua_project");
+				Libs.AM.I.InitAssetName2abPathDic ("StreamingAssets_u3d_res_project");
+				*/
 				isInit = false;
 				Debug.LogWarning ("初始化完成！");
 			} else {
@@ -40,7 +44,7 @@ namespace ZhuYuU3d{
 			Init ();
 
 			env.DoString ("game_state_loading()");
-			luaManager.SetLuaUpdate ("game_state_update");
+			//luaManager.SetLuaUpdate ("game_state_update");
 		}
 
 		// Update is called once per frame

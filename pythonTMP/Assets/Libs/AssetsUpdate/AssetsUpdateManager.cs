@@ -7,6 +7,9 @@ using System.Text;
 
 public delegate void OnAssetsUpdateCmp();
 
+public delegate void OnAssetsUpdateProgress(DownLoadBatch dbl);
+
+
 public class AssetsUpdateManager : MonoBehaviour {
 
     private static AssetsUpdateManager instance;
@@ -50,6 +53,8 @@ public class AssetsUpdateManager : MonoBehaviour {
 
     OnAssetsUpdateCmp onAssetsUpdateCmp;
 
+    OnAssetsUpdateProgress onAssetUpdateProgress;
+
     void Awake(){
         if (instance == null)
         {
@@ -73,7 +78,8 @@ public class AssetsUpdateManager : MonoBehaviour {
 
         DownLoadBatch downLoadBatch = new DownLoadBatch("AssetsUpdateManager.UpdateAssets",
                                                                          OnUpdateAssetsCmp,
-                                                                         OnDownLoadBatchError); 
+                                                                         OnDownLoadBatchError,
+																		 OnDownLoadBatchProgress); 
 
         string line;
         for(int i = 0; i < needUpdate.Length; i++){
@@ -91,6 +97,12 @@ public class AssetsUpdateManager : MonoBehaviour {
         downLoadBatch.Execute();
 
     }
+
+	public void OnDownLoadBatchProgress(DownLoadBatch downLoadBatch,DownLoaderBese downLoaderBese){
+
+        if (onAssetUpdateProgress != null)
+            onAssetUpdateProgress(downLoadBatch);
+	}
 
     void OnUpdateAssetsCmp( DownLoadBatch downLoadBatch ){
 
@@ -120,7 +132,7 @@ public class AssetsUpdateManager : MonoBehaviour {
         }
     }
 
-    void OnDownLoadBatchError(DownLoadBatch downLoadBatch){
+	void OnDownLoadBatchError(DownLoadBatch downLoadBatch,DownLoaderBese downLoaderBese){
        /*
         * 如果在本次下载批次中出现错误，则还原备份的 md5filelist.txt.bak
         * 当程序再次加载时忽略本次下载结果
@@ -169,16 +181,18 @@ public class AssetsUpdateManager : MonoBehaviour {
         fs.Close();
 	}
 
-    public void Check(string url,OnAssetsUpdateCmp onAssetsUpdateCmpFun){
+    public void Check(string url,OnAssetsUpdateCmp onAssetsUpdateCmpFun,OnAssetsUpdateProgress onassetprogress=null){
        
         onAssetsUpdateCmp = onAssetsUpdateCmpFun;
 
+        onAssetUpdateProgress = onassetprogress;
+
         StartCoroutine(DownLoad(url,
                                (fileArr)=>{
-                                                if(fileArr == null){
-													
+								if(fileArr == null||fileArr.Length<=0){
+
 													onAssetsUpdateCmp();
-                                                    
+                                   					                 
 													Debug.LogWarningFormat("当前不需要更新！");
                                                     return;
                                                 }
@@ -248,15 +262,15 @@ public class AssetsUpdateManager : MonoBehaviour {
         string[] severLines = severFileText.Split('\n');
         string[] localLines = localFileText.Split('\n');
 
-        if (severLines.Length > 0 && localLines.Length > 0)
-        {
-            if (severLines[0].Equals(localLines[0]))
-            {
-				Debug.LogWarningFormat (" 文件更新时间相等 {0} ，跳过更新！",severLines[0]);
-                return null;
-            }
-        }
-
+//        if (severLines.Length > 0 && localLines.Length > 0)
+//        {
+//            if (severLines[0].Equals(localLines[0]))
+//            {
+//				Debug.LogWarningFormat (" 文件更新时间相等 {0} ，跳过更新！",severLines[0]);
+//                return null;
+//            }
+//        }
+//
         string line;
 
         for (int i = 0; i < localLines.Length; i++)
@@ -293,6 +307,13 @@ public class AssetsUpdateManager : MonoBehaviour {
             {
                 needUpdate.Add(line);
             }
+
+			string strfilepath = assetsUpdatePath + path;
+			if (!File.Exists (strfilepath)) 
+			{
+				needUpdate.Add (line);
+			}
+
         }
 
         string[] needUpdateFileArr = new string[needUpdate.Count];
@@ -300,4 +321,59 @@ public class AssetsUpdateManager : MonoBehaviour {
 
         return needUpdateFileArr;
     }
+
+
+	string []_arrayNeedUpdate=null;
+
+	public IEnumerator CheckServerFileAndLocal(string url,Action<string[]> updatelist)
+	{
+		WWW www = new WWW(url);
+		yield return www;
+		if (www.error != null) 
+		{
+			updatelist (null);
+			_arrayNeedUpdate = null;
+			yield break;
+		}
+
+		string localMD5BakFilePath = assetsUpdatePath + "/md5filelist.txt.bak";
+
+		string localMD5FilePath = assetsUpdatePath + "/md5filelist.txt";
+
+		//如果本地文件存在
+		if (File.Exists(localMD5FilePath))
+		{
+			//备份旧列表
+			File.Copy(localMD5FilePath, localMD5BakFilePath, true);
+			//创建新列表
+			//File.WriteAllText(localMD5FilePath, www.text, Encoding.UTF8);
+
+			StreamReader sr = new StreamReader(localMD5FilePath, Encoding.UTF8); 
+			StringBuilder stringBuilder = new StringBuilder();
+			String line;
+			while ((line = sr.ReadLine()) != null) 
+			{
+				stringBuilder.AppendLine(line);
+			}
+
+			_arrayNeedUpdate =  CheckStr(www.text,stringBuilder.ToString());
+		}
+		//本地文件不存在
+		else
+		{
+			File.WriteAllText (localMD5BakFilePath, www.text, Encoding.UTF8);
+
+			_arrayNeedUpdate = www.text.Split('\n');
+		}
+
+		if (updatelist != null)
+			updatelist (_arrayNeedUpdate);
+	}
+
+	public void StartCheck(string url,Action<string[]> cb)
+	{
+		StartCoroutine (CheckServerFileAndLocal (url,cb));
+	}
+
+
 }

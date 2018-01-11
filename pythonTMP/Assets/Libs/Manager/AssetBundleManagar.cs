@@ -236,7 +236,9 @@ namespace Libs{
         {
             if (instance == null)
             {
-                GameObject gameObject = new GameObject("AssetBundleManagar");
+				GameObject gameObject = GameObject.Find ("AssetBundleManagar");
+				if(gameObject == null)
+                	gameObject = new GameObject("AssetBundleManagar");
                 DontDestroyOnLoad(gameObject);
                 instance = gameObject.AddComponent<AssetBundleManagar>();
             }
@@ -278,6 +280,8 @@ namespace Libs{
             }
 
             public void Unload(){
+				if (assetBundle == null)
+					return;
                 assetBundle.Unload(true);
                 assetBundle = null;
             }
@@ -642,7 +646,7 @@ namespace Libs{
 
             if (assetBundleInstance == null)
             {
-                Debug.LogErrorFormat("AssetBundleManagar cache 中没有 {0} ", abName);
+				Debug.LogErrorFormat("AssetBundleManagar cache 中没有 {0}, id {1} ", abName,GetInstanceID());
                 return 0;
             }
             //引用计数减 1 
@@ -808,11 +812,34 @@ namespace Libs{
                 Next();
             }
         }
+		/// <summary>
+		/// Clear all cache. AssetBundle 清除所有缓存
+		/// </summary>
+		public void ClearAllCache(){
+			/**/
+			foreach(string name in cache.Keys){
+				
+				AssetBundleInstance assetBundleInstance = cache[name];
+
+				Debug.LogWarningFormat ("Unload >> name = {0}, abname = {1}, id = {2}",name, assetBundleInstance.name,GetInstanceID());
+
+				assetBundleInstance.Unload ();
+			}
+
+			foreach(AssetBundleInstance assetBundleInstance in cache.Values){
+
+				Debug.LogWarningFormat ("Unload >> {0}",assetBundleInstance.name);
+
+				assetBundleInstance.Unload ();
+			}
+
+			cache.Clear ();
+		}
 
 		void OnDestroy()
 		{
+			ClearAllCache ();
 			//Dictionary<string, AssetBundleInstance> cache = new Dictionary<string, AssetBundleInstance>();
-			cache.Clear ();
 			cache = null;
 			//Queue<AssetBundleLoader> waiting = new Queue<AssetBundleLoader>();
 			waiting.Clear ();
@@ -827,6 +854,18 @@ namespace Libs{
 			//AssetBundleManifest manifest;
 			manifest = null;
 
+			instance = null;
+
+			Debug.LogWarning ("AssetBundleManager OnDestroy");
+		}
+		/// <summary>
+		/// 销毁当前实例
+		/// </summary>
+		static public void Destroy(){
+			
+			if(instance != null){
+				Destroy (instance);
+			}
 		}
 
     }//class end

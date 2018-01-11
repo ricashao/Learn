@@ -7,7 +7,6 @@ CommonFun = require 'lua/game/CommonFun'
 Define = require 'lua/game/Define'
 
 --MsgDefine = require 'lua/game/MsgDefine'
-
 --GameData = require "lua/game/GameData"
 
 local events = require "lua/utils/events"
@@ -23,23 +22,30 @@ function game_state_init()
 		return
 	end
 	--游戏状态表
-	GameState = {curState = 'InitToLogin'}
+	GameState = {curState = 'InitToLobby'}
 	--初始化 update 回调方法列表
-	GameState.updatefunList = {}
+	GameState.fiexdUpdateFunList = {}
+	GameState.updateFunList = {}
+	GameState.lateUpdateFunList = {}
+	--注册lua层全局回调
+	CS.ZhuYuU3d.LuaManager.SetFixedUpdateFun('game_state_fiexd_update')
+	CS.ZhuYuU3d.LuaManager.SetUpdateFun('game_state_update')
+	CS.ZhuYuU3d.LuaManager.SetLateUpdateFun('game_state_late_update')
 	--事件管理器
 	EventManager = events
 	--添加 事件管理器 update 回调 用于执行事件队列
-	game_state_update_add(EventManager.Update)
+	game_state_callback_add(GameState.lateUpdateFunList,EventManager.Update)
 	--加载 进度显示界面
 	--game_state_loading()	
 	SceneName = {Login = 'Login' , Lobby = 'Lobby' , Game = 'Game'}
 	--模块数据层初始化
 	--GameData.DemoData = {}
-
 	--GameData.DemoListData = {}
+
 	--初始化网络层
 	--GameState.tcpClinet = CS.ZhuYuU3d.LuaBaseBehaviour.LoadDontDestroy('TcpClinet','lua/game/TcpClient.lua');
-	GameState.tcpClinet = CS.ZhuYuU3d.LBF.LDD('TcpClinet','lua/game/TcpClient.lua');
+	--GameState.tcpClinet = CS.ZhuYuU3d.LBF.LDD('TcpClinet','lua/game/TcpClient.lua');
+	GameState.tcpClinet = LoadDontDestroy('TcpClinet','lua/game/TcpClient.lua');
 	--pb 注册
 	--MsgDefine:register(GameState.tcpClinet)
 	--游戏数据层注册
@@ -76,7 +82,7 @@ function game_state_clear()
 	--清除数据层监听
 	GameData:clear()
 	--清除 update 回调
-	game_state_update_rem(EventManager.Update)
+	game_state_callback_rem(GameState.lateUpdateFunList,EventManager.Update)
 	--清除事件监听队列
 	EventManager.RemoveAll()
 	--清除 updatefunList 
@@ -93,34 +99,53 @@ function game_state_clear()
 	print("<<<< cg end mem : "..collectgarbage("count") * 1024 )
 end 	
 -- 添加全局 update 回调 
-function game_state_update_add(updatefun)
-
-	table.insert(GameState.updatefunList,updatefun)
-
+function game_state_callback_add(tb,updatefun)
+	--table.insert(GameState.updateFunList,updatefun)
+	table.insert(tb,updatefun)
 end 
 -- 移除全局 update 回调 
-function game_state_update_rem(updatefun)
+function game_state_callback_rem(tb,updatefun)
 	-- 从 回调列表 移除 updatefun
-	local updatefunList = GameState.updatefunList
-
-   	for i=#updatefunList, 1, -1 do 
-        if updatefunList[i] == updatefun then 
-            table.remove(updatefunList,i) 
+	--local updateFunList = GameState.updateFunList
+	local updateFunList = tb
+   	for i=#updateFunList, 1, -1 do 
+        if updateFunList[i] == updatefun then 
+            table.remove(updateFunList,i) 
             print("remove updatefun = " .. i)
         end 
     end 
 end
--- 执行全局 update 回调 
-function game_state_update()
-	--迭代调用 update
-	for i,updatefun in ipairs(GameState.updatefunList) do
+-- 执行全局 fiexdupdate 回调 
+function game_state_fiexd_update()
+	for i,updatefun in ipairs(GameState.fiexdUpdateFunList) do
 		updatefun()
 	end
 end 	
+-- 执行全局 update 回调 
+function game_state_update()
+	--迭代调用 update
+	for i,updatefun in ipairs(GameState.updateFunList) do
+		updatefun()
+	end
+end 	
+-- 执行全局 lateupdate 回调 
+function game_state_late_update()
+	for i,updatefun in ipairs(GameState.lateUpdateFunList) do
+		updatefun()
+	end
+end 
 
 function game_state_loading()	
 
-	if GameState.curState == 'InitToLogin' then
+	if GameState.curState == 'InitToLobby' then
+
+		GameState.curRunState = require '/lua/modules/Lobby/LobbyState'
+		GameState.curRunState:init(GameState, GameState.tcpClinet,GameData)
+
+		GameState.curState ='Lobby'
+		CS.ZhuYuU3d.LuaCallCsFun.JumpToRun()
+
+	elseif GameState.curState == 'InitToLogin' then
 
 		GameState.curRunState = require '/lua/modules/demo/DemoState'
 		GameState.curRunState:init(GameState, GameState.tcpClinet,GameData)
@@ -133,7 +158,10 @@ function game_state_loading()
 
 		GameState.curRunState:clear()
 		GameState.curRunState = nil
-		
+
+		GameState.curRunState = require '/lua/modules/Lobby/LobbyState'
+		GameState.curRunState:init(GameState, GameState.tcpClinet,GameData)
+
 		GameState.curState ='Lobby'
 		CS.ZhuYuU3d.LuaCallCsFun.JumpToRun()
 
@@ -189,3 +217,5 @@ function game_state_jump_to_scene(sceneName)
 	end
 
 end	
+
+CommonData={}

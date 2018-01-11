@@ -4,7 +4,8 @@ using System;
 using UnityEngine.UI;
 using System.Timers;
 using System.Collections.Generic;
-
+using ZhuYuU3d.Game;
+using Libs;
 
 namespace ZhuYuU3d
 {
@@ -66,56 +67,69 @@ public class Toast {
         }
         else
         {
-
-                var prefab = ResourceLoader.Instance.LoadInstanceAsset("ScalingToast", (UnityEngine.Object objret) =>
-                {
-                    if (objret == null)
+                string strFileName = "/ui/ScalingToast.panel";
+                ABLoaderHelper.Instance.LoadAB
+                    (
+                    strFileName,
+                    null,
+                    "ScalingToast",
+                    (GameObject objret)=>
                     {
-                        Debug.LogAssertion("Prefab missing!");
-                        return;
+                        if (objret == null)
+                        {
+                            Debug.LogAssertion("Prefab missing!");
+                            return;
+                        }
+
+
+                        //Debug.Log("CREATED ONE");
+
+                        //Instantiate the toast!
+                        toastCanvas = (GameObject)objret;
+
+                        //Get the text within the toast and set it.
+                        toastCanvas.GetComponentInChildren<Text>().text = message;
+                        toastCanvas.GetComponentInChildren<Text>().fontSize = DEFAULT_SIZE;       //Default font size is 20!
+
+                        //Get the toast type and set the mood accordingly.
+                        switch (type)
+                        {
+                            case Type.ERROR:
+                                toastCanvas.GetComponentInChildren<Image>().color = new Color(1f, 0.011f, 0.011f);
+                                break;
+                            case Type.WARNING:
+                                toastCanvas.GetComponentInChildren<Image>().color = new Color(1f, 0.53125f, 0.03125f);
+                                break;
+                            case Type.MESSAGE:
+                                toastCanvas.GetComponentInChildren<Image>().color = new Color(0.95f, 0.95f, 0.95f);
+                                break;
+                        }
+
+                        isActive = true;
+                        durationSecs = duration;
+                        ctxt = caller;
+                        currentTimer = ctxt.StartCoroutine(DestroyToast());
+
+                        toastCanvas.GetComponentInChildren<Text>().fontSize = size;
+                        //Play the animation
+                        string animString = getGravityString(gravity);
+                        AnimationClip anim = Resources.Load<AnimationClip>(animString);
+                        anim.legacy = true;
+                        toastCanvas.GetComponentInChildren<Animation>().Stop();
+                        toastCanvas.GetComponent<Animation>().AddClip(anim, animString);
+                        toastCanvas.GetComponentInChildren<Animation>().clip = anim;
+                        toastCanvas.GetComponentInChildren<Animation>().Play();
                     }
 
+                    );
 
-                    //Debug.Log("CREATED ONE");
 
-                    //Instantiate the toast!
-                    toastCanvas = (GameObject)objret;
-
-                    //Get the text within the toast and set it.
-                    toastCanvas.GetComponentInChildren<Text>().text = message;
-                    toastCanvas.GetComponentInChildren<Text>().fontSize = DEFAULT_SIZE;       //Default font size is 20!
-
-                    //Get the toast type and set the mood accordingly.
-                    switch (type)
-                    {
-                        case Type.ERROR:
-                            toastCanvas.GetComponentInChildren<Image>().color = new Color(1f, 0.011f, 0.011f);
-                            break;
-                        case Type.WARNING:
-                            toastCanvas.GetComponentInChildren<Image>().color = new Color(1f, 0.53125f, 0.03125f);
-                            break;
-                        case Type.MESSAGE:
-                            toastCanvas.GetComponentInChildren<Image>().color = new Color(0.95f, 0.95f, 0.95f);
-                            break;
-                    }
-
-                    isActive = true;
-                    durationSecs = duration;
-                    ctxt = caller;
-                    currentTimer = ctxt.StartCoroutine(DestroyToast());
-
-                    toastCanvas.GetComponentInChildren<Text>().fontSize = size;
-                    //Play the animation
-                    string animString = getGravityString(gravity);
-                    AnimationClip anim = Resources.Load<AnimationClip>(animString);
-                    anim.legacy = true;
-                    toastCanvas.GetComponentInChildren<Animation>().Stop();
-                    toastCanvas.GetComponent<Animation>().AddClip(anim, animString);
-                    toastCanvas.GetComponentInChildren<Animation>().clip = anim;
-                    toastCanvas.GetComponentInChildren<Animation>().Play();
-                },
-                LoadResourceWay.FromAssetbundle
-                );
+                //var prefab = ResourceLoader.Instance.LoadInstanceAsset("ScalingToast", (UnityEngine.Object objret) =>
+                //{
+                    
+                //},
+                //LoadResourceWay.FromAssetbundle
+                //);
 
 
 

@@ -3,9 +3,9 @@ using System.Collections;
 using UnityEngine.UI;
 public class UILoopItem : MonoBehaviour {
 
-    [System.NonSerialized]
+    //[System.NonSerialized]
     public int itemIndex;
-    [System.NonSerialized]
+    //[System.NonSerialized]
     public GameObject itemObject;
     private object data;
 	public void UpdateItem(int index,GameObject item)
@@ -15,7 +15,8 @@ public class UILoopItem : MonoBehaviour {
 	}
     public virtual void Data(object data)
 	{
-        Debug.Log("Data:" + data.ToString());
+        //Debug.Log("Data:" + data.ToString());
+		Debug.LogWarningFormat ("index:{0} Data:{1}",itemIndex,data.ToString());
         this.data = data;
 	}
     public virtual object GetData()
@@ -26,6 +27,4 @@ public class UILoopItem : MonoBehaviour {
     {
 
     }
-
-    public System.Action<object,GameObject> SetData;
 }

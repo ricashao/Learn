@@ -5,7 +5,8 @@ using XLua;
 using System;
 
 namespace ZhuYuU3d{
-
+	
+	[LuaCallCSharp]
 	public class LuaManager : MonoBehaviour {
 
 		static LuaManager instance;
@@ -22,12 +23,24 @@ namespace ZhuYuU3d{
 			return instance;
 		}
 
+		static public void SetFixedUpdateFun(string luaFixedUpdateFunName){
+			LuaManager.GetInstance ().SetLuaFixedUpdate (luaFixedUpdateFunName);
+		}
+		static public void SetUpdateFun(string luaUpdateFunName){
+			LuaManager.GetInstance ().SetLuaUpdate (luaUpdateFunName);
+		}
+		static public void SetLateUpdateFun(string luaLateUpdateFunName){
+			LuaManager.GetInstance ().SetLuaLateUpdate (luaLateUpdateFunName);
+		}
+
 		internal static float lastGCTime = 0;
 		internal const float GCInterval = 1;//1 second 
 
+		private	Action luaFixedUpdate;
 		private	Action luaUpdate;
+		private	Action luaLateUpdate;
 
-		string _initDoString;
+		string _initDoString = "";
 
 		public string InitDoString {
 			set{
@@ -83,8 +96,11 @@ namespace ZhuYuU3d{
 
 		void LuaEnvInit(){
 			//lua 文件查找目录
+			//沙盒路径
+			_env.AddSearcher(ExtStaticLuaCallbacks.LoadLuaFileFromPersistentDataPath, -1);
 			#if UNITY_EDITOR
-			_env.AddSearcher(ExtStaticLuaCallbacks.LoadFromResourceLuaFile, -1);
+			//Resource 路径
+			_env.AddSearcher(ExtStaticLuaCallbacks.LoadLuaFileFromResource, -1);
 			#endif
 			//模块注册
 			_env.AddBuildin("rapidjson", XLua.LuaDLL.Lua.LoadRapidJson);
@@ -92,16 +108,36 @@ namespace ZhuYuU3d{
 			_env.AddBuildin("protobuf.c", XLua.LuaDLL.Lua.LoadProtobufC);
 		}
 
+		public void SetLuaFixedUpdate(string luaFixedUpdateFunName){
+			if(_env == null){
+				Debug.LogErrorFormat("_env is null !");
+				return;
+			}
+			_env.Global.Get(luaFixedUpdateFunName, out luaFixedUpdate);
+			if (luaFixedUpdate == null) {
+				Debug.LogErrorFormat ("not find {0} function !",luaFixedUpdateFunName);
+			}
+		}
+
 		public void SetLuaUpdate(string luaUpdateFunName){
-			
 			if(_env == null){
 				Debug.LogErrorFormat("_env is null !");
 				return;
 			}
 			_env.Global.Get(luaUpdateFunName, out luaUpdate);
-			//luaUpdate = _env.Global.Get<Action> (luaUpdateFunName);
 			if (luaUpdate == null) {
 				Debug.LogErrorFormat ("not find {0} function !",luaUpdateFunName);
+			}
+		}
+
+		public void SetLuaLateUpdate(string luaLateUpdateFunName){
+			if(_env == null){
+				Debug.LogErrorFormat("_env is null !");
+				return;
+			}
+			_env.Global.Get(luaLateUpdateFunName, out luaLateUpdate);
+			if (luaLateUpdate == null) {
+				Debug.LogErrorFormat ("not find {0} function !",luaLateUpdateFunName);
 			}
 		}
 
@@ -110,6 +146,15 @@ namespace ZhuYuU3d{
 
 		}
 
+		void FixedUpdate () {
+			
+			if (_env == null)
+				return;
+
+			if (luaFixedUpdate != null)
+				luaFixedUpdate ();
+		}
+			
 		// Update is called once per frame
 		void Update () {
 
@@ -125,6 +170,16 @@ namespace ZhuYuU3d{
 				lastGCTime = Time.time;
 			}
 		}
+
+		void LateUpdate(){
+
+			if (_env == null)
+				return;
+
+			if (luaLateUpdate != null)
+				luaLateUpdate ();
+		}
+
 	}
 
 }

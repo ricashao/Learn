@@ -4,16 +4,16 @@ using UnityEngine;
 
 public class TestStarter : MonoBehaviour {
 
-    List<object> lstcontent = new List<object>();
-    [SerializeField]
-    UILoopList ull;
+    List<string> lstcontent = new List<string>();
+
+	public UILoopList ull;
 	// Use this for initialization
 	void Start () {
         for (int i = 0; i < 100; i++)
         {
             lstcontent.Add(i.ToString());
         }
-        ull.Data(lstcontent);
+		ull.Data(lstcontent.ToArray());
 	}
 	
 }

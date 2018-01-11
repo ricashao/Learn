@@ -48,10 +48,17 @@ function Event.Send(event,...)
 end 
 --update 回调 ,执行事件队列
 function Event.Update()
+	local curList
 	for i,eventItem in ipairs(eventQueue) do
-		for k,handler in ipairs(events[eventItem[1]]) do
-    		--print(k,v)
-    		handler(eventItem[1],eventItem[2])
+		curList = events[eventItem[1]]
+
+		if curList == nil then
+			error("handler not find event name:"..eventItem[1])
+		else
+			for k,handler in ipairs(curList) do
+    			--print(k,v)
+    			handler(eventItem[1],eventItem[2])
+			end
 		end
     	eventItem[1] = nil
     	eventItem[2] = nil
@@ -91,6 +98,15 @@ end
 function Event.RemoveAll()
 	events = {}
 	eventQueue = {}
+end
+
+function Event.HandlerInfo()
+	for e,handlerList in pairs(events) do
+		print("event >> "..e)
+		for i,handler in ipairs(handlerList) do
+			print("handler >> "..type(handler))
+		end	
+	end
 end
 
 return Event

@@ -104,7 +104,7 @@ public class UILoopList : MonoBehaviour
 	/// 设置数据 数据格式为IList
 	/// </summary>
 	/// <param name="data">Data.</param>
-	public void Data(List<object> data)
+	public void Data(object[] data)
 	{
         Reset();
 		m_Datas = data;
@@ -177,7 +177,7 @@ public class UILoopList : MonoBehaviour
             item.anchorMin = Vector2.up;
             item.pivot = Vector2.up;
         }
-        item.GetComponent<UILoopItem>().SetData = this.SetData;
+		
 		item.name = "item" + index;
         item.anchoredPosition = getPosByIndex(index);
 		m_InstantiateItems.Add(item);
@@ -272,13 +272,12 @@ public class UILoopList : MonoBehaviour
 		updateItem(index, item.gameObject);
 	}
 
-    public System.Action<object,GameObject> SetData;
-
-    private Vector2 getPosByIndex(int index)
+    
+	private Vector2 getPosByIndex(int index)
 	{
         return direction == Direction.Horizontal ?
             new Vector2(LeftPadding+ Mathf.Floor(index / InstantiateSize.x) * CellRect.x, -(index % InstantiateSize.x) * CellRect.y - topPadding) :
-                new Vector2(LeftPadding+ (index % InstantiateSize.y) * CellRect.x, -Mathf.Floor(index / InstantiateSize.y) * CellRect.y - topPadding);
+            new Vector2(LeftPadding+ (index % InstantiateSize.y) * CellRect.x, -Mathf.Floor(index / InstantiateSize.y) * CellRect.y - topPadding);
         //float x, y;
         //if(direction == Direction.Horizontal)
         //{
@@ -370,6 +369,15 @@ public class UILoopList : MonoBehaviour
                     selectedItem = m_InstantiateItems[i].GetComponent<UILoopItem>();
                 }
             }
+        }
+    }
+
+    public void refreshWithoutPosChange()
+    {
+        for (int i = 0; i < m_InstantiateItems.Count; i++)
+        {
+            UILoopItem item = m_InstantiateItems[i].GetComponent<UILoopItem>();
+            item.Data(item.GetData());
         }
     }
 }

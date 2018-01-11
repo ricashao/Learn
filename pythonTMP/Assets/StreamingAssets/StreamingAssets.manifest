@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2523101698
+CRC: 3992836114
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
-      Name: ui/demopanel.panel
+      Name: ui/messageboxprefab.panel
       Dependencies: {}
     Info_1:
-      Name: ui/messageboxprefab.panel
+      Name: ui/demopanel.panel
       Dependencies: {}
     Info_2:
       Name: ui/demogamehudpanel.panel

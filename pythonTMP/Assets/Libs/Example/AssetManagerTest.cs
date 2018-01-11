@@ -9,7 +9,7 @@ public class AssetManagerTest : MonoBehaviour {
 
         Libs.AssetManager.getInstance().InitAssetName2abPathDic("StreamingAssets_loadAb");
         //Libs.AssetManager.getInstance().CreateAsync("Cube",OnCreate);
-
+        //transform.
         //Libs.AssetManager.getInstance().CreateAsync("Grass_A_3",OnCreate);
 	}
 

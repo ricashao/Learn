@@ -6,7 +6,7 @@ using XLua;
 namespace ZhuYuU3d
 {
 	[LuaCallCSharp]
-	public class LuaBehaviourFactory : MonoBehaviour {
+	public class LuaBehaviourFactory  {
 
 		static public LuaTable AddBase(string gameObjectName,string luaFilePath){
 			return Add<LuaBaseBehaviour> (gameObjectName, luaFilePath);
@@ -40,19 +40,14 @@ namespace ZhuYuU3d
 		static LuaTable LoadDontDestroy<T>(string gameObjectName,string luaFilePath) where T : LuaBaseBehaviour
 		{
 			GameObject gameObject = new GameObject (gameObjectName);
-			DontDestroyOnLoad (gameObject);
+			GameObject. DontDestroyOnLoad (gameObject);
 
 			LuaBaseBehaviour.luaFilePathDic.Add (gameObject,luaFilePath);
 			LuaBaseBehaviour luaBaseBehaviour = gameObject.AddComponent<T> ();
 
 			return luaBaseBehaviour.scriptEnv;
 		}
-
-		// Use this for initialization
-		void Start () {
-
-		}
-
+			
 	}
 
 	[LuaCallCSharp]

@@ -55,8 +55,6 @@ public class TabControl : MonoBehaviour
 		foreach (TabControlEntry entry in entries)
 		{
 			bool isSelected = entry == selectedEntry;
-            if(isSelected)
-                Debug.Log(string.Format("选择了第{0}个页签", entries.IndexOf(entry)));
 
 			entry.Tab.interactable = !isSelected;
 

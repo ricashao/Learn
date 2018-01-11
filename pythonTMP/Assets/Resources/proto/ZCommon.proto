@@ -1,0 +1,91 @@
+syntax = "proto2";
+
+package ZProto;
+
+message GeneralReq
+{
+}
+
+message GeneralAck
+{
+    optional int32 status = 1;
+}
+
+message ShakeHandNotify
+{
+    optional int64 secret_key = 1;
+}
+
+enum enumServerType
+{
+    UnknownServer = 0;
+    GServer = 1;
+    ZServer = 2;
+    WServer = 3;
+}
+
+message RegisterToCenterReq
+{
+    enum enumID
+    {
+        ID = 1;
+    }
+
+    optional enumServerType type = 1;
+    optional int32 port = 2;
+    optional int32 nclient = 3;
+}
+
+message Server
+{
+    optional int32 id = 1;
+    optional string addr = 2;
+    optional int32 port = 3;
+}
+
+message RegisterToCenterAck
+{
+    enum enumID
+    {
+        ID = 10001;
+    }
+
+    optional int32 id = 1;
+    optional string wide_addr = 2;
+}
+
+message ZServerChangeNotify
+{
+    enum enumID
+    {
+        ID = 10002;
+    }
+
+    repeated Server zserver_add = 1;
+    repeated Server zserver_del = 2;
+}
+
+message WServerChangeNotify
+{
+    enum enumID
+    {
+        ID = 10003;
+    }
+
+    repeated Server wserver_add = 1;
+    repeated Server wserver_del = 2;
+}
+
+/*
+message AddrChangeNotify
+{
+}
+
+message BinaryMessage
+{
+    optional uint32 session_id = 1;
+    optional uint32 main_id = 2;
+    optional uint32 assistant_id = 3;
+    optional uint32 handle_code = 4;
+    optional bytes data = 5;
+}*/

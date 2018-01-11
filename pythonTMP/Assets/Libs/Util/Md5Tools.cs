@@ -6,7 +6,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
+using XLua;
 
+[LuaCallCSharp]
 public class Md5Tools  {
     /// <summary>
     /// HashToMD5Hex
