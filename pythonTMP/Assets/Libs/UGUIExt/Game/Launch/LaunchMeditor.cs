@@ -15,6 +15,12 @@ namespace ZhuYuU3d.Game
     }
 public class LaunchMeditor :Mediator
 {
+		string mstrRemoveUrl="";
+		string mstrRemoteMD5Url="";
+
+
+		bool mbHotFixEnable=true;
+
         AsyncOperation asyncOperation;
         public new const string NAME = "LaunchMediator";
         public LaunchPage View
@@ -25,6 +31,13 @@ public class LaunchMeditor :Mediator
         public LaunchMeditor(LaunchPage view) : base(NAME, view)
         {
             _view = view;
+			AssetUpdateInfoCommand auic=(AssetUpdateInfoCommand)Facade.getCommand (NotificationType.ReadUpdateInfo);
+			if (auic != null) 
+			{
+				mstrRemoveUrl = auic.getData ().mstrAssetServerUrl;
+				mstrRemoteMD5Url = auic.getData ().mstrRemoteMD5FilePath;
+				mbHotFixEnable = auic.getData ().bEnableHotFix;
+			}
         }
 
         LaunchPage _view = null;
@@ -45,13 +58,19 @@ public class LaunchMeditor :Mediator
             {
 			case NotificationType.V2V_BeginUpdateResource:
                     
-					View.setState(LaunchPage.LaunchPageState.UpdateResource);
-					BeginUpdateResource ();
+				View.setState(LaunchPage.LaunchPageState.UpdateResource);
+				BeginUpdateResource ();
+                break;
 
-                    break;
 			case NotificationType.V2M_BeginCheckResource:
+
+				if (mbHotFixEnable) {
 					BeginCheckUpdateResource ();
-					break;
+				} else {
+					SendNotification (NotificationType.M2M_ResourceUpdateOver);
+				}
+
+				break;
 
 			case NotificationType.M2M_ResourceUpdateOver:
 				View.setState (LaunchPage.LaunchPageState.UpdateOver);
@@ -74,18 +93,18 @@ public class LaunchMeditor :Mediator
         void BeginCheckUpdateResource()
         {
             //热更新url
-			AssetsUpdateManager.assetsSeverUrl = "http://127.0.0.1";
+			AssetsUpdateManager.assetsSeverUrl =mstrRemoveUrl;// "http://127.0.0.1";
             //保存路径
             AssetsUpdateManager.assetsUpdatePath = Application.dataPath + "/StreamingAssetsUpdate";
 
-            CheckVersions("file:///D:/StreamingAssets/md5filelist.txt");
+			CheckVersions (mstrRemoteMD5Url);// "file:///D:/StreamingAssets/md5filelist.txt");
 
         }
 
 		void BeginUpdateResource()
 		{
 			AssetsUpdateManager.getInstance ().Check 
-			("file:///D:/StreamingAssets/md5filelist.txt",
+			(mstrRemoteMD5Url,// "file:///D:/StreamingAssets/md5filelist.txt",
 				OnAssetsUpdateCmp,
 				OnAssetsUpdateProgress
 			);
@@ -95,7 +114,7 @@ public class LaunchMeditor :Mediator
         {
 			AssetsUpdateManager.getInstance ().StartCheck 
 			(
-				"file:///D:/StreamingAssets/md5filelist.txt",
+				url,// "file:///D:/StreamingAssets/md5filelist.txt",
 				(string[]arrayUpdatePath) => 
 				{
 					if(arrayUpdatePath!=null&&arrayUpdatePath.Length>0)

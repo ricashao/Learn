@@ -8,6 +8,7 @@ local ZEntryModuleData = require 'lua/datamodules/ZEntryModuleData'
 local ZLobbyModuleData = require 'lua/datamodules/ZLobbyModuleData'
 local CommonModuleData = require 'lua/datamodules/CommonModuleData'
 require 'lua/modules/Lobby/modules/ChangeHead/ChangeHeadPanelFunc'
+require 'lua/modules/Lobby/modules/Rank/RankPanelFunc'
 require 'lua/modules/Lobby/LobbyEventConst'
 --导入子模块数据层
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using XLua;
 using ZhuYuU3d;
+using UnityEngine.UI;
 
 [CSharpCallLua]
 public class LuaSelectItem : SelectItem {
@@ -22,9 +23,13 @@ public class LuaSelectItem : SelectItem {
 	[SerializeField]
 	public string onSelectFunName ;
 	[SerializeField]
-	public string unSelectFunName ;
+	public string unSelectFunName;
+    [SerializeField]
+    private Sprite[] sprits;
 
-	void Awake(){
+    private Image img;
+
+    void Awake(){
 
 		if(luafun_OnSelect == null){
 			luaEnv = LuaManager.GetInstance ().LuaEnvGetOrNew ();
@@ -41,17 +46,28 @@ public class LuaSelectItem : SelectItem {
 				luafun_UnSelect = luaEnv.Global.GetInPath<OnSelectItem> (unSelectFunName);
 			}
 		}
+        img = this.GetComponent<Image>();
 	}
 
 	public override void OnSelect ()
     {
         if (luafun_OnSelect != null)
             luafun_OnSelect (index,transform,data);
+        if(sprits!=null && sprits.Length > 1)
+        {
+            img.sprite = sprits[1];
+            img.SetNativeSize();
+        }
+
 	}
 
-	public override void UnSelect ()
-    {
-        if (luafun_UnSelect != null)
-            luafun_UnSelect (index,transform,data);
-	}
+	public override void UnSelect (){
+        if(luafun_UnSelect !=null)
+		luafun_UnSelect (index,transform,data);
+        if (sprits != null && sprits.Length > 1)
+        {
+            img.sprite = sprits[0];
+            img.SetNativeSize();
+        }
+    }
 }

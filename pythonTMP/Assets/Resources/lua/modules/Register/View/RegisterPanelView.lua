@@ -91,7 +91,34 @@ end
 function RegisterPanelview:OnGetCheckCode()
 
 	print("Click On Get CheckCode Button");
-		
+	--[[CS.ZhuYuU3d.UIManager.GetInstance():PopWindow("MessageBoxPanel",
+	"Test Tips",
+	"Test Content",
+	0,
+	"PopupCanvas",
+	function()
+		print("Click OK");
+		CS.ZhuYuU3d.UIManager.GetInstance():ToastTips("Test",3,30,function()
+			print("Toast over");
+		end)
+	end,
+	function()
+		print("Click Cancel");
+	end);--]]
+	LuaUIManager.PopMessageWindow("MessageBoxPanel",
+	"Test Tips",
+	"Test Content",
+	0,
+	function()
+		print("Click OK");
+			CS.ZhuYuU3d.UIManager.GetInstance():ToastTips("Test",3,30,function()
+			print("Toast over");
+		end)
+	end,
+	function()
+		print("Click Cancel");
+	end);
+	
 	
 end
 
@@ -99,7 +126,7 @@ function RegisterPanelview:OnBack()
 	
 	print("Click On Back Button");
 	
-	CS.ZhuYuU3d.UIManager.GetInstance():ClosePage();
+	LuaUIManager.CloseWindow();
 	
 	
 end
@@ -131,6 +158,7 @@ function RegisterPanelview:OnLogin()
 		isInfoAll=false;
 	end
 	if isInfoAll==false then
+		LuaUIManager.ToastTip("信息填写错误或不全！",3,30);
 		return;
 	end
 
@@ -155,6 +183,7 @@ function RegisterPanelview:on_destroy()
 end
 --视图状态
 function RegisterPanelview:set_state(viewState)
+	
 end
 
 return RegisterPanelview

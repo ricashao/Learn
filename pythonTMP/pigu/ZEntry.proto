@@ -1,0 +1,89 @@
+syntax = "proto2";
+
+import "ZCommon.proto";
+import "ZEnum.proto";
+import "ZModel.proto";
+
+package ZProto;
+
+
+//=========================================================================================
+//模块：登录模块
+//作者：Deo
+//描述：所有的协议消息，采用的是解耦的编程思想，消息与消息之间并没有上下文依赖
+//=========================================================================================
+
+
+//登录 -- 游客登录模式（如果不存在，会默认创建游客账号）
+message CS_Login
+{
+    enum enumID
+    {
+        ID = 1000;
+    }
+
+    required string token = 1;          //游客身份的唯一特征值（32位md5加密，客户端可使用机器码来做，一个特征值对应一个游客账号）
+}
+
+//登录 -- 账号登录模式
+message CS_LoginByAccount
+{
+    enum enumID
+    {
+        ID = 1001;
+    }
+
+    required string account = 1;        //登录账号（登录账号可以是手机号，用户名或者邮箱）
+    required string password = 2;       //登录密码（md5加密的32位字符串）
+}
+
+//登录 -- 第三方登录模式
+message CS_LoginByPlatform
+{
+    enum enumID
+    {
+        ID = 1002;
+    }
+
+    required E_PlatformType platform = 1;   //平台枚举值
+    required string token = 2;              //第三方平台身份的唯一特征值（32位md5加密）
+}
+
+//登录成功
+message SC_LoginSuccess
+{
+    enum enumID
+    {
+        ID = 11000;
+    }
+
+    optional M_User user = 1;               //用户数据
+    optional M_UserInfo user_info = 2;      //用户基本信息
+}
+
+//注册（绑定）账号 -- 手机号
+message CS_RegistByPhone
+{
+    enum enumID
+    {
+        ID = 1003;
+    }
+
+    required string phone = 1;          //手机号
+    required uint32 code = 2;           //验证码
+    required string password = 3;       //登录密码（md5加密的32位字符串）
+    required uint32 uid = 4;            //用户ID（如果为空，则代表是用手机号注册账号，如果存在，则表示用手机号绑定这个用户）
+}
+
+//修改密码
+message CS_EditPassword
+{
+    enum enumID
+    {
+        ID = 1004;
+    }
+
+    required uint32 uid = 1;            //用户ID
+    required uint32 code = 2;           //验证码
+    required string password = 3;       //要修改后的新登录密码（md5加密的32位字符串）
+}

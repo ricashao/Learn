@@ -1,5 +1,5 @@
 
-≠	
+Ø	
 ZLobby.protoZProtoZCommon.protoZEnum.protoZModel.proto"5
 CS_GetUserData
 uid (Ruid"
@@ -13,11 +13,11 @@
 CS_GetUserState
 uid (Ruid"
 enumID
-IDÛ"d
+IDÛ"f
 SC_SetUserState
 msg (Rmsg
-task (Rtask
-activiy (Ractiviy"
+task (Rtask
+activity (Ractivity"
 enumID
 IDÉV"L
 CS_ChangeUserFace

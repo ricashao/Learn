@@ -17,7 +17,6 @@ function on_asset_cmp(name,gotp)
 	if name == 'UIRoot' then 
 		local objInstantiate = CS.UnityEngine.GameObject.Instantiate(gotp)
 		objInstantiate.name = name
-		LuaUIManager.clear()
 		LuaUIManager.layerregister()
 		LuaUIManager.register('LobbyPanel',{
 											name = 'LobbyPanel',
@@ -49,6 +48,11 @@ function on_asset_cmp(name,gotp)
 											name = 'ChangeHeadPanel',
 											layer = 'PopupCanvas',
 											path = 'lua/modules/Lobby/modules/ChangeHead/ChangeHeadPanelCtrl.lua' 
+											})
+		LuaUIManager.register('RankPanel',{
+											name = 'RankPanel',
+											layer = 'PopupCanvas',
+											path = 'lua/modules/Lobby/modules/Rank/RankPanelCtrl.lua' 
 											})
 									
 								

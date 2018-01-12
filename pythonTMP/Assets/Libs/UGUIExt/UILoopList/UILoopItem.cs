@@ -7,7 +7,7 @@ public class UILoopItem : MonoBehaviour {
     public int itemIndex;
     //[System.NonSerialized]
     public GameObject itemObject;
-    private object data;
+    protected object data;
 	public void UpdateItem(int index,GameObject item)
 	{
         itemIndex = index;

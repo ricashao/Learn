@@ -109,4 +109,13 @@ function Event.HandlerInfo()
 	end
 end
 
+function Event.Contains(strkey)
+	for e,handlerList in pairs(events) do
+		if(e==strkey)then
+			return true;
+		end
+	end
+	return false;
+end
+
 return Event

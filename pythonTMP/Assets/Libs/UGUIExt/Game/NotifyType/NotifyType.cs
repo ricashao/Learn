@@ -11,5 +11,7 @@
 
         public const string LoadHotFixTipsUI = "LoadHotFixTipsUI";
 
+		public const string ReadUpdateInfo = "ReadUpdateInfo";
+
     }
 }

@@ -8,8 +8,6 @@ using ZhuYuU3d;
 [RequireComponent(typeof(LuaSelectItem))]
 public class LuaSelectLoopItem : LuaLoopItem
 {
-    //[SerializeField]
-    //public string awakefunctionName;
     private LuaSelectItem selectItem;
 
     internal LuaEnv luaEnv;
@@ -28,8 +26,6 @@ public class LuaSelectLoopItem : LuaLoopItem
                 luafun_UILoopItem_Set = luaEnv.Global.GetInPath<UILoopItem_Set>(functionName);
             }
         }
-        //UILoopItem_Set luafun_UILoopItem_Awake = luaEnv.Global.GetInPath<UILoopItem_Set>(awakefunctionName);
-        //if (luafun_UILoopItem_Awake != null) luafun_UILoopItem_Awake(itemIndex, transform, GetData());
         Button[] btns = this.transform.GetComponentsInChildren<Button>();
         SelectGroup group = this.transform.parent.GetComponent<SelectGroup>();
         group.AddItem(selectItem);
@@ -37,6 +33,8 @@ public class LuaSelectLoopItem : LuaLoopItem
         {
             btn.onClick.AddListener(() => { group.SelectByIndex(selectItem.index); });
         }
+        UILoopItem_Set luafun_UILoopItem_Awake = luaEnv.Global.GetInPath<UILoopItem_Set>(awakefunctionName);
+        if (luafun_UILoopItem_Awake != null) luafun_UILoopItem_Awake(itemIndex, transform, GetData());
     }
 
     public override void Data(object data)

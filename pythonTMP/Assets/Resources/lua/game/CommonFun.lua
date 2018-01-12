@@ -64,3 +64,53 @@ function GetComponentInPath(transPar,strPath,typeVar)
 	end
 	return nil;
 end
+
+function EventExist(strkey)
+	return EventManager.Contains(strkey);
+end
+
+function IsInTable(key, tbl)
+	for k,v in pairs(tbl) do
+	  if k == key then
+		return true;
+	  end
+	end
+	return false;
+end
+
+
+function removebyvalue(array, value)
+    for i=#array, 1, -1 do 
+             if array[i] == value then 
+                 table.remove(array,i) 
+             end 
+    end 
+end
+
+-- 删除table中的元素
+function removeElementByKey(tbl,key)
+    --新建一个临时的table
+    local tmp ={}
+
+    --把每个key做一个下标，保存到临时的table中，转换成{1=a,2=c,3=b} 
+    --组成一个有顺序的table，才能在while循环准备时使用#table
+    for i in pairs(tbl) do
+        table.insert(tmp,i)
+    end
+
+    local newTbl = {}
+    --使用while循环剔除不需要的元素
+    local i = 1
+    while i <= #tmp do
+        local val = tmp [i]
+        if val == key then
+            --如果是需要剔除则remove 
+            table.remove(tmp,i)
+         else
+            --如果不是剔除，放入新的tabl中
+            newTbl[val] = tbl[val]
+            i = i + 1
+         end
+     end
+    return newTbl
+end 

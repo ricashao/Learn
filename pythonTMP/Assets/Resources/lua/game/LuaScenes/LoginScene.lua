@@ -16,7 +16,6 @@ function on_asset_cmp(name,gotp)
 	if name == 'UIRoot' then 
 		local objInstantiate = CS.UnityEngine.GameObject.Instantiate(gotp)
 		objInstantiate.name = name
-		LuaUIManager.clear()
 		LuaUIManager.layerregister()
 		
 		--[[

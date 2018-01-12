@@ -1,0 +1,77 @@
+syntax = "proto2";
+
+package ZProto;
+
+//协议类型
+enum E_ProtoIds
+{
+    RegisterToCenterReqId   = 1;        // 注册到中央服务器
+
+    RegisterToCenterAckId   = 10001;    // 注册到中央服务器
+    ZServerChangeNotifyId   = 10002;    // 大厅服务器变化
+    WServerChangeNotifyId   = 10003;    // 大厅服务器变化
+
+    //====================消息分割线，以下消息为客户端和服务端交互所用，以上不是===========
+
+    MessageNotifyId         = 10000;    // 通用消息推送
+
+    CS_LoginId              = 1000;  
+    CS_LoginByAccountId     = 1001;  
+    CS_LoginByPlatformId    = 1002;  
+    CS_RegistByPhoneId      = 1003;
+    CS_EditPasswordId       = 1004;  
+
+    CS_GetUserDataId        = 1010;
+    CS_GetUserStateId       = 1011;
+    CS_ChangeUserFaceId     = 1020;
+    CS_ChangeUserNickId     = 1021;
+    CS_GetRankListId        = 1030;
+
+    SC_LoginSuccessId       = 11000; 
+    SC_SetUserDataId        = 11010; 
+    SC_SetUserStateId       = 11011; 
+    SC_SetRankListId        = 11030; 
+}
+
+//平台类型
+enum E_PlatformType
+{
+    OFFICIAL = 0;           //官方平台
+    WECHAT = 1;             //微信平台
+    QQ = 2;                 //QQ平台
+}
+
+//货币类型
+enum E_MoneyType
+{
+    GOLD = 0;           //金币
+    GEM = 1;            //钻石
+    TICKET = 2;         //点卷
+}
+
+//各种消息通知类型枚举
+enum NotifyType
+{
+    ERROR_SUCCEED = 0;
+
+    ERROR_COMMON = -1;              //请求失败（不确定的失败原因，均返回这个类型）
+    ERROR_PARAM = -2;               //参数错误（客户端请求数据的参数格式不正确或不存在）
+    
+    WARN_USER_NO_FOUND    = -3;       //用户不存在（一般指通过用户ID找不到这个用户）
+    WARN_PHONE_EXISTED    = -4;       //手机号已存在
+    WARN_PHONE_NO_FOUND   = -5;       //手机号不存在
+    WARN_CODE_NO_FOUND    = -6;       //短信验证码不匹配
+    WARN_WRONG_PASSWORD   = -7;       //用户密码错误
+    WARN_BIND_PHONE_AGAIN = -8;       //用户已经绑定手机号 
+    WARN_USERNAME_EXIST   = -9;       //用户名已存在
+    WARN_WRONG_AGENCY     = -10;      //错误代理
+    WARN_IP_LIMIT         = -11;      //IP受限
+    WARN_USER_NO_RIGHT    = -12;      //用户被禁用
+    WARN_USER_IS_ONLINE   = -13;      //用户重复登录
+    WARN_MACHINE_LOCK     = -14;      //机器码被锁
+    WARN_PHONE_LOCK       = -15;      //手机号被锁
+
+    INF0_REGIST_SUCCESS = 1;        //注册成功
+    INF0_BIND_SUCCESS = 2;          //绑定成功
+    INF0_EDIT_SUCCESS = 3;          //修改成功（一般指用户的属性，如头像，昵称，密码等）
+}

@@ -12,9 +12,11 @@ namespace ZhuYuU3d.Game
 	    void Start ()
         {
             mAF = new ApplicationFacade();
-            mAF.StartUp();
+			mAF.StartUp(mstrAssetConfig);
 	    }
 	
+		[SerializeField]
+		string mstrAssetConfig="";
 	}
 
 }

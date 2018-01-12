@@ -2,6 +2,7 @@
 local view = require 'lua/modules/Lobby/modules/ModifyPassword/ModifyPasswordPanelView'
 --本模块消息号
 -- local msgCmd = GameState.curRunState.MsgDefine.LobbyCmd
+local msgCmd = GameState.curRunState.MsgDefine.CommonModuleCmd
 --本模块数据层
 -- local data = GameState.curRunState.Data.LobbyData
 local ZEntryModuleData = require 'lua/datamodules/ZEntryModuleData'
@@ -14,14 +15,14 @@ function awake()
 	view:set_state('init_state')
 	
 	view.cancelbutton:GetComponent("Button").onClick:AddListener(function()
-		uimanager.toggle('ModifyPasswordPanel',0)
+		uimanager.CloseWindow('ModifyPasswordPanel')
 	end)
 	view.closebutton:GetComponent("Button").onClick:AddListener(function()
-		uimanager.toggle('ModifyPasswordPanel',0)
+		uimanager.CloseWindow('ModifyPasswordPanel')
 	end)
 	view.surebutton:GetComponent("Button").onClick:AddListener(function()
 		local err = this.checkpwd()
-		if err then print(err) return end
+		if err then uimanager.ToastTip(err,3,30); return end
 		if (#view.codeinput.text ~= 6) then
 			print("输入六位有效验证码")
 			return
@@ -37,7 +38,7 @@ function awake()
 			print("获取验证码")
 			--TODO获取验证码
 		else
-			print("手机号码格式不正确")
+			uimanager.ToastTip("手机号码格式不正确!",3,30);
 		end
 	end)
 	--AddEventCode 追加事件标志
@@ -50,7 +51,7 @@ function awake()
 
 	--消息监听
 	--ml(msgCmd.user_para,on_msg)
-	ml(sib(10000),on_msg)
+	ml(msgCmd.MessageNotify,on_msg)
 	--事件监听
 	--el(event.name,on_event)
 end	
@@ -84,6 +85,7 @@ function ondestroy()
 
 	--移除消息监听
 	--mr(msgCmd.user_para,on_msg)
+	mr(msgCmd.MessageNotify,on_msg)
 	--移除事件监听
 	--er(event.name,on_event)
 
@@ -100,9 +102,13 @@ end
 --消息处理函数
 function on_msg(key,decode)
 	print(" modifypwd on_msg >> "..key)
-	if(key == sib(10000))then
+	if(key == msgCmd.MessageNotify)then
 		if decode.pid == 'CS_EditPasswordId' then
-			print("modifypwd on_msg type"..decode.type)
+			if decode.type ~= 'INF0_EDIT_SUCCESS' and decode.msg then
+				uimanager.ToastTip(decode.msg,3,30)
+			elseif decode.type == 'INF0_EDIT_SUCCESS' then
+				uimanager.ToastTip('修改成功',3,30)
+			end
 		end
 	end
 

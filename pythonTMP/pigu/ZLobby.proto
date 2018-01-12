@@ -1,0 +1,179 @@
+syntax = "proto2";
+
+import "ZCommon.proto";
+import "ZEnum.proto";
+import "ZModel.proto";
+
+package ZProto;
+
+
+//=========================================================================================
+//模块：大厅
+//作者：Deo
+//描述：所有的协议消息，采用的是解耦的编程思想，消息与消息之间并没有上下文依赖
+//=========================================================================================
+
+
+//获取最新的用户数据
+message CS_GetUserData
+{
+    enum enumID
+    {
+        ID = 1010;
+    }
+
+    required uint32 uid = 1;        //用户ID
+}
+
+//更新用户数据
+message SC_SetUserData
+{
+    enum enumID
+    {
+        ID = 11010;
+    }
+
+    optional M_User user = 1;           //用户数据
+    optional M_UserInfo user_info = 2;  //用户信息（如果不是自己，则为空）
+}
+
+//获取用户状态
+message CS_GetUserState
+{
+    enum enumID
+    {
+        ID = 1011;
+    }
+
+    required uint32 uid = 1;        //用户ID
+}
+
+//更新用户状态
+message SC_SetUserState
+{
+    enum enumID
+    {
+        ID = 11011;
+    }
+
+    optional uint32 msg = 1;        //未读消息数量（等于0，表示没有）
+    optional uint32 task = 2;       //新增已完成的任务数（等于0，表示没有。大于0，表示有尚未查看的已完成任务）
+    optional uint32 activity = 3;    //新增已完成的活动数（等于0，表示没有。大于0，表示有尚未查看的已完成活动）
+}
+
+//修改用户头像
+message CS_ChangeUserFace
+{
+    enum enumID
+    {
+        ID = 1020;
+    }
+
+    required uint32 uid = 1;        //用户ID
+    required string face = 2;       //用户头像标识（如果是纯数字，则表示系统头像的ID，暂时只支持纯数字）
+}
+
+//修改用户昵称
+message CS_ChangeUserNick
+{
+    enum enumID
+    {
+        ID = 1021;
+    }
+
+    required uint32 uid = 1;            //用户ID
+    required string nick_name = 2;      //要修改的用户昵称
+}
+
+//获取排行榜信息
+message CS_GetRankList
+{
+    enum enumID
+    {
+        ID = 1030;
+    }
+
+    required uint32 uid = 1;            //用户ID
+    required E_MoneyType type = 2;      //榜单类型（使用货币类型描述，其中钻石类型表示获取充值榜单）
+}
+
+//更新排行榜信息
+message SC_SetRankList
+{
+    enum enumID
+    {
+        ID = 11030;
+    }
+
+    message RankData
+    {
+        optional uint32 uid = 1;            //用户ID
+        optional string nick_name = 2;      //用户昵称
+        optional string face = 3;           //用户头像
+        optional sint64 value = 4;          //当前榜单类型对应的值（非排名）
+    }
+
+    optional uint32 mine = 1;           //我的排名（客户端自行判断数值是否超过100）
+    optional E_MoneyType type = 2;      //当前榜单类型
+    repeated RankData datas = 3;        //前20名的信息数据（数组默认排序是升序）
+}
+
+//获取当前最新的跑马灯
+message CS_GetMarquee
+{
+    enum enumID
+    {
+        ID = 1040;
+    }
+}
+
+//更新当前最新的跑马灯
+message SC_SetMarquee
+{
+    enum enumID
+    {
+        ID = 11040;
+    }
+
+    repeated string msgs = 1;        //最新的消息数组（从上一次发送这条通知的时间开始到当前这一条通知之间的所有消息）
+}
+
+//获取当前的活动信息
+message CS_GetActivity
+{
+    enum enumID
+    {
+        ID = 1050;
+    }
+}
+
+//更新当前的活动信息
+message SC_SetActivity
+{
+    enum enumID
+    {
+        ID = 11050;
+    }
+
+    repeated string urls = 1;       //当前的活动数组（返回的内容只有展示图的url地址）
+}
+
+//获取游戏列表
+message CS_GetGameList
+{
+    enum enumID
+    {
+        ID = 1060;
+    }
+}
+
+//更新游戏列表
+message SC_SetGameList
+{
+    enum enumID
+    {
+        ID = 11060;
+    }
+
+    repeated M_GameInfo games = 1;     //游戏数组（默认排序并非是客户端显示排序）
+}

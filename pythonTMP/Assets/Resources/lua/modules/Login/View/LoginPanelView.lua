@@ -62,7 +62,7 @@ function LoginPanelview:init(trans)
 		this.BtnBackGame.onClick:AddListener
 		(
 			function()
-				CS.ZhuYuU3d.UIManager.GetInstance():ClosePage();
+				LuaUIManager.CloseWindow("LoginPanel");
 				print("Click Back Game Button");
 			end
 		);
@@ -74,15 +74,21 @@ function LoginPanelview:init(trans)
 		(
 			function()
 
-				if this.AccountInputField.text==nil then
+				if this.AccountInputField.text=="" then
 					print("Account is nil.");
+					return;
 				end
 				
-				if this.PasswordInputField.text==nil then
+				if this.PasswordInputField.text=="" then
 					print("Password is nil.");
+					return;
 				end
 				
 				print("Click Login Button");
+				
+				es("V2C_LoginModule_LoginByPhone",{["phoneNumber"]=this.AccountInputField.text , ["password"]=this.PasswordInputField.text});
+				
+				
 			end
 		);
 	end
@@ -95,7 +101,7 @@ function LoginPanelview:init(trans)
 				print("Click Register Button");
 				LuaUIManager.register('RegisterPanel',{
 											name = 'RegisterPanel',
-											layer = 'StaticCanvas',
+											layer = 'PopupCanvas',
 											path = 'lua/modules/Register/Ctrl/RegisterPanelCtrl.lua' 
 											})
 
@@ -125,9 +131,14 @@ end
 --视图状态
 function LoginPanelview:set_state(viewState)
 	
-	if(viewState == 'close') then
-		this.transform.gameObject:SetActive(false)
-	end
+end
+
+function LoginPanelview.setAccountLabel(strValue)
+	this.AccountInputField.text=strValue;
+end
+
+function LoginPanelview.setPassLabel(strValue)
+	this.PasswordInputField.text=strValue;
 end
 
 return LoginPanelview

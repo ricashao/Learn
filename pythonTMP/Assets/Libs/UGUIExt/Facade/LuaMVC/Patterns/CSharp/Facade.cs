@@ -12,6 +12,7 @@ namespace PureMVC.Patterns
         bool HasCommand(string notificationName);
         void RegisterCommand(string notificationName, ICommand command);
         void RemoveCommand(string notificationName);
+		ICommand getCommand(string s);
         // mediator
         bool HasMediator(string mediatorName);
         void RegisterMediator(IMediator mediator);
@@ -85,6 +86,11 @@ namespace PureMVC.Patterns
         {
             this.m_controller.RegisterCommand(notificationName, command);
         }
+
+		public ICommand getCommand(string skey)
+		{
+			return this.m_controller.getcommand (skey);
+		}
 
         public void RemoveCommand(string notificationName)
         {

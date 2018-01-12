@@ -114,7 +114,6 @@ function ZEntryModuleData.on_msg(key,decode)
 		ZEntryModuleData.SC_LoginSuccess = decode
 		CommonData.user = decode.user;
 		CommonData.user_info = decode.user_info
-		uimanager.toggle("LoginPanel",0);
 		print('face============'..decode.user.face)
 		es("LoginSuccess",nil)
 		

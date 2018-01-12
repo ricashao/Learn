@@ -12,9 +12,13 @@ namespace ZhuYuU3d.Game
             
         }
 
-        public void StartUp(  )
+		public void StartUp(string sconfigpath=null)
 		{
-            SendNotification(NotificationType.LoadLaunchUI);
+			RegisterCommand (NotificationType.ReadUpdateInfo, new AssetUpdateInfoCommand (AssetUpdateInfoCommand.UpdateConfigLoadWay.LoadFromResource,
+				sconfigpath)
+			);
+
+			SendNotification(NotificationType.ReadUpdateInfo);
 		}
 
 	    public void ShutDown()
@@ -32,6 +36,8 @@ namespace ZhuYuU3d.Game
             RegisterCommand(NotificationType.NetWorkCheck, new NetworkCheckCommand());
 
             RegisterCommand(NotificationType.LoadHotFixTipsUI, new HotFixTipsCommand());
+
+
 
         }
     }

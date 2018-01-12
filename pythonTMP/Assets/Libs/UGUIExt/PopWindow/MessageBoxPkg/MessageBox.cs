@@ -36,11 +36,23 @@ public class MessageBox:MonoBehaviour {
     static GameObject messageBoxCanvas;
     static Action<Result> resultCallback;
 
-        [SerializeField]
+//        [SerializeField]
         GameObject Button1, Button2, Button3;
 
-        [SerializeField]
+//        [SerializeField]
         Text mtxtTitle, mtxtContent;
+
+
+
+		void Awake()
+		{
+			Button1 = transform.Find ("Button1").gameObject;
+			Button2 = transform.Find ("Button2").gameObject;
+			Button3 = transform.Find ("Button3").gameObject;
+
+			mtxtTitle = transform.Find ("MBTitle").GetComponent<Text> ();
+			mtxtContent = transform.Find ("MBMessage").GetComponent<Text> ();
+		}
 
     /// <summary>
     /// Displays a MessageBox with an OK button.
@@ -98,6 +110,8 @@ public class MessageBox:MonoBehaviour {
             isActive = true;
         }
 
+
+
     /// <summary>
     /// Displays a MessageBox with an OK button.
     /// </summary>
@@ -122,6 +136,7 @@ public class MessageBox:MonoBehaviour {
     {
         if (isActive)
             return;
+		
 
         var prefab = ResourceLoader.Instance.LoadInstanceAsset("MessageBoxPrefab",
             (UnityEngine.Object objins) =>
@@ -158,6 +173,8 @@ public class MessageBox:MonoBehaviour {
         void ShowOKCancel(string title, string message,Action<Result> callback)
         {
            // messageBoxCanvas = (GameObject)UnityEngine.Object.Instantiate(prefab);
+			messageBoxCanvas = this.gameObject;
+
             Button1.GetComponentInChildren<Text>().text = "Cancel";
             Button1.GetComponent<Button>().onClick.AddListener(() => CancelClicked());
             Button2.GetComponentInChildren<Text>().text = "OK";
@@ -228,38 +245,55 @@ public class MessageBox:MonoBehaviour {
             isActive = true;
         }
 
-    private static void NoClicked()
+    private void NoClicked()
     {
         isActive = false;
-        messageBoxCanvas.SetActive(false);
-        GameObject.Destroy(messageBoxCanvas);
+		if (messageBoxCanvas != null) {
+
+			messageBoxCanvas.SetActive (false);
+			GameObject.Destroy (messageBoxCanvas);
+			messageBoxCanvas = null;
+		}
+
         if(resultCallback!=null)
             resultCallback(Result.NO);
     }
 
-    private static void YesClicked()
+    private void YesClicked()
     {
         isActive = false;
-        messageBoxCanvas.SetActive(false);
-        GameObject.Destroy(messageBoxCanvas);
+			if (messageBoxCanvas != null) {
+				messageBoxCanvas.SetActive (false);
+				GameObject.Destroy (messageBoxCanvas);
+				messageBoxCanvas = null;
+
+			}
         if (resultCallback != null)
             resultCallback(Result.YES);
     }
 
-    private static void OKClicked()
+    private void OKClicked()
     {
         isActive = false;
-        messageBoxCanvas.SetActive(false);
-        GameObject.Destroy(messageBoxCanvas);
+		if (messageBoxCanvas != null) 
+		{
+			messageBoxCanvas.SetActive (false);
+			GameObject.Destroy (messageBoxCanvas);
+				messageBoxCanvas = null;
+		}
         if (resultCallback != null)
             resultCallback(Result.OK);
     }
 
-    private static void CancelClicked()
+    private void CancelClicked()
     {
         isActive = false;
-        messageBoxCanvas.SetActive(false);
-        GameObject.Destroy(messageBoxCanvas);
+		if (messageBoxCanvas != null) {
+			messageBoxCanvas.SetActive (false);
+			GameObject.Destroy (messageBoxCanvas);
+				messageBoxCanvas = null;
+
+		}
         if (resultCallback != null)
             resultCallback(Result.CANCEL);
     }
@@ -268,13 +302,17 @@ public class MessageBox:MonoBehaviour {
     /// Static method to dismiss any active MessageBox in the scene.
     /// </summary>
     /// <returns>A boolean, TRUE if a MessageBox was indeed dismissed, FALSE if there was no active MessageBox.</returns>
-    public static bool Dismiss()
+    public bool Dismiss()
     {
         if (isActive)
         {
             isActive = false;
-            messageBoxCanvas.SetActive(false);
-            GameObject.Destroy(messageBoxCanvas);
+				if (messageBoxCanvas != null) {
+					messageBoxCanvas.SetActive (false);
+					GameObject.Destroy (messageBoxCanvas);
+					messageBoxCanvas = null;
+
+				}
             if (resultCallback != null)
                 resultCallback(Result.DISMISSED);
             return true;

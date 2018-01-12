@@ -4,56 +4,73 @@ using UnityEngine;
 using XLua;
 
 [CSharpCallLua]
-public class SelectGroup : MonoBehaviour {
+public class SelectGroup : MonoBehaviour
+{
 
-	public SelectItem[] initArr;
+    public SelectItem[] initArr;
 
-    public int selectIndex;
-    public object selectData;
+    public List<ISelectAble> group = new List<ISelectAble>();
 
-    public List<ISelectAble> group = new List<ISelectAble> ();
+    public void Awake()
+    {
 
-	public void Awake(){
+        if (initArr != null)
+        {
 
-		if(initArr != null){
-			
-			for(int i = 0 ; i < initArr.Length; i++ ){
-				AddItem (initArr[i]);
-			}
-		}
-	}
+            for (int i = 0; i < initArr.Length; i++)
+            {
+                AddItem(initArr[i]);
+            }
+        }
+    }
 
-	public void SelectByIndex (int index){
-		
-		for(int i = 0 ;i < group.Count; i++ ){
+    private int index = -1;
 
-			if (i == index) {
-				group[i].OnSelect();
-                selectIndex = index;
-                selectData = group[i].GetData();
-            } else {
-				group[i].UnSelect();
-			}
-		}
-	}
+    public int Index { get { return this.index; } set { SelectByIndex(value); } }
 
-	public void AddItem(ISelectAble selectItem ){
-		
-		group.Add (selectItem);
+    public object SelectData { get { return this._selectData; } }
 
-		selectItem.SetSelectGroup (this);
-		selectItem.SetIndex (group.Count - 1);
-	}
+    private object _selectData;
 
-	public void Add(object selectItem){
-		
-		if (selectItem is ISelectAble) {
-			AddItem (selectItem as ISelectAble);
-		}
-	}
+    public void SelectByIndex(int index)
+    {
+        this.index = index;
+        for (int i = 0; i < group.Count; i++)
+        {
 
-	void OnDestroy(){
+            if (i == index)
+            {
+                group[i].OnSelect();
+                _selectData = group[i].GetData();
+            }
+            else
+            {
+                group[i].UnSelect();
+            }
+        }
+    }
 
-		group.Clear ();
-	}
+    public void AddItem(ISelectAble selectItem)
+    {
+
+        group.Add(selectItem);
+
+        selectItem.SetSelectGroup(this);
+        selectItem.SetIndex(group.Count - 1);
+    }
+
+    public void Add(object selectItem)
+    {
+
+        if (selectItem is ISelectAble)
+        {
+            AddItem(selectItem as ISelectAble);
+        }
+    }
+
+    void OnDestroy()
+    {
+
+        group.Clear();
+    }
 }

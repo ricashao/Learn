@@ -10,6 +10,7 @@
         void RegisterCommand(string notificationName, ICommand command);
         void RegisterObserver(string notificationName, IObserver observer);
         void RemoveObserver(string notificationName, IObserver observer);
+		ICommand getcommand (string skey);
     }
 
     public class Controller : IController
@@ -45,6 +46,17 @@
         {
             this.m_view = View.Instance;
         }
+
+		public virtual ICommand getcommand(string skey)
+		{
+			lock (this.m_syncRoot)
+			{
+				if (HasCommand (skey))
+					return this.m_commands [skey];
+				else
+					return null;
+			}
+		}
         
         public virtual bool HasCommand(string notificationName)
         {

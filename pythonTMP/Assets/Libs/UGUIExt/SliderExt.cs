@@ -19,13 +19,18 @@ public class SliderExt : MonoBehaviour
     [SerializeField]
     GameObject mgoHandle,mgoInfo;
 
+	[SerializeField]
+	float mfstart_Delta_x=50.0f;
+
+	[SerializeField]
+	float mfend_Delta_x=100.0f;
 
     public void OnSliderValueChange(float fper)
     {
         Debug.Log("Current Per:" + fper);
 
         RectTransform rtself = GetComponent<RectTransform>();
-        float fcurpos = _sliderIns.GetComponent<RectTransform>().sizeDelta.x * fper;
+		float fcurpos = (_sliderIns.GetComponent<RectTransform>().sizeDelta.x+mfstart_Delta_x) * fper-mfend_Delta_x;
 
         RectTransform rtgoHandle=mgoHandle.GetComponent<RectTransform>();
         if (rtgoHandle != null)

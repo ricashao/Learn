@@ -1,0 +1,5 @@
+{
+    "AssetServerUrl": "http://127.0.0.1",
+    "RemoteMD5FilePath": "file:///D:/StreamingAssets/md5filelist.txt",
+    "EnableHotfix": "False"
+}

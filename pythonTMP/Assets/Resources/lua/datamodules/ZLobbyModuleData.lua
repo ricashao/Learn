@@ -109,10 +109,10 @@ function ZLobbyModuleData.send_CS_ChangeUserNick(uid,nick_name)
 	CS_ChangeUserNick.nick_name = nick_name
 	GameState.tcpClinet.sendmsg(Cmd.CS_ChangeUserNick,CS_ChangeUserNick)
 end
-function ZLobbyModuleData.send_CS_GetRankList(uid,type)
+function ZLobbyModuleData.send_CS_GetRankList(uid,type1)
 	local CS_GetRankList = {}
 	CS_GetRankList.uid = uid
-	CS_GetRankList.type = type
+	CS_GetRankList.type = type1
 	GameState.tcpClinet.sendmsg(Cmd.CS_GetRankList,CS_GetRankList)
 end
 function ZLobbyModuleData.send_CS_GetMarquee()
@@ -147,6 +147,7 @@ function ZLobbyModuleData.on_msg(key,decode)
 		print("SC_SetUserState.activiy ".. decode.activiy)
 	end
 	if key == Cmd.SC_SetRankList then
+		print('11111111111111111111111111111111111111111')
 		print("ZLobby >> on_msg >> user_para >>  ".. Cmd.SC_SetRankList)
 
 		ZLobbyModuleData.SC_SetRankList = decode

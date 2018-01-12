@@ -8,6 +8,8 @@ RegisterPanelCtrl={};
 
 local this=RegisterPanelCtrl;
 
+LuaUIManager = require 'lua/game/LuaUIManager'
+
 function awake()
 	
 	RegisterPanelview:init(self.transform);
@@ -15,6 +17,8 @@ function awake()
 	el("V2C_RegisterModule_GoRegister",RegisterPanelCtrl.OnEvent);
 	
 	el("S2C_RegisterModule_RegisterSuccess",RegisterPanelCtrl.OnEvent);
+	
+	el("S2C_RegisterModule_RegisterFailed",RegisterPanelCtrl.OnEvent);
 	
 end	
 --事件处理函数
@@ -47,6 +51,12 @@ end
 
 function ondestroy()
 	
+	er("V2C_RegisterModule_GoRegister",RegisterPanelCtrl.OnEvent);
+	
+	er("S2C_RegisterModule_RegisterSuccess",RegisterPanelCtrl.OnEvent);
+	
+	er("S2C_RegisterModule_RegisterFailed",RegisterPanelCtrl.OnEvent);
+	
 end
 
 function RegisterPanelCtrl.OnEvent(event,param)
@@ -59,8 +69,31 @@ function RegisterPanelCtrl.OnEvent(event,param)
 		
 	elseif event=="S2C_RegisterModule_RegisterSuccess" then
 		
+		print("S2C_RegisterModule_RegisterSuccess");
+		
+		LuaUIManager.ToastTip
+		(
+		"你已经注册成功!",
+		3,
+		30
+		);
+		
+		LuaUIManager.CloseWindow("RegisterPanel");
+		
+		es("C2C_RegisterModule_RegisterSuccess",param);
+		
+		print("Toast over");
+		
+	elseif event=="S2C_RegisterModule_RegisterFailed" then
+		LuaUIManager.ToastTip
+		(
+		"注册失败!",
+		3,
+		30
+		);
 		
 	end
+	
 	
 	
 	

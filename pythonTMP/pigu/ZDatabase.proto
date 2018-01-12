@@ -1,0 +1,56 @@
+syntax = "proto2";
+
+import "ZCommon.proto";
+
+package ZProto;
+
+message DBParameter
+{
+    enum enumDBParamterType
+    {
+        Unknown = 0;
+        Int32 = 3;
+        Int64 = 20;
+        VChar = 200;
+    }
+
+    optional string name = 1;
+    optional enumDBParamterType type = 2;
+    optional int32 int32_v = 3;
+    optional int64 int64_v = 4;
+    optional string string_v = 5;
+    optional int32 size = 6;
+}
+
+message ExecuteProcReq
+{
+    optional GeneralReq req = 1;
+    optional string text = 2;
+    optional bool is_return_value = 3;
+    optional bool is_return_xml = 4;
+    repeated DBParameter parameters = 5;
+}
+
+message ExecuteTextReq
+{
+    optional GeneralReq req = 1;
+    optional string text = 2;
+    optional bool is_query = 3;
+    optional bool is_return_xml = 4;
+}
+
+message ExecuteProcAck
+{
+    optional GeneralAck ack = 1;
+    optional int32 result = 2;
+    optional string recordset_xml = 3;
+    optional bytes recordset_adtg = 4;
+}
+
+message ExecuteTextAck
+{
+    optional GeneralAck ack = 1;
+    optional int32 result = 2;
+    optional string recordset_xml = 3;
+    optional bytes recordset_adtg = 4;
+}

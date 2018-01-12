@@ -1,0 +1,32 @@
+syntax = "proto2";
+
+package ZProto;
+
+//用户模型
+message M_User
+{
+    optional uint32 id = 1;             //用户ID
+    optional sint64 gold = 2;           //金币（指身上携带的金币，不包含银行金币）
+    optional string user_name = 3;      //用户名
+    optional string nick_name = 4;      //用户昵称
+    optional string face = 5;           //头像ID或者URL（当不是URL时则为系统头像ID，如果是一个URL，则客户端自己获取头像图片）
+    optional uint32 vip = 6;            //VIP等级（0代表没有VIP）
+}
+
+//用户信息模型
+message M_UserInfo
+{
+    optional sint64 gold_bank = 1;      //存放在银行（保险柜）的金币
+    optional sint64 gem = 2;            //钻石
+    optional sint64 ticket = 3;         //游戏点卷
+    optional string phone = 4;          //手机号
+}
+
+//游戏信息模型
+message M_GameInfo
+{
+    optional uint32 id = 1;             //游戏ID
+    optional string name = 2;           //游戏名字
+    optional uint32 status = 3;         //游戏状态（0 表示正常 >=1 表示各种异常状态）
+    optional uint32 sort = 4;           //游戏显示顺序（主要给客户端做游戏显示排序用的）
+}

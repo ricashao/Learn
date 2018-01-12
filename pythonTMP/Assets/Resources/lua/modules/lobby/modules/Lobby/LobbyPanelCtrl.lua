@@ -19,7 +19,7 @@ function awake()
 	--end)
 
 	view.HaedImageButton:GetComponent("Button").onClick:AddListener(function()
-		uimanager.toggle('UserInfoPanel',1)
+		uimanager.open('UserInfoPanel',nil,nil)
 	end)
 	view.NumberAddButton0:GetComponent("Button").onClick:AddListener(function()
 	print('onClick:'..'NumberAddButton0')
@@ -32,8 +32,7 @@ function awake()
 	end)
 	view.SettingButton:GetComponent("Button").onClick:AddListener(function()
 		print("Setting Click");
-		-- uimanager.open('LoginPanel');--,"","");
-		uimanager.toggle('LoginPanel',1)
+		uimanager.open('LoginPanel',nil,nil);--,"","");
 	end)
 	view.KefuButton:GetComponent("Button").onClick:AddListener(function()
 	print('onClick:'..'KefuButton')
@@ -57,7 +56,7 @@ function awake()
 	print('onClick:'..'BottomButton3')
 	end)
 	view.BottomButton4:GetComponent("Button").onClick:AddListener(function()
-	print('onClick:'..'BottomButton4')
+		uimanager.open('RankPanel',nil,nil);
 	end)
 	view.BottomButton5:GetComponent("Button").onClick:AddListener(function()
 	print('onClick:'..'BottomButton5')

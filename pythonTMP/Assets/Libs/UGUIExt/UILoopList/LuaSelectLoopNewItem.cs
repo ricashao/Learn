@@ -36,8 +36,6 @@ public class LuaSelectLoopNewItem : LuaLoopItem,ISelectAble
                 luafun_UILoopItem_Set = luaEnv.Global.GetInPath<UILoopItem_Set>(functionName);
             }
         }
-        //UILoopItem_Set luafun_UILoopItem_Awake = luaEnv.Global.GetInPath<UILoopItem_Set>(awakefunctionName);
-        //if (luafun_UILoopItem_Awake != null) luafun_UILoopItem_Awake(itemIndex, transform, GetData());
         Button[] btns = this.transform.GetComponentsInChildren<Button>();
         SelectGroup group = this.transform.parent.GetComponent<SelectGroup>();
         group.AddItem(this);
@@ -65,6 +63,9 @@ public class LuaSelectLoopNewItem : LuaLoopItem,ISelectAble
                 luafun_UnSelect = luaEnv.Global.GetInPath<OnSelectItem>(unSelectFunName);
             }
         }
+
+        UILoopItem_Set luafun_UILoopItem_Awake = luaEnv.Global.GetInPath<UILoopItem_Set>(awakefunctionName);
+        if (luafun_UILoopItem_Awake != null) luafun_UILoopItem_Awake(itemIndex, transform, GetData());
     }
     protected SelectGroup selectGroup;
     public override void Data(object data)

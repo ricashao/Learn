@@ -10,7 +10,7 @@ function RegisterPanelServices.Init(MsgCmd,DataObj)
 	this.DataObj=DataObj;
 	el("C2S_RegisterModule_GoRegister",RegisterPanelServices.OnEvent)
 	
-	ml(MsgCmd.SC_LoginSuccess,RegisterPanelServices.on_msg)
+	--ml(MsgCmd.SC_LoginSuccess,RegisterPanelServices.on_msg)
 	ml(sib(10000),RegisterPanelServices.on_msg)
 	
 	
@@ -27,6 +27,16 @@ function RegisterPanelServices.send_CS_RegistByPhone(phone,code,password,uid)
 
 	CS_RegistByPhone.password = newmd5password;
 	CS_RegistByPhone.uid = uid
+
+	this.DataObj.CS_RegisterByPhoneQuest=
+	{
+		["RegisterByPhoneQuest_PhoneNumber"]=phone,
+		["RegisterByPhoneQuest_Code"]=code;
+		["RegisterByPhoneQuest_Password"]=password;
+		["RegisterByPhoneQuest_UserID"]=uid;
+		["RegisterByPhoneQuest_IsRegisterSuccess"]=false;
+	};
+	
 	GameState.tcpClinet.sendmsg( this.MsgCmd.CS_RegistByPhone,CS_RegistByPhone)
 end
 
@@ -52,16 +62,23 @@ end
 
 function RegisterPanelServices.on_msg(key,decode)
 	
-	if key == this.MsgCmd.SC_LoginSuccess then
-
-		this.DataObj.SC_LoginSuccess = decode;
-		
-		print("Login Success"..decode.user.id);
-	elseif key==sib(10000) then
+	if key==sib(10000) then
+	
 		print("Back Message"..decode.type..decode.pid);
+		
 		if (decode.type=="INF0_REGIST_SUCCESS") then
+		
+			this.DataObj.CS_RegisterByPhoneQuest["RegisterByPhoneQuest_IsRegisterSuccess"]=true;
 			
+			es("S2C_RegisterModule_RegisterSuccess",this.DataObj.CS_RegisterByPhoneQuest);
+			
+		else 
+			if(EventExist("S2C_RegisterModule_RegisterFailed"))then
+				es("S2C_RegisterModule_RegisterFailed");
+			end
 		end
+		
+		
 	end
 	
 end 
