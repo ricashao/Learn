@@ -9,6 +9,9 @@ local ZLobbyModuleData = require 'lua/datamodules/ZLobbyModuleData'
 local CommonModuleData = require 'lua/datamodules/CommonModuleData'
 require 'lua/modules/Lobby/modules/ChangeHead/ChangeHeadPanelFunc'
 require 'lua/modules/Lobby/modules/Rank/RankPanelFunc'
+require 'lua/modules/Lobby/modules/Shop/ShopPanelFunc'
+require 'lua/modules/Lobby/modules/Bag/BagPanelFunc'
+require 'lua/modules/Lobby/modules/Task/TaskPanelFunc'
 require 'lua/modules/Lobby/LobbyEventConst'
 --导入子模块数据层
 
@@ -21,6 +24,8 @@ function LobbyState:init(gameState,curTcpClinet,gameData)
 	LobbyState.MsgDefine = MsgDefine
 	LobbyState.Data = Data
 	Data.ZEntryModuleData = ZEntryModuleData
+	Data.CommonModuleData = CommonModuleData
+	Data.ZLobbyModuleData = ZLobbyModuleData
 	--pb 注册
 	CommonModuleData.register(tcpClinet,MsgDefine)
 	ZEntryModuleData.register(tcpClinet,MsgDefine)

@@ -2,8 +2,8 @@ LoginPanelCtrl={};
 
 this=LoginPanelCtrl;
 
-local LoginPanelview = require 'lua/modules/Login/View/LoginPanelview'
-
+local LoginPanelview = require 'lua/modules/Login/View/LoginPanelView'
+							
 LuaUIManager = require 'lua/game/LuaUIManager'
 
 --本模块消息号
@@ -43,6 +43,8 @@ function ondestroy()
 	
 	er("S2C_LoginModule_LoginSuccess",LoginPanelCtrl.OnEvent);
 	
+	
+	
 end
 
 function LoginPanelCtrl.OnEvent(event,param)
@@ -66,6 +68,9 @@ function LoginPanelCtrl.OnEvent(event,param)
 			LoginPanelview.setAccountLabel(param["RegisterByPhoneQuest_PhoneNumber"]);
 			
 			LoginPanelview.setPassLabel(param["RegisterByPhoneQuest_Password"]);
+			
+			LocalDataManager.SaveAccountAndPassword(param["RegisterByPhoneQuest_PhoneNumber"],
+			param["RegisterByPhoneQuest_Password"]);
 		end
 		
 	elseif event=="V2C_LoginModule_LoginByPhone" then
@@ -79,6 +84,8 @@ function LoginPanelCtrl.OnEvent(event,param)
 		LuaUIManager.ToastTip("登陆成功!",3,30);
 		
 		LuaUIManager.CloseWindow("LoginPanel");
+		
+		
 		
 	end
 	

@@ -154,7 +154,7 @@ namespace Libs{
         AssetBundleCreateRequest r;
         override public IEnumerator LoadAsync(string assetBundleName)
         {
-            r = AssetBundle.LoadFromFileAsync(PathTools.GetAssetPathForLoadPath(assetBundleName));
+			r = AssetBundle.LoadFromFileAsync(PathTools.PersistentOrStreamingAssetsPath(assetBundleName));
             yield return r;
 
             assetBundle = r.assetBundle;
@@ -330,8 +330,7 @@ namespace Libs{
 			AssetBundle bundle;
 
 			#if UNITY_5
-				bundle = AssetBundle.LoadFromFile (PathTools.GetAssetPathForLoadPath("StreamingAssets"));
-				//bundle = AssetBundle.LoadFromFile (Application.streamingAssetsPath+"/StreamingAssets");
+				bundle = AssetBundle.LoadFromFile (PathTools.PersistentOrStreamingAssetsPath("StreamingAssets"));
 			#else 
 				string manifestPath = PathTools.GetAssetPath("StreamingAssets");
 				WWW www = new WWW(manifestPath);
@@ -362,7 +361,7 @@ namespace Libs{
 
 			AssetBundle bundle;
 			#if UNITY_5
-			bundle = AssetBundle.LoadFromFile (PathTools.GetAssetPathForLoadPath(streamingAssetsFileName));
+			bundle = AssetBundle.LoadFromFile (PathTools.PersistentOrStreamingAssetsPath(streamingAssetsFileName));
 			//bundle = AssetBundle.LoadFromFile (Application.streamingAssetsPath+"/StreamingAssets");
 			#else 
 			string manifestPath = PathTools.GetAssetPath("StreamingAssets");
@@ -895,37 +894,60 @@ namespace Libs{
         /// <param name="streamingAssetsFileName">Streaming assets file name.</param>
         /// <param name="abDic">Ab dic.</param>
         public static void ReadAssetsName2AssetBundleInDic(string streamingAssetsFileName, Dictionary<string,string> abDic ){
-            
-            string fileText = System.IO.File.ReadAllText(PathTools.GetAssetPathForLoadPath(streamingAssetsFileName)).Trim();
-            string[] allLines = fileText.Split('\n');
-            string curLine;
-            int curIndex;
-            for(int i = 0;i < allLines.Length; i++){
-                curLine = allLines[i];
-                curLine=curLine.Trim();
-                curIndex = curLine.IndexOf("=");
-                if (curIndex < 0)
-                {
-                    Debug.LogErrorFormat("ReadAssetsame2AssetBundleInDic Error Line {0}" , curLine);
-                    continue;
-                }
-                else
-                {
-                    abDic.Add( curLine.Substring(0,curIndex) , curLine.Substring(curIndex + 1 ) );
-                }
+			string fileText = null;
+			         
+            if (PathTools.ExistsPersistentPath (streamingAssetsFileName)) {               
+                fileText = System.IO.File.ReadAllText (PathTools.GetPersistentPath (streamingAssetsFileName)).Trim ();            
+             }  else {               
+             if (Application.platform == RuntimePlatform.Android) {              
+                 WWW www = new WWW(PathTools.GetAppContentPath (streamingAssetsFileName));     
+                 while (true){
+                    if (www.isDone || !string.IsNullOrEmpty(www.error)) {                           
+                        System.Threading.Thread.Sleep(50);                              
+                        if (!string.IsNullOrEmpty(www.error)) {                               
+                            Debug.LogError(www.error);                         } else {                             fileText = www.text;
+                        }
+                        break;
+                    } 
+                }               
+            }  else {                   
+                fileText = System.IO.File.ReadAllText (PathTools.GetAppContentPath (streamingAssetsFileName)).Trim ();              
+                }          
+            }     			if (fileText == null) {                 
+                Debug.LogErrorFormat ("error Read streamingAssetsFile {0} ", streamingAssetsFileName);              
+                return;            
             }
 
+			string[] allLines = fileText.Split('\n');
+			string curLine;
+			int curIndex;
+			for(int i = 0;i < allLines.Length; i++){
+				curLine = allLines[i];
+				curLine=curLine.Trim();
+				curIndex = curLine.IndexOf("=");
+				if (curIndex < 0)
+				{
+					Debug.LogErrorFormat("ReadAssetsame2AssetBundleInDic Error Line {0}" , curLine);
+					continue;
+				}
+				else
+				{
+					Debug.LogWarningFormat ("  add ReadAssetsame2AssetBundleInDic key{0},value{1}",curLine.Substring(0,curIndex),
+						curLine.Substring(curIndex + 1 ) );
+					abDic.Add( curLine.Substring(0,curIndex) , curLine.Substring(curIndex + 1 ) );
+				}
+			}
         }
 
         public static void CreateAssetsName2AssetBundle(string streamingAssetsFileName){
             
-            string filePath = PathTools.GetAssetPathForLoadPath(streamingAssetsFileName);
+			string filePath = PathTools.PersistentOrStreamingAssetsPath(streamingAssetsFileName);
             AssetBundle bundle = AssetBundle.LoadFromFile(filePath);
             AssetBundleManifest manifest = bundle.LoadAsset<AssetBundleManifest>("AssetBundleManifest");
 
             string [] assetBundles = manifest.GetAllAssetBundles();
 
-            string path = PathTools.GetAssetPathForLoadPath(streamingAssetsFileName+"_AssetsName2AssetBundleAll.txt" );
+			string path = PathTools.PersistentOrStreamingAssetsPath(streamingAssetsFileName+"_AssetsName2AssetBundleAll.txt" );
             System.IO.StreamWriter sw = System.IO.File.CreateText(path);
             foreach(string abName in assetBundles){
                 if (abName.StartsWith("StreamingAssets")){
@@ -949,7 +971,7 @@ namespace Libs{
 
         public static string[] GetManifestAssetsNames(string assetBundleName){
             
-            string path = PathTools.GetAssetPathForLoadPath(assetBundleName + ".manifest");
+			string path = PathTools.PersistentOrStreamingAssetsPath(assetBundleName + ".manifest");
             string fileText = System.IO.File.ReadAllText(path);
             string allLines = fileText.Substring(fileText.LastIndexOf("Assets:\n- ") + "Assets:\n- ".Length ,
                                                  fileText.LastIndexOf("Dependencies:") + 1 - "Dependencies:".Length - fileText.LastIndexOf("Assets:") +1);
@@ -975,5 +997,7 @@ namespace Libs{
             */
             return assetsNameLineArr;
         }
+
+
     }
 }

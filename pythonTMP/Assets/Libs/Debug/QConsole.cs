@@ -72,6 +72,7 @@ namespace QFramework {
             //QApp.Instance().onGUI += OnGUI;
             Application.logMessageReceived += HandleLog;
            
+			DontDestroyOnLoad (gameObject);
         }
         /*
         ~QConsole()
@@ -105,7 +106,7 @@ namespace QFramework {
 
         void OnGUI()
         {
-            if (GUI.Button(new Rect(100, 100, 200, 100), this.showGUI ? "hide Console" : "show Console"))
+            if (GUI.Button(new Rect(0, 0, 24, 24), this.showGUI ? "hide Console" : "show Console"))
             {
                 this.showGUI = !this.showGUI;
             }

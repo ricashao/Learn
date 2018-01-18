@@ -37,18 +37,25 @@ namespace ZhuYuU3d.Game
 
 			protected void resolveData(string sJsonData)
 			{
+				Debug.Log ("resolveData:"+sJsonData);
 				System.Object objdes=MiniJSON.Json.Deserialize (sJsonData);
 				if (objdes != null) 
 				{
+					Debug.Log ("Objdes is not null");//+sJsonData);
+
 					Dictionary<string,System.Object> dictret = objdes as Dictionary<string,System.Object>;
 					if (dictret != null) 
 					{
+						
 						AssetUpdateInfo aui = new AssetUpdateInfo ();
 						aui.mstrAssetServerUrl = dictret ["AssetServerUrl"].ToString();
 						aui.mstrRemoteMD5FilePath=dictret ["RemoteMD5FilePath"].ToString();
 						aui.bEnableHotFix = bool.Parse (dictret ["EnableHotfix"].ToString ());
 						mdata = aui;
+
+						Debug.Log ("Back");//+sJsonData);
 					}
+
 				}
 				return;
 			}

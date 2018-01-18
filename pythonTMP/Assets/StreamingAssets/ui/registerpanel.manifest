@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2218326642
+CRC: 3229616977
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 3763fe36d78fe7e2f5dd5860ac5c474c
+    Hash: 9be2745f9b519ff4f134f95f8b11afda
   TypeTreeHash:
     serializedVersion: 2
     Hash: 7488a8bc0df4ce60d82f728d93f754d0
@@ -40,5 +40,5 @@ ClassTypes:
 - Class: 224
   Script: {instanceID: 0}
 Assets:
-- Assets/UI/Prefabs/RegisterPanel.prefab
+- Assets/UI/Lobby/Prefabs/RegisterPanel.prefab
 Dependencies: []

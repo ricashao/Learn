@@ -9,7 +9,8 @@ using Libs;
 
 namespace ZhuYuU3d
 {
-public class Toast {
+	public class Toast:MonoBehaviour
+	{
 
     public enum Type
     {
@@ -47,45 +48,48 @@ public class Toast {
         }
     } 
 
-    public static bool isActive { get; private set; }
+    static public bool isActive { get; private set; }
     
-    static GameObject toastCanvas;
-    static MonoBehaviour ctxt;
-    static int durationSecs;
-    private static Queue<ToastHolder> toastQueue = new Queue<ToastHolder>();
-    private static Coroutine currentTimer;
-    private static readonly int DEFAULT_SIZE = 20;
+    GameObject toastCanvas;
+    MonoBehaviour ctxt;
+    int durationSecs;
+    static private Queue<ToastHolder> toastQueue = new Queue<ToastHolder>();
+    private Coroutine currentTimer;
+    private readonly int DEFAULT_SIZE = 20;
 
+		public static void StartShow(MonoBehaviour caller, string message, int duration, Type type, Gravity gravity,int size)
+		{
+			if (isActive)
+			{
+				//Debug.Log("ENQUEUED ONE, GRAVITY DEFAULT");
+				toastQueue.Enqueue(new ToastHolder(caller, message, duration, type, size, gravity));
+				return;
+			}
+			else
+			{
+				Libs.AM.I.CreateFromCache ("ToastPanel", (string assetName,UnityEngine.Object objInstantiateTp)=>
+					{
+						GameObject objInstantiate =(GameObject)GameObject.Instantiate((GameObject)objInstantiateTp);
+						objInstantiate.name = objInstantiate.name.Replace("(Clone)","");
 
-    public static void Show(MonoBehaviour caller, string message, int duration, Type type, Gravity gravity,int size)
+						objInstantiate.transform.SetParent(GameObject.Find("PopupCanvas").transform,false);
+
+						if (objInstantiate != null)
+						{
+							Toast tips=objInstantiate.AddComponent<Toast>();
+
+							tips.Show (CoroutineController.Instance, message, duration, ZhuYuU3d.Toast.Type.WARNING, ZhuYuU3d.Toast.Gravity.CENTER,size);
+						}
+					}
+				);
+
+			}
+		}
+
+    public void Show(MonoBehaviour caller, string message, int duration, Type type, Gravity gravity,int size)
     {
-        if (isActive)
-        {
-            //Debug.Log("ENQUEUED ONE, GRAVITY DEFAULT");
-            toastQueue.Enqueue(new ToastHolder(caller, message, duration, type, DEFAULT_SIZE, gravity));
-            return;
-        }
-        else
-        {
-                string strFileName = "/ui/ScalingToast.panel";
-                ABLoaderHelper.Instance.LoadAB
-                    (
-                    strFileName,
-                    null,
-                    "ScalingToast",
-                    (GameObject objret)=>
-                    {
-                        if (objret == null)
-                        {
-                            Debug.LogAssertion("Prefab missing!");
-                            return;
-                        }
-
-
-                        //Debug.Log("CREATED ONE");
-
-                        //Instantiate the toast!
-                        toastCanvas = (GameObject)objret;
+        
+                        toastCanvas = gameObject;
 
                         //Get the text within the toast and set it.
                         toastCanvas.GetComponentInChildren<Text>().text = message;
@@ -119,48 +123,30 @@ public class Toast {
                         toastCanvas.GetComponent<Animation>().AddClip(anim, animString);
                         toastCanvas.GetComponentInChildren<Animation>().clip = anim;
                         toastCanvas.GetComponentInChildren<Animation>().Play();
-                    }
 
-                    );
-
-
-                //var prefab = ResourceLoader.Instance.LoadInstanceAsset("ScalingToast", (UnityEngine.Object objret) =>
-                //{
-                    
-                //},
-                //LoadResourceWay.FromAssetbundle
-                //);
-
-
-
-        }
     }
 
 
 
-    static IEnumerator DestroyToast()
+    IEnumerator DestroyToast()
     {
         yield return new WaitForSeconds(durationSecs);
-        GameObject.Destroy(toastCanvas);
-        //Debug.Log("DELETED ONE");
-        isActive = false;
-        if (toastQueue.Count>0)
-        {
-            ToastHolder topToast = toastQueue.Dequeue();
-            //if (topToast.toastSize > 0)
-            //    Toast.Show(topToast.toastContext, topToast.toastMessage, topToast.toastDuration, topToast.toastType, topToast.toastSize);
-            //else
-            //{
-            //    Debug.Log("Showing small toast instead of big!");
-            //    Toast.Show(topToast.toastContext, topToast.toastMessage, topToast.toastDuration, topToast.toastType);
-            //    Debug.Log("Showing small toast instead of big!");
-            //}
+		toastCanvas.SetActive (false);
 
-            Toast.Show(topToast.toastContext, topToast.toastMessage, topToast.toastDuration, topToast.toastType, topToast.toastGravity, topToast.toastSize);
-        }
+         //GameObject.Destroy(toastCanvas);
+        //Debug.Log("DELETED ONE");
+        
+			if (toastQueue.Count > 0) {
+				ToastHolder topToast = toastQueue.Dequeue ();
+           
+				Show (topToast.toastContext, topToast.toastMessage, topToast.toastDuration, topToast.toastType, topToast.toastGravity, topToast.toastSize);
+			} else {
+				GameObject.Destroy (toastCanvas);
+				isActive = false;
+			}
     }
 
-    private static string getGravityString(Gravity gravity)
+    private string getGravityString(Gravity gravity)
     {
         switch(gravity)
         {
@@ -183,46 +169,46 @@ public class Toast {
     /// Dismisses the current toast and dumps the entire toast queue
     /// </summary>
     /// <returns>A boolean, TRUE if a Toast was dismissed, FALSE if there was no active Toast to dismiss.</returns>
-    public static bool Dismiss()
-    {
-        if (isActive)
-        {
-            isActive = false;
-            GameObject.Destroy(toastCanvas);
-            ctxt.StopCoroutine(currentTimer);
-            toastQueue.Clear();
-            return true;
-        }
-        else
-            return false;
-    }
-
-
-    /// <summary>
-    /// Dismisses the current toast being displayed, if any, and activates the next toast in the queue, if any.
-    /// </summary>
-    /// <returns>A boolean, TRUE if there was another toast to show and a toast to dismiss, FALSE if there is no toast to show or no toast to dismiss.</returns>
-    public static bool DismissNext()
-    {
-        if (isActive)
-        {
-            isActive = false;
-            GameObject.Destroy(toastCanvas);
-            ctxt.StopCoroutine(currentTimer);
-            if (toastQueue.Count>0)
-            {
-                ToastHolder topToast = toastQueue.Dequeue();
-                //if (topToast.toastSize > 0)
-                //    Toast.Show(topToast.toastContext, topToast.toastMessage, topToast.toastDuration, topToast.toastType, topToast.toastSize);
-                //else
-                //    Toast.Show(topToast.toastContext, topToast.toastMessage, topToast.toastDuration, topToast.toastType);
-                Toast.Show(topToast.toastContext, topToast.toastMessage, topToast.toastDuration, topToast.toastType, topToast.toastGravity, topToast.toastSize);
-                return true;
-            }
-            return false;
-        }
-        else
-            return false;
-    }
+//    public bool Dismiss()
+//    {
+//        if (isActive)
+//        {
+//            isActive = false;
+//            GameObject.Destroy(toastCanvas);
+//            ctxt.StopCoroutine(currentTimer);
+//            toastQueue.Clear();
+//            return true;
+//        }
+//        else
+//            return false;
+//    }
+//
+//
+//    /// <summary>
+//    /// Dismisses the current toast being displayed, if any, and activates the next toast in the queue, if any.
+//    /// </summary>
+//    /// <returns>A boolean, TRUE if there was another toast to show and a toast to dismiss, FALSE if there is no toast to show or no toast to dismiss.</returns>
+//    public bool DismissNext()
+//    {
+//        if (isActive)
+//        {
+//            isActive = false;
+//            GameObject.Destroy(toastCanvas);
+//            ctxt.StopCoroutine(currentTimer);
+//            if (toastQueue.Count>0)
+//            {
+//                ToastHolder topToast = toastQueue.Dequeue();
+//                //if (topToast.toastSize > 0)
+//                //    Toast.Show(topToast.toastContext, topToast.toastMessage, topToast.toastDuration, topToast.toastType, topToast.toastSize);
+//                //else
+//                //    Toast.Show(topToast.toastContext, topToast.toastMessage, topToast.toastDuration, topToast.toastType);
+//                Toast.Show(topToast.toastContext, topToast.toastMessage, topToast.toastDuration, topToast.toastType, topToast.toastGravity, topToast.toastSize);
+//                return true;
+//            }
+//            return false;
+//        }
+//        else
+//            return false;
+//    }
 }
 }

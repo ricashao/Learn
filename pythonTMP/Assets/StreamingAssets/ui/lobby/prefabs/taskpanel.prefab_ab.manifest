@@ -1,0 +1,52 @@
+ManifestFileVersion: 0
+CRC: 3659068666
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 4a397b8748b76049d7e9587fec80560c
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: ca57f688673d9a5caa1650e67b30fd88
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 60
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: -1200242548, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: 1367256648, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c4ca2a624a6d8644d95ab9b653e57e7e, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6b0c2e95b088542409e24343ddfe2f16, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 207ef55955ab9564394ac33f6f290391, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e375c89bc1ddf43b3a8f25f3e9449b90, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+Assets:
+- Assets/UI/Lobby/Prefabs/TaskPanel.prefab
+Dependencies: []

@@ -56,6 +56,8 @@ public class URL
 #if UNITY_EDITOR
         PathPruffix = "file:///";
 
+
+
 #elif UNITY_IPHONE			
            PathPruffix = "file:///";      
 #elif UNITY_ANDROID
@@ -70,7 +72,7 @@ public class URL
         CachModleURL = Application.temporaryCachePath + "/Model/";
         CachModleAnimationURL = Application.temporaryCachePath + "/ModelAnimation/";
         CachModleXmlURL = Application.temporaryCachePath + "/XMLModle/";
-        ServerDataURL = ServerURL + "Android/";
+        //ServerDataURL = ServerURL + "Android/";
         CachPath = Application.temporaryCachePath + "/";
         TempPath = Application.temporaryCachePath + "/Temp/";
         StreamingModelURL = Application.dataPath+"!/assets" + "/Model/";  

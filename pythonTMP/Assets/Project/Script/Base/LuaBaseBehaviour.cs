@@ -15,6 +15,8 @@ namespace ZhuYuU3d
 
 		public BehaviourInjection[] injections;
 
+		bool luaAwakeInited = false;
+
 		private	Action luaAwake;
 		private Action luaStart;
 		//private Action luaUpdate;
@@ -35,6 +37,7 @@ namespace ZhuYuU3d
 			GameObject gameObject = GameObject.Find (gameObjectName);
 			luaFilePathDic.Add (gameObject,luaFilePath);
 			LuaBaseBehaviour luaBaseBehaviour = gameObject.AddComponent<LuaBaseBehaviour> ();
+			luaBaseBehaviour.Init ();
 			return luaBaseBehaviour.scriptEnv;
 		}
 
@@ -43,7 +46,7 @@ namespace ZhuYuU3d
 			GameObject gameObject = new GameObject (gameObjectName);
 			luaFilePathDic.Add (gameObject,luaFilePath);
 			LuaBaseBehaviour luaBaseBehaviour = gameObject.AddComponent<LuaBaseBehaviour> ();
-
+			luaBaseBehaviour.Init ();
 			return luaBaseBehaviour.scriptEnv;
 		}
 
@@ -54,7 +57,7 @@ namespace ZhuYuU3d
 
 			luaFilePathDic.Add (gameObject,luaFilePath);
 			LuaBaseBehaviour luaBaseBehaviour = gameObject.AddComponent<LuaBaseBehaviour> ();
-
+			luaBaseBehaviour.Init ();
 			return luaBaseBehaviour.scriptEnv;
 		}
 
@@ -63,50 +66,44 @@ namespace ZhuYuU3d
 			GameObject.Destroy(go.GetComponent<LuaBaseBehaviour> ());
 		}
 
-		protected virtual void Awake()
+		public virtual void Init()
 		{
-			luaFilePathDic.TryGetValue (gameObject,out luaPath);
-			luaFilePathDic.Remove (gameObject);
+			if (string.IsNullOrEmpty( luaPath )) {
 
-			if (luaPath == null) {
+				luaFilePathDic.TryGetValue (gameObject,out luaPath);
+				luaFilePathDic.Remove (gameObject);
+			} 
+
+			if (string.IsNullOrEmpty (luaPath)) {
 				Debug.LogError (" luaPath = null !");
 				return;
-			} else {
-				if (!luaPath.Trim().EndsWith (".lua")) {
-					luaPath = luaPath + ".lua";
-				}
 			}
-
+		
+			if (!luaPath.Trim().EndsWith (".lua")) {
+				luaPath = luaPath + ".lua";
+			}
+				
 			string luaCode;
 
-			string filePath = Application.persistentDataPath + "/" + luaPath;
+			string filePath;
 
-			if (!System.IO.File.Exists (filePath)) {
-				filePath = Application.streamingAssetsPath + "/" + luaPath;
-			}
-
+			byte[] code = null;
+				
 			#if UNITY_EDITOR
 			/* 在编辑器下从 Resources 下加载 */
-			if (!System.IO.File.Exists (filePath)) {
-				filePath = Application.dataPath + "/Resources/" + luaPath;
-			}
+			filePath = Application.dataPath + "/Resources/" + luaPath;
+			code = System.IO.File.ReadAllBytes(filePath);
+			Debug.LogWarningFormat ("LuaBaseBehaviour load file {0}",filePath);
+			#else
+			//filePath = Application.persistentDataPath + "/" + luaPath;
+			code = ReadRes.ReadByte (luaPath);
 			#endif
-			if (!System.IO.File.Exists (filePath)) {
-				Debug.LogError (" not find "+ luaPath);
+		
+			if (code == null) {
+				Debug.LogError ("lua code is null "+ luaPath);
 				return;
 			}
-
-			Debug.LogWarningFormat ("load file {0}",filePath);
-				
-			luaCode = System.IO.File.ReadAllText (filePath,encoding);
-
-			//WWW www = new WWW(Application.streamingAssetsPath+"/"+luaPath+".lua");  
-			//while (!www.isDone) {}
-
-			//Transform transformbt  = transform.Find ("Button");
-			//transform.GetComponent<Text>().text = 
-			//gameObject.SetActive(false);
-
+		
 			luaEnv = LuaManager.GetInstance ().LuaEnvGetOrNew();
 	
 			scriptEnv = luaEnv.NewTable();
@@ -117,7 +114,7 @@ namespace ZhuYuU3d
 			meta.Dispose();
 
 			scriptEnv.Set("self", this);
-			scriptEnv.Set("scriptEnv", scriptEnv);
+			scriptEnv.Set("scriptEnv", scriptEnv );
 				
 			if (injections != null) 
 			{
@@ -129,23 +126,44 @@ namespace ZhuYuU3d
 
 			scriptEnv.Set ("luaPath",luaPath);
 
-			luaEnv.DoString(luaCode,"LuaBaseBehaviour",scriptEnv);
+			luaEnv.DoString(code,"LuaBaseBehaviour",scriptEnv);
 
 			//luaEnv.DoString(string.Format("require '{0}'",luaPath), "LuaBaseBehaviour_"+gameObject.GetInstanceID(), scriptEnv);
 			//luaEnv.DoString("function awake()\n\nend\t\n\nfunction start()\n\tprint(\"LuaBaseBehaviour start...\"..self.luaPath)\nend\n\nfunction update()\n\tlocal r = CS.UnityEngine.Vector3.up * CS.UnityEngine.Time.deltaTime\n\tself.transform:Rotate(r)\nend\n\nfunction ondestroy()\n    print(\"LuaBaseBehaviour destroy...\"..self.luaPath)\nend", "LuaBaseBehaviour", scriptEnv);
 
-			if (luaAwake == null) {
-				luaAwake = scriptEnv.Get<Action> ("awake");
+			scriptEnv.Get("awake", out luaAwake);
 
-				if (luaAwake != null){
-					luaAwake();
-				}
+			/*
+			if (luaAwake == null) {
+				Debug.LogError ("awake null");
+			} else {
+				Debug.LogError ("awake ");
 			}
+			*/
+
+			//#if UNITY_EDITOR
+			if (luaAwake != null && !luaAwakeInited) {
+				luaAwake ();
+				luaAwakeInited = true;
+			}
+			//#endif
 
 			scriptEnv.Get("start", out luaStart);
 			//scriptEnv.Get("update", out luaUpdate);
 			scriptEnv.Get("ondestroy", out luaOnDestroy);
 
+		}
+
+		protected virtual void Awake () {
+			
+			if (scriptEnv == null) {
+				Init ();
+			}
+				
+			if (luaAwake != null && !luaAwakeInited){
+				luaAwake();
+				luaAwakeInited = true;
+			}
 		}
 
 		// Use this for initialization

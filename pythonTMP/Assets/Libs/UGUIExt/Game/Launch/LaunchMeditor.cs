@@ -74,6 +74,7 @@ public class LaunchMeditor :Mediator
 
 			case NotificationType.M2M_ResourceUpdateOver:
 				View.setState (LaunchPage.LaunchPageState.UpdateOver);
+				Libs.AM.I.ClearABDic ();
 				BeginLoadLoadingScene ();
 				break;
             }
@@ -95,7 +96,14 @@ public class LaunchMeditor :Mediator
             //热更新url
 			AssetsUpdateManager.assetsSeverUrl =mstrRemoveUrl;// "http://127.0.0.1";
             //保存路径
-            AssetsUpdateManager.assetsUpdatePath = Application.dataPath + "/StreamingAssetsUpdate";
+			string slocalfile="";
+			#if UNITY_EDITOR
+			slocalfile=Application.dataPath;
+			AssetsUpdateManager.assetsUpdatePath = slocalfile + "/StreamingAssetsUpdate";
+			#else
+			slocalfile=Application.persistentDataPath;
+			AssetsUpdateManager.assetsUpdatePath = Application.persistentDataPath;
+			#endif
 
 			CheckVersions (mstrRemoteMD5Url);// "file:///D:/StreamingAssets/md5filelist.txt");
 

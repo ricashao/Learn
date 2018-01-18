@@ -194,16 +194,36 @@ namespace ZhuYuU3d
 		/// <param name="onover">结束回调.</param>
 		public void ToastTips(string strContent,int ntime,int nfontsize,int ndirection,LuaFunction onover)
 		{
-			if(ndirection==0)
-				ZhuYuU3d.Toast.Show (this, strContent, ntime, ZhuYuU3d.Toast.Type.WARNING, ZhuYuU3d.Toast.Gravity.CENTER,nfontsize);
-			else if(ndirection==1)
-				ZhuYuU3d.Toast.Show (this, strContent, ntime, ZhuYuU3d.Toast.Type.WARNING, ZhuYuU3d.Toast.Gravity.BOTTOM_RIGHT,nfontsize);
-			else if(ndirection==2)
-				ZhuYuU3d.Toast.Show (this, strContent, ntime, ZhuYuU3d.Toast.Type.WARNING, ZhuYuU3d.Toast.Gravity.BOTTOM,nfontsize);
-			else if(ndirection==3)
-				ZhuYuU3d.Toast.Show (this, strContent, ntime, ZhuYuU3d.Toast.Type.WARNING, ZhuYuU3d.Toast.Gravity.TOP,nfontsize);
-			else if(ndirection==4)
-				ZhuYuU3d.Toast.Show (this, strContent, ntime, ZhuYuU3d.Toast.Type.WARNING, ZhuYuU3d.Toast.Gravity.TOP_RIGHT,nfontsize);
+
+			Libs.AM.I.CreateFromCache ("ToastPanel", (string assetName,UnityEngine.Object objInstantiateTp)=>
+			{
+					GameObject objInstantiate =(GameObject)GameObject.Instantiate((GameObject)objInstantiateTp);
+					objInstantiate.name = objInstantiate.name.Replace("(Clone)","");
+
+					objInstantiate.transform.SetParent(GameObject.Find("PopupCanvas").transform,false);
+
+					if (objInstantiate != null)
+					{
+						Toast tips=objInstantiate.AddComponent<Toast>();
+
+						tips.Show (this, strContent, ntime, ZhuYuU3d.Toast.Type.WARNING, ZhuYuU3d.Toast.Gravity.CENTER,nfontsize);
+
+//						if(ndirection==0)
+//							tips.Show (this, strContent, ntime, ZhuYuU3d.Toast.Type.WARNING, ZhuYuU3d.Toast.Gravity.CENTER,nfontsize);
+//						else if(ndirection==1)
+//							tips.Show (this, strContent, ntime, ZhuYuU3d.Toast.Type.WARNING, ZhuYuU3d.Toast.Gravity.BOTTOM_RIGHT,nfontsize);
+//						else if(ndirection==2)
+//							tips.Show (this, strContent, ntime, ZhuYuU3d.Toast.Type.WARNING, ZhuYuU3d.Toast.Gravity.BOTTOM,nfontsize);
+//						else if(ndirection==3)
+//							tips.Show (this, strContent, ntime, ZhuYuU3d.Toast.Type.WARNING, ZhuYuU3d.Toast.Gravity.TOP,nfontsize);
+//						else if(ndirection==4)
+//							tips.Show (this, strContent, ntime, ZhuYuU3d.Toast.Type.WARNING, ZhuYuU3d.Toast.Gravity.TOP_RIGHT,nfontsize);
+						
+					}
+				}
+			);
+
+
 		}
 
 

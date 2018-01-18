@@ -25,6 +25,7 @@ namespace ZhuYuU3d
 			GameObject gameObject = GameObject.Find (gameObjectName);
 			LuaBaseBehaviour.luaFilePathDic.Add (gameObject,luaFilePath);
 			LuaBaseBehaviour luaBaseBehaviour = gameObject.AddComponent<T> ();
+			luaBaseBehaviour.Init ();
 			return luaBaseBehaviour.scriptEnv;
 		}
 
@@ -33,7 +34,7 @@ namespace ZhuYuU3d
 			GameObject gameObject = new GameObject (gameObjectName);
 			LuaBaseBehaviour.luaFilePathDic.Add (gameObject,luaFilePath);
 			LuaBaseBehaviour luaBaseBehaviour = gameObject.AddComponent<T> ();
-
+			luaBaseBehaviour.Init ();
 			return luaBaseBehaviour.scriptEnv;
 		}
 
@@ -44,7 +45,7 @@ namespace ZhuYuU3d
 
 			LuaBaseBehaviour.luaFilePathDic.Add (gameObject,luaFilePath);
 			LuaBaseBehaviour luaBaseBehaviour = gameObject.AddComponent<T> ();
-
+			luaBaseBehaviour.Init ();
 			return luaBaseBehaviour.scriptEnv;
 		}
 			

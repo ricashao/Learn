@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using XLua;
 
 namespace ZhuYuU3d{
+	
+	[LuaCallCSharp]
 	public class LuaCallCsFun {
 
 		public static void JumpScene(int index){
@@ -30,5 +33,20 @@ namespace ZhuYuU3d{
 
 			AsyncOperation asyncOperation = SceneManager.LoadSceneAsync ("Launcher", LoadSceneMode.Single);
 		}
+
+		public static byte[] ReadByte(string fileName){
+			
+			return ReadRes.ReadByte (fileName);
+		}
+
+		public static byte[] ReadByteForLua(string fileName){
+
+			#if UNITY_EDITOR
+			return System.IO.File.ReadAllBytes(PathTools.Combine(Application.dataPath+"/Resources",fileName) );
+			#else
+			return ReadRes.ReadByte (fileName);
+			#endif
+		}
+
 	}
 }

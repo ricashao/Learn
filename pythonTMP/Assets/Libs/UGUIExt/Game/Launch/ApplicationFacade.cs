@@ -9,7 +9,7 @@ namespace ZhuYuU3d.Game
 
         public ApplicationFacade()
         {
-            
+        	    
         }
 
 		public void StartUp(string sconfigpath=null)
@@ -19,6 +19,7 @@ namespace ZhuYuU3d.Game
 			);
 
 			SendNotification(NotificationType.ReadUpdateInfo);
+
 		}
 
 	    public void ShutDown()
@@ -36,8 +37,6 @@ namespace ZhuYuU3d.Game
             RegisterCommand(NotificationType.NetWorkCheck, new NetworkCheckCommand());
 
             RegisterCommand(NotificationType.LoadHotFixTipsUI, new HotFixTipsCommand());
-
-
 
         }
     }

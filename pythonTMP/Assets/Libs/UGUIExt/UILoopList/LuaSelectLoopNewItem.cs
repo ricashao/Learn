@@ -6,7 +6,6 @@ using UnityEngine.UI;
 using XLua;
 using ZhuYuU3d;
 
-[RequireComponent(typeof(LuaSelectItem))]
 public class LuaSelectLoopNewItem : LuaLoopItem,ISelectAble
 {
     internal LuaEnv luaEnv;

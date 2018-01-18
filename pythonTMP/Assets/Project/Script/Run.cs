@@ -9,7 +9,9 @@ namespace ZhuYuU3d{
 		LuaEnv env;
 
 		void Awake(){
-			
+
+			Debug.LogWarning ("Run Awake!");
+
 			env = LuaManager.GetInstance ().LuaEnvGetOrNew ();
 			env.DoString ("game_state_run()");
 
@@ -20,9 +22,19 @@ namespace ZhuYuU3d{
 			meta.Set("__index", env.Global);
 			curLuaScene.SetMetaTable(meta);
 			meta.Dispose();*/
-
-
+		
 		}
+
+		/*
+		void OnGUI()
+		{
+			if (GUI.Button (new Rect (0, 70, 72, 24),"game_state_run" )) {
+				env = LuaManager.GetInstance ().LuaEnvGetOrNew ();
+				env.DoString ("game_state_run()");
+			}
+		}
+		*/
+
 		bool isLoad;
 		// Use this for initialization
 		void Start () {

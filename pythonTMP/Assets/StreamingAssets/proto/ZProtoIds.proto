@@ -1,0 +1,12 @@
+syntax = "proto2";
+
+package ZProto;
+
+enum enumZProtoIds
+{
+    RegisterToCenterReqId = 1; // 注册到中央服务器
+
+    RegisterToCenterAckId = 10001; // 注册到中央服务器
+    ZServerChangeNotifyId = 10002; // 大厅服务器变化
+    WServerChangeNotifyId = 10003; // 大厅服务器变化
+}

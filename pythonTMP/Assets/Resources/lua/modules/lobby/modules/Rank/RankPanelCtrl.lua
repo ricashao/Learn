@@ -50,12 +50,13 @@ function start()
 	-- {1110,'woshi1',1110},
 	-- {1110,'woshi1',1110},
 	-- }
-	on_msg('ZProto.E_MoneyType.GEM',decode)
+	--on_msg('ZProto.E_MoneyType.GEM',decode)
 end
 
 function ondestroy()
 
 	--移除消息监听
+	mr(msgCmd2.SC_SetRankList,on_msg)
 	mr(msgCmd.MessageNotify,on_msg)
 	--移除事件监听
 	--er(event.name,on_event)
@@ -75,8 +76,8 @@ function update_first(data)
 		view.ranknametext1.text = '虚伪以待'
 		view.rankgoldtext1.text = ''
 	else
-		view.ranknametext1.text = data[2]
-		view.rankgoldtext1.text = data[3]
+		view.ranknametext1.text = data.nick_name
+		view.rankgoldtext1.text = data.value
 	end
 end
 
@@ -85,8 +86,8 @@ function update_second(data)
 		view.ranknametext2.text = '虚伪以待'
 		view.rankgoldtext2.text = ''
 	else
-		view.ranknametext2.text = data[2]
-		view.rankgoldtext2.text = data[3]
+		view.ranknametext2.text = data.nick_name
+		view.rankgoldtext2.text = data.value
 	end
 end
 
@@ -95,8 +96,8 @@ function update_third(data)
 		view.ranknametext3.text = '虚伪以待'
 		view.rankgoldtext3.text = ''
 	else
-		view.ranknametext3.text = data[2]
-		view.rankgoldtext3.text = data[3]
+		view.ranknametext3.text = data.nick_name
+		view.rankgoldtext3.text = data.value
 	end
 end
 
@@ -107,11 +108,11 @@ function update_info(decode)
 	update_second(data)
 	data = table.remove(decode.datas,1);
 	update_third(data)
-	if(decode.type == 'ZProto.E_MoneyType.GOLD') then
+	if(decode.type == 'GOLD') then
 		view.goldlist:Data(decode.datas)
-	elseif(decode.type == 'ZProto.E_MoneyType.GEM') then
+	elseif(decode.type == 'GEM') then
 		view.gemlist:Data(decode.datas)
-	elseif (decode.type == 'ZProto.E_MoneyType.TICKET') then
+	elseif (decode.type == 'TICKET') then
 		view.ticketlist:Data(decode.datas)
 	else
 	end
@@ -129,13 +130,13 @@ end
 
 --消息处理函数
 function on_msg(key,decode)
-	print(" modifypwd on_msg >> "..key)
+	print(" rank on_msg >> "..key)
 	if(key == msgCmd2.SC_SetRankList) then
-		if(decode.type == 'ZProto.E_MoneyType.GOLD') then
+		if(decode.type == 'GOLD') then
 			view:set_state('gold_state')
-		elseif(decode.type == 'ZProto.E_MoneyType.GEM') then
+		elseif(decode.type == 'GEM') then
 			view:set_state('gem_state')
-		elseif (decode.type == 'ZProto.E_MoneyType.TICKET') then
+		elseif (decode.type == 'TICKET') then
 			view:set_state('ticket_state')
 		else
 		end

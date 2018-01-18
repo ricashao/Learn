@@ -66,7 +66,7 @@ public class ExtStaticLuaCallbacks {
 			{
 				var bytes = File.ReadAllBytes(filepath);
 
-				UnityEngine.Debug.LogWarning("load lua file from Resource LuaFile is obsolete, filename:" + filename);
+				UnityEngine.Debug.LogWarning("load lua file from LoadLuaFileFromPersistentDataPath LuaFile is obsolete, filename:" + filename);
 				if (LuaAPI.xluaL_loadbuffer(L, bytes, bytes.Length, "@" + filename) != 0)
 				{
 					return LuaAPI.luaL_error(L, String.Format("error loading module {0} from {2}, {1}",

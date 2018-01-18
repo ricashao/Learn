@@ -17,35 +17,44 @@ namespace ZhuYuU3d.Game
 
         public void LoadAB(string strFileName,GameObject goparent,string strassetname,System.Action<GameObject> onInsOver)
         {
-            string strLoadPath = Application.persistentDataPath + strFileName;
-            if (File.Exists(strLoadPath))
-            {
-                AssetBundleManagar.getInstance().LoadOne(strFileName, (string path, AssetBundle assetBundle) =>
-                {
-                    Debug.Log("Load Over");
-                    GameObject goret=LoadAssetFromAB(assetBundle,strassetname, goparent);
-                    if (onInsOver != null)
-                        onInsOver(goret);
-                }
-                );
-            }
-            else
-            {
-                strLoadPath = Application.streamingAssetsPath + strFileName;
-                if (File.Exists(strLoadPath))
-                {
-                    AssetBundle abLaunch = AssetBundle.LoadFromFile(strLoadPath);
-                    if (abLaunch != null)
-                    {
-                        GameObject goret = LoadAssetFromAB(abLaunch,strassetname, goparent);
-                        if (onInsOver != null)
-                            onInsOver(goret);
-                        abLaunch.Unload(false);
-                    }
-                }
+			//PathTools.PersistentOrStreamingAssetsPath (strFileName);
 
-            }
+
+			string strLoadPath = PathTools.GetAssetPath(strFileName);
+
+			Debug.Log("Load Assetbundle."+strLoadPath);
+
+			StartCoroutine(loadresbywww(strLoadPath,(AssetBundle ab)=>
+				{
+					Debug.Log ("Load over");
+
+					AssetBundle abLaunch = ab;
+					if (abLaunch != null)
+					{
+						GameObject goret = LoadAssetFromAB(abLaunch,strassetname, goparent);
+						if (onInsOver != null)
+							onInsOver(goret);
+						abLaunch.Unload(false);
+					}
+				}
+			)
+			);
+                    
+
         }
+
+		IEnumerator loadresbywww(string sname,System.Action<AssetBundle> oncb)
+		{
+			WWW w = new WWW(sname);
+			yield return w;
+			if (w.error == null) {
+				oncb (w.assetBundle);
+				w.Dispose ();
+			} else {
+				Debug.Log ("Error:" + w.error);
+				w.Dispose ();
+			}
+		}
 
         GameObject LoadAssetFromAB(AssetBundle assetBundle,string strassetname, GameObject goparent)
         {
@@ -70,4 +79,9 @@ namespace ZhuYuU3d.Game
         }
 
     }
+
+
+
+
+
 }

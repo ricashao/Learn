@@ -1,0 +1,50 @@
+ManifestFileVersion: 0
+CRC: 774515552
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 27b99e66a7cf6da9b9123a0a0e8de646
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 15ddee6f4bfcf58b8ca8d33c36cb35e8
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: -1200242548, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: 1367256648, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c4ca2a624a6d8644d95ab9b653e57e7e, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6b0c2e95b088542409e24343ddfe2f16, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 207ef55955ab9564394ac33f6f290391, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e375c89bc1ddf43b3a8f25f3e9449b90, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+Assets:
+- Assets/UI/Lobby/Prefabs/ShopPanel.prefab
+Dependencies: []

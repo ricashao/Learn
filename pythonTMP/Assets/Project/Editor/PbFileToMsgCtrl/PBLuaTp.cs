@@ -310,8 +310,8 @@ public class PBLuaTp  {
 		PBFile.curPath = "/Users/zhuyuu3d/Downloads";
 		protoPath = PBFile.curPath + "/ZTest.proto";
 
-		PBFile.curPath = "C:/Users/Administrator/Desktop/proto";
-		protoPath = "C:/Users/Administrator/Desktop/proto/ZEntry.proto";
+		PBFile.curPath = "C:/Users/Administrator.PC-20171226GAHY/Desktop/proto";
+		protoPath = "C:/Users/Administrator.PC-20171226GAHY/Desktop/proto/ZShop.proto";
 
 		string LuaCodeOutPath = "/Project/Editor/LuaCodeOut/";
 

@@ -17,7 +17,23 @@ public class Packager {
         CopyAssetBundleManifest();
     }
 
-    [MenuItem("Assets/1.Build 2.Manifest 3.Md5 4.Copy", false, 11)]
+	[MenuItem("Assets/游戏工程 1.Build 2.Manifest 3.CopyFiles 4.Md5", false, 11)]
+	public static void BuildiManifestCopyMd5()
+	{
+		string resPath = Application.dataPath + "/StreamingAssets/";
+		BuildPipeline.BuildAssetBundles(resPath, BuildAssetBundleOptions.None, EditorUserBuildSettings.activeBuildTarget);
+
+		//CopyAssetBundleManifest();
+
+		Libs.LibsTools.CopyFiles ();
+
+		CreateStreamingAssetsMd5filelist();
+
+		//Libs.LibsTools.CopyStreamingAssetsPathToOther();
+
+	}
+
+	[MenuItem("Assets/资源工程 1.Build 2.Manifest 3.Md5 4.CopyFiles", false, 11)]
     public static void BuildiManifestMd5Copy()
     {
         string resPath = Application.dataPath + "/StreamingAssets/";
@@ -27,7 +43,9 @@ public class Packager {
 
         CreateStreamingAssetsMd5filelist();
 
-        Libs.LibsTools.CopyStreamingAssetsPathToOther();
+		Libs.LibsTools.CopyFiles ();
+        //Libs.LibsTools.CopyStreamingAssetsPathToOther();
+
     }
 
     [MenuItem("Assets/Build Android Resource", false, 11)]

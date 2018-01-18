@@ -26,6 +26,8 @@ public class LuaSelectItem : SelectItem {
 	public string unSelectFunName;
     [SerializeField]
     private Sprite[] sprits;
+    [SerializeField]
+    public string awakefunctionName;
 
     private Image img;
 
@@ -47,7 +49,9 @@ public class LuaSelectItem : SelectItem {
 			}
 		}
         img = this.GetComponent<Image>();
-	}
+        OnSelectItem luafun_UILoopItem_Awake = luaEnv.Global.GetInPath<OnSelectItem>(awakefunctionName);
+        if (luafun_UILoopItem_Awake != null) luafun_UILoopItem_Awake(index, transform, GetData());
+    }
 
 	public override void OnSelect ()
     {

@@ -7,6 +7,8 @@ public class AssetsUpdateTest : MonoBehaviour {
 	public string url = "file:///Users/zhuyuu3d/Documents/svn/U3D/u3d_xlua_project/Assets/StreamingAssets/md5filelist.txt";
 	// Use this for initialization
 	void Start () {
+		AssetsUpdateManager.assetsSeverUrl = "http://127.0.0.1/Res/StreamingAssets";
+		//AssetsUpdateManager.I.assetsUpdatePath = 
         //AssetsUpdateManager.I.Check("file://"+Application.streamingAssetsPath + "/" + "md5filelist.txt",OnAssetsUpdateCmp);
         AssetsUpdateManager.I.Check(url,OnAssetsUpdateCmp);
 	}

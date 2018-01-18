@@ -29,12 +29,12 @@ public class MessageBox:MonoBehaviour {
         DISMISSED
     }
 
-    public static bool isActive { get; private set; }
+    public bool isActive { get; private set; }
 
-    static string title;
-    static string message;
-    static GameObject messageBoxCanvas;
-    static Action<Result> resultCallback;
+    string title;
+    string message;
+    GameObject messageBoxCanvas;
+    Action<Result> resultCallback;
 
 //        [SerializeField]
         GameObject Button1, Button2, Button3;
@@ -54,50 +54,7 @@ public class MessageBox:MonoBehaviour {
 			mtxtContent = transform.Find ("MBMessage").GetComponent<Text> ();
 		}
 
-    /// <summary>
-    /// Displays a MessageBox with an OK button.
-    /// </summary>
-    /// <param name="title">The messageBox title.</param>
-    /// <param name="message">The content of the massage.</param>
-    /// <param name="type">The type of MessageBox this is.</param>
-    /// <param name="callback">The method to call when the user clicks a button.</param>
-    public static void ShowOK(string title, string message, MessageBox.Type type, Action<Result> callback)
-    {
-        if (isActive)
-            return;
-
-		var prefab = ResourceLoader.Instance.LoadInstanceAsset("MessageBoxPrefab",(UnityEngine.Object objins)=> 
-        {
-            if (objins == null)
-            {
-                Debug.LogAssertion("Prefab missing!");
-            }
-            messageBoxCanvas = (GameObject)objins;
-            MessageBox MBInstance = messageBoxCanvas.GetComponent<MessageBox>();
-            if (MBInstance != null)
-            {
-                MBInstance.ShowOK(title, message, callback);
-            }
-        },
-        LoadResourceWay.FromAssetbundle
-        );
-
-        //if (prefab == null)
-        //{
-        //    Debug.LogAssertion("Prefab missing!");
-        //    return;
-        //}
-        //messageBoxCanvas = (GameObject)prefab;
-        //MessageBox  MBInstance=messageBoxCanvas.GetComponent<MessageBox>();
-        //    if (MBInstance != null)
-        //    {
-        //        MBInstance.ShowOK(title,message,callback);
-        //    }
-
-
-      
-    }
-
+    
         public void ShowOK(string title, string message, Action<Result> callback,string sokDesc="ok")
         {
             Button2.SetActive(false);
@@ -112,64 +69,8 @@ public class MessageBox:MonoBehaviour {
 
 
 
-    /// <summary>
-    /// Displays a MessageBox with an OK button.
-    /// </summary>
-    /// <param name="title">The messageBox title.</param>
-    /// <param name="message">The content of the massage.</param>
-    /// <param name="type">The type of MessageBox this is.</param>
-    /// <param name="callback">The method to call when the user clicks a button.</param>
-    public static void ShowOK(string title, string message, MessageBox.Type type, Action<Result> callback, string okText)
-    {
-        ShowOK(title, message, type, callback,okText);
-        
-    }
-
-    /// <summary>
-    /// Displays a MessageBox with an OKAY and CANCEL button.
-    /// </summary>
-    /// <param name="title">The messageBox title.</param>
-    /// <param name="message">The content of the massage.</param>
-    /// <param name="type">The type of MessageBox this is.</param>
-    /// <param name="callback">The method to call when the user clicks a button.</param>
-    public static void ShowOKCancel(string title, string message, MessageBox.Type type, Action<Result> callback)
-    {
-        if (isActive)
-            return;
-		
-
-        var prefab = ResourceLoader.Instance.LoadInstanceAsset("MessageBoxPrefab",
-            (UnityEngine.Object objins) =>
-            {
-                if (objins == null)
-                {
-                    Debug.LogAssertion("Prefab missing!");
-                }
-                messageBoxCanvas = (GameObject)objins;
-                MessageBox MBInstance = messageBoxCanvas.GetComponent<MessageBox>();
-                if (MBInstance != null)
-                {
-                    MBInstance.ShowOKCancel(title, message, callback);
-                }
-            },LoadResourceWay.FromAssetbundle
-        );
-        //if (prefab == null)
-        //{
-        //    Debug.LogAssertion("Prefab missing!");
-        //    return;
-        //}
-        //messageBoxCanvas = (GameObject)UnityEngine.Object.Instantiate(prefab);
-        //GameObject.Find("Button1").GetComponentInChildren<Text>().text = "Cancel";
-        //GameObject.Find("Button1").GetComponent<Button>().onClick.AddListener(() => CancelClicked());
-        //GameObject.Find("Button2").GetComponentInChildren<Text>().text = "OK";
-        //GameObject.Find("Button2").GetComponent<Button>().onClick.AddListener(() => OKClicked());
-        //GameObject.Find("Button3").SetActive(false);
-        //GameObject.Find("MBTitle").GetComponent<Text>().text = title;
-        //GameObject.Find("MBMessage").GetComponent<Text>().text = message;
-        //resultCallback = callback;
-        //isActive = true;
-    }
-
+    
+    
         void ShowOKCancel(string title, string message,Action<Result> callback)
         {
            // messageBoxCanvas = (GameObject)UnityEngine.Object.Instantiate(prefab);
@@ -187,51 +88,7 @@ public class MessageBox:MonoBehaviour {
         }
 
     
-    /// <summary>
-    /// Displays a MessageBox with a YES and NO button.
-    /// </summary>
-    /// <param name="title">The messageBox title.</param>
-    /// <param name="message">The content of the massage.</param>
-    /// <param name="type">The type of MessageBox this is.</param>
-    /// <param name="callback">The method to call when the user clicks a button.</param>
-    public static void ShowYesNo(string title, string message, MessageBox.Type type, Action<Result> callback)
-    {
-        if (isActive)
-            return;
-
-            string strFileName = "/ui/MessageBoxPrefab.panel";
-
-            ABLoaderHelper.Instance.LoadAB
-                    (
-                    strFileName,
-                    null,
-                    "MessageBoxPrefab",
-                    (GameObject objins) =>
-                    {
-                        if (objins == null)
-                        {
-                            Debug.LogAssertion("Prefab missing!");
-                        }
-                        messageBoxCanvas = (GameObject)objins;
-                        MessageBox MBInstance = messageBoxCanvas.GetComponent<MessageBox>();
-                        if (MBInstance != null)
-                        {
-                            MBInstance.ShowYesNo(title, message, callback);
-                        }
-                    }
-                    );
-
-
-                 //       var prefab = assetbuhelp l("",
-                 //(UnityEngine.Object objins) =>
-                 //{
-                     
-                 //},
-                 //LoadResourceWay.FromAssetbundle
-             //);
-      
-    }
-
+    
         public void ShowYesNo(string title, string message,  Action<Result> callback)
         {
             Button1.GetComponentInChildren<Text>().text = "Yes";
@@ -248,54 +105,50 @@ public class MessageBox:MonoBehaviour {
     private void NoClicked()
     {
         isActive = false;
-		if (messageBoxCanvas != null) {
 
-			messageBoxCanvas.SetActive (false);
-			GameObject.Destroy (messageBoxCanvas);
-			messageBoxCanvas = null;
-		}
+			if(resultCallback!=null)
+				resultCallback(Result.NO);
+			
+//		if (messageBoxCanvas != null) {
+			gameObject.SetActive (false);
+			GameObject.Destroy (gameObject);
 
-        if(resultCallback!=null)
-            resultCallback(Result.NO);
+//		}
+
+        
     }
 
     private void YesClicked()
     {
         isActive = false;
-			if (messageBoxCanvas != null) {
-				messageBoxCanvas.SetActive (false);
-				GameObject.Destroy (messageBoxCanvas);
-				messageBoxCanvas = null;
 
-			}
-        if (resultCallback != null)
+			if (resultCallback != null)
             resultCallback(Result.YES);
+
+			gameObject.SetActive (false);
+			GameObject.Destroy (gameObject);
     }
 
     private void OKClicked()
     {
         isActive = false;
-		if (messageBoxCanvas != null) 
-		{
-			messageBoxCanvas.SetActive (false);
-			GameObject.Destroy (messageBoxCanvas);
-				messageBoxCanvas = null;
-		}
+		
         if (resultCallback != null)
             resultCallback(Result.OK);
+
+			gameObject.SetActive (false);
+			GameObject.Destroy (gameObject);
     }
 
     private void CancelClicked()
     {
         isActive = false;
-		if (messageBoxCanvas != null) {
-			messageBoxCanvas.SetActive (false);
-			GameObject.Destroy (messageBoxCanvas);
-				messageBoxCanvas = null;
-
-		}
+		
         if (resultCallback != null)
             resultCallback(Result.CANCEL);
+
+			gameObject.SetActive (false);
+			GameObject.Destroy (gameObject);
     }
 
     /// <summary>
@@ -307,14 +160,12 @@ public class MessageBox:MonoBehaviour {
         if (isActive)
         {
             isActive = false;
-				if (messageBoxCanvas != null) {
-					messageBoxCanvas.SetActive (false);
-					GameObject.Destroy (messageBoxCanvas);
-					messageBoxCanvas = null;
 
-				}
             if (resultCallback != null)
                 resultCallback(Result.DISMISSED);
+
+				gameObject.SetActive (false);
+				GameObject.Destroy (gameObject);
             return true;
         }
         else

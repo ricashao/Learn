@@ -158,6 +158,7 @@ namespace Libs{
             else if(assetName != null && !assetName.Equals(""))
             {
                 assetBundlePath = AssetManager.getInstance().FindAbPathByAssetName(assetName);
+
                 LoadAssetBundle();
             }
         }
@@ -166,7 +167,7 @@ namespace Libs{
             if (assetBundlePath != null && !assetBundlePath.Equals(""))
                 AssetBundleManagar.getInstance().Load(assetBundlePath, OnLoadAssetBundle);
             else
-                Debug.LogErrorFormat("LoadAssetBundle() 参数错误！{0}",this.ToString());
+				Debug.LogErrorFormat("LoadAssetBundle() 参数错误！{0}，{1}",this.ToString(),assetName);
         }
         /*
         void LoadAssetOne(AssetBundle assetBundlep, string assetName)
@@ -272,6 +273,14 @@ namespace Libs{
             assetName2abPathDic.TryGetValue(assetName,out abPath);
             return abPath;
         }
+
+		public void ClearABDic()
+		{
+			if (assetName2abPathDic != null)
+				assetName2abPathDic.Clear ();
+			
+		}
+
         /// <summary>
         /// Creates from cache.
         /// </summary>

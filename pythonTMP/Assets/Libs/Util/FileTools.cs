@@ -12,6 +12,11 @@ public static class FileTools
 {
     public static void CopyDir(string fromDir, string toDir)
     {
+		if (fromDir.EndsWith(".DS_Store"))
+			return;
+		if (fromDir.EndsWith(".svn"))
+			return;
+
         if (!Directory.Exists(fromDir))
             return;
 
@@ -26,6 +31,9 @@ public static class FileTools
             string fileName = Path.GetFileName(formFileName);
             if (fileName.EndsWith(".DS_Store"))
                 continue;
+			if (fileName.EndsWith(".svn"))
+				return;
+			
             string toFileName = Path.Combine(toDir, fileName);
 
             if (File.Exists(toFileName))

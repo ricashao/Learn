@@ -11,9 +11,9 @@ namespace ZhuYuU3d
 
 		private Action luaUpdate;
 
-		protected override void Awake(){
+		public override void Init(){
 
-			base.Awake ();
+			base.Init ();
 
 			scriptEnv.Get("update", out luaUpdate);
 		}

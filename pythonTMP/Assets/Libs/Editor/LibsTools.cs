@@ -100,7 +100,9 @@ namespace Libs{
 
 					FileTools.CopyDir( formPath ,toPath);
 
-					Debug.LogWarning (f.value);
+					Debug.Log (f.value);
+
+					Debug.LogWarning ("CopyFiles >> " + toPath );
 				}
 				if (f.cmd.Equals ("CopyFile"))
 				{
@@ -126,9 +128,12 @@ namespace Libs{
 
 					File.Copy(formPath, toPath);
 
-					Debug.LogWarning (f.value);
+					Debug.Log (f.value);
+
+					Debug.LogWarning ("CopyFile >> " + toPath );
 				}
 			}
+
 		}
 
 		[MenuItem("Assets/LibsTools/Copy Libs To Other")]

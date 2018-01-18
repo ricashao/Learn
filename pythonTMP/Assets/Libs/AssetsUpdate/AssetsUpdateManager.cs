@@ -179,6 +179,10 @@ public class AssetsUpdateManager : MonoBehaviour {
         fs.Write(bytes,0,bytes.Length);
         fs.Flush();
         fs.Close();
+
+		Debug.LogWarningFormat ("本次更新列表保存到>>{0}",listFilePath);
+		Debug.LogWarningFormat ("本次更新列内容>>\n{0}\n<<本次更新列内容", fileStr.ToString ());
+
 	}
 
     public void Check(string url,OnAssetsUpdateCmp onAssetsUpdateCmpFun,OnAssetsUpdateProgress onassetprogress=null){
@@ -188,8 +192,8 @@ public class AssetsUpdateManager : MonoBehaviour {
         onAssetUpdateProgress = onassetprogress;
 
         StartCoroutine(DownLoad(url,
-                               (fileArr)=>{
-								if(fileArr == null||fileArr.Length<=0){
+                               		(fileArr)=>{
+												if(fileArr == null||fileArr.Length<=0){
 
 													onAssetsUpdateCmp();
                                    					                 
@@ -199,7 +203,7 @@ public class AssetsUpdateManager : MonoBehaviour {
         
                                                 SaveDownLoadListFile(fileArr);
                                                 UpdateAssets(fileArr);
-                                          }
+                                    }
                                 )
                        );
     }
@@ -212,7 +216,15 @@ public class AssetsUpdateManager : MonoBehaviour {
 		string localMD5BakFilePath = assetsUpdatePath + "/md5filelist.txt.bak";
 
 		string localMD5FilePath = assetsUpdatePath + "/md5filelist.txt";
-
+		//如果本地 bak 文件存在
+		if (File.Exists (localMD5BakFilePath)) {
+			//还原旧列表
+			File.Copy(localMD5BakFilePath,localMD5FilePath, true);
+		}
+		//如果本地文件存在
+		if (!File.Exists(localMD5FilePath)){
+			File.WriteAllBytes (localMD5FilePath,ReadRes.ReadByte("/md5filelist.txt"));
+		}
         //如果本地文件存在
 		if (File.Exists(localMD5FilePath))
         {
@@ -238,6 +250,7 @@ public class AssetsUpdateManager : MonoBehaviour {
 			File.WriteAllText (localMD5BakFilePath, www.text, Encoding.UTF8);
 
             //Dictionary<string,string> fileMd5Dic = new Dictionary<string, string>();
+
             string[] severLines = www.text.Split('\n');
             /*
             string line;
@@ -258,6 +271,7 @@ public class AssetsUpdateManager : MonoBehaviour {
 
         HashSet<string> needUpdate = new HashSet<string>();
         Dictionary<string,string> fileMd5Dic = new Dictionary<string, string>();
+		Dictionary<string,string> severFileMd5Dic = new Dictionary<string, string>();
 
         string[] severLines = severFileText.Split('\n');
         string[] localLines = localFileText.Split('\n');
@@ -279,6 +293,12 @@ public class AssetsUpdateManager : MonoBehaviour {
             if(line.IndexOf("=") > 0)
                 fileMd5Dic.Add(line.Substring(0, line.IndexOf("=")), line.Substring(line.IndexOf("=") + 1));
         }
+		/*
+		for(int i = 0; i < severLines.Length; i++){
+			line = severLines[i];
+			if(line.IndexOf("=") > 0)
+				severFileMd5Dic.Add(line.Substring(0, line.IndexOf("=")), line.Substring(line.IndexOf("=") + 1));
+		}*/
 
         string path;
         string localmd5 = null;
@@ -307,13 +327,13 @@ public class AssetsUpdateManager : MonoBehaviour {
             {
                 needUpdate.Add(line);
             }
-
+			/*
 			string strfilepath = assetsUpdatePath + path;
 			if (!File.Exists (strfilepath)) 
 			{
 				needUpdate.Add (line);
 			}
-
+			*/
         }
 
         string[] needUpdateFileArr = new string[needUpdate.Count];
@@ -339,6 +359,11 @@ public class AssetsUpdateManager : MonoBehaviour {
 		string localMD5BakFilePath = assetsUpdatePath + "/md5filelist.txt.bak";
 
 		string localMD5FilePath = assetsUpdatePath + "/md5filelist.txt";
+
+			if (!Directory.Exists (assetsUpdatePath)) 
+			{
+				Directory.CreateDirectory (assetsUpdatePath);
+			}
 
 		//如果本地文件存在
 		if (File.Exists(localMD5FilePath))

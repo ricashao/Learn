@@ -96,11 +96,15 @@ namespace ZhuYuU3d{
 
 		void LuaEnvInit(){
 			//lua 文件查找目录
-			//沙盒路径
-			_env.AddSearcher(ExtStaticLuaCallbacks.LoadLuaFileFromPersistentDataPath, -1);
+
 			#if UNITY_EDITOR
+			//先找 Resource 路径 -> StreamingAssets
 			//Resource 路径
-			_env.AddSearcher(ExtStaticLuaCallbacks.LoadLuaFileFromResource, -1);
+			_env.AddSearcher(ExtStaticLuaCallbacks.LoadLuaFileFromResource, -4);
+			#else
+			//先找 PersistentDataPath 路径 -> StreamingAssets
+			//沙盒路径
+			_env.AddSearcher(ExtStaticLuaCallbacks.LoadLuaFileFromPersistentDataPath, -4);
 			#endif
 			//模块注册
 			_env.AddBuildin("rapidjson", XLua.LuaDLL.Lua.LoadRapidJson);

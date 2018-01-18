@@ -12,6 +12,9 @@ using UnityEngine;
 using XLua;
 
 //配置的详细介绍请看Doc下《XLua的配置.doc》
+using UnityEngine.EventSystems;
+
+
 public static class ExampleGenConfig
 {
     //lua中要使用到C#库的配置，比如C#标准库，或者Unity API，第三方库等。
@@ -44,7 +47,13 @@ public static class ExampleGenConfig
                 typeof(WWW),
                 typeof(System.Collections.Generic.List<int>),
                 typeof(Action<string>),
-                typeof(UnityEngine.Debug)
+                typeof(UnityEngine.Debug),
+				typeof(Application),
+				typeof(RuntimePlatform),
+				typeof(PlayerPrefs),
+				typeof(EventTriggerType),
+				typeof(BaseEventData),
+				typeof(PointerEventData),
             };
 
     //C#静态调用Lua的配置（包括事件的原型），仅可以配delegate，interface
@@ -55,6 +64,8 @@ public static class ExampleGenConfig
                 typeof(Action<string>),
                 typeof(Action<double>),
                 typeof(UnityEngine.Events.UnityAction),
+				typeof(UnityEngine.Events.UnityAction<float>),
+				typeof(UnityEngine.Events.UnityAction<bool>),
                 typeof(System.Collections.IEnumerator)
             };
 
