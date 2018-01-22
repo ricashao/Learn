@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: b6f73fc9c26a66947bd7f315dbf2fdfa
+timeCreated: 1516242202
+licenseType: Free
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: prefab
+  assetBundleName: ui/lobby/prefabs/shoppanel
+  assetBundleVariant: prefab_ab

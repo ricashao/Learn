@@ -1,0 +1,65 @@
+ManifestFileVersion: 0
+CRC: 1335497336
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: c53cbdd0b4c84fd447f02dd315b4e0ea
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 09b6c88ddc095b83f446f8bc6a531e78
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 20
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 64
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 111
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: fbbbe49130db64fa4945170eb39c5b60, type: 3}
+- Class: 114
+  Script: {fileID: -768656878, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: faeb0fc241c2d453296cb387acfb376a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c26240b3436e34bbca75b209b5ae0b0a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 65e31ab8c53374693ad4111d6c5021c2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 7b84f76f1993c4c8790d117336a5882b, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 18caaadf2bb774e20b8ccbbb5a84e383, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+Assets:
+- Assets/UI/Lobby/3D/Prefabs/LobbyRoot.prefab
+- Assets/UI/Lobby/3D/Material/MenImg.mat
+- Assets/UI/Lobby/3D/Texture/bg0.png
+- Assets/UI/Lobby/3D/Shader/UI3d_UnlitShader.shader
+- Assets/UI/Lobby/3D/Texture/card_bg.png
+- Assets/UI/Lobby/3D/Material/UI3d_Material.mat
+- Assets/UI/Lobby/3D/Material/UI3d_bg_Materia.mat
+- Assets/UI/Lobby/3D/Material/MenImg 1.mat
+Dependencies: []

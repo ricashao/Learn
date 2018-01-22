@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 28497dd35cb03f043891f0cd988ebadd
+timeCreated: 1515740670
+licenseType: Free
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: prefab
+  assetBundleName: ui/lobby/prefabs/rankpanel
+  assetBundleVariant: prefab_ab

@@ -1,0 +1,55 @@
+ManifestFileVersion: 0
+CRC: 3577541628
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: ui/common/uiroot
+      Dependencies: {}
+    Info_1:
+      Name: ui/lobby/prefabs/modifypasswordpanel.prefab_ab
+      Dependencies: {}
+    Info_2:
+      Name: ui/lobby/prefabs/userinfopanel.prefab_ab
+      Dependencies: {}
+    Info_3:
+      Name: ui/hotfixpanel
+      Dependencies: {}
+    Info_4:
+      Name: ui/launchpanel.panel
+      Dependencies: {}
+    Info_5:
+      Name: ui/loginpanel
+      Dependencies: {}
+    Info_6:
+      Name: ui/registerpanel
+      Dependencies: {}
+    Info_7:
+      Name: ui/lobby/prefabs/changeheadpanel.prefab_ab
+      Dependencies: {}
+    Info_8:
+      Name: ui/lobby/prefabs/rankpanel.prefab_ab
+      Dependencies: {}
+    Info_9:
+      Name: ui/lobby/prefabs/lobbypanel.prefab_ab
+      Dependencies: {}
+    Info_10:
+      Name: ui/messageboxpanel
+      Dependencies: {}
+    Info_11:
+      Name: ui/toastpanel
+      Dependencies: {}
+    Info_12:
+      Name: ui/lobbyroot
+      Dependencies: {}
+    Info_13:
+      Name: ui/settingpanel
+      Dependencies: {}
+    Info_14:
+      Name: ui/lobby/prefabs/shoppanel.prefab_ab
+      Dependencies: {}
+    Info_15:
+      Name: ui/lobby/prefabs/bagpanel.prefab_ab
+      Dependencies: {}
+    Info_16:
+      Name: ui/lobby/prefabs/taskpanel.prefab_ab
+      Dependencies: {}

@@ -8,7 +8,12 @@
 		<type fullname="Md5Tools" preserve="all"/>
 		<type fullname="PathTools" preserve="all"/>
 		<type fullname="LuaSocketBehaviour" preserve="all"/>
+		<type fullname="ZhuYuU3d.LuaAnimationCtrl" preserve="all"/>
 		<type fullname="ZhuYuU3d.LuaBaseBehaviour" preserve="all"/>
+		<type fullname="ZhuYuU3d.LuaEventCallBack" preserve="all"/>
+		<type fullname="ZhuYuU3d.LuaSceneClick" preserve="all"/>
+		<type fullname="ZhuYuU3d.LuaSceneClickRelease" preserve="all"/>
+		<type fullname="ZhuYuU3d.LuaUGUIEvent" preserve="all"/>
 		<type fullname="ZhuYuU3d.LuaUpdateBehaviour" preserve="all"/>
 		<type fullname="ZhuYuU3d.LuaBehaviourFactory" preserve="all"/>
 		<type fullname="ZhuYuU3d.LBF" preserve="all"/>
@@ -75,6 +80,13 @@
 	<assembly fullname="mscorlib">
 	    <type fullname="System.Object" preserve="all"/>
 		<type fullname="System.Collections.Generic.List`1[System.Int32]" preserve="all"/>
+		
+	</assembly>
+
+	<assembly fullname="UnityEngine.UI">
+	    <type fullname="UnityEngine.EventSystems.EventTriggerType" preserve="all"/>
+		<type fullname="UnityEngine.EventSystems.BaseEventData" preserve="all"/>
+		<type fullname="UnityEngine.EventSystems.PointerEventData" preserve="all"/>
 		
 	</assembly>
 

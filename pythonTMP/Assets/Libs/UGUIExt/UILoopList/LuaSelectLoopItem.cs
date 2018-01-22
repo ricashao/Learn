@@ -10,6 +10,7 @@ public class LuaSelectLoopItem : LuaLoopItem
 {
     private LuaSelectItem selectItem;
 
+    public bool isAutoListener = false;
     internal LuaEnv luaEnv;
     private void Awake()
     {
@@ -26,12 +27,15 @@ public class LuaSelectLoopItem : LuaLoopItem
                 luafun_UILoopItem_Set = luaEnv.Global.GetInPath<UILoopItem_Set>(functionName);
             }
         }
-        Button[] btns = this.transform.GetComponentsInChildren<Button>();
-        SelectGroup group = this.transform.parent.GetComponent<SelectGroup>();
-        group.AddItem(selectItem);
-        foreach (Button btn in btns)
+        if(isAutoListener)
         {
-            btn.onClick.AddListener(() => { group.SelectByIndex(selectItem.index); });
+            Button[] btns = this.transform.GetComponentsInChildren<Button>();
+            SelectGroup group = this.transform.parent.GetComponent<SelectGroup>();
+            group.AddItem(selectItem);
+            foreach (Button btn in btns)
+            {
+                btn.onClick.AddListener(() => { group.SelectByIndex(selectItem.index); });
+            }
         }
         UILoopItem_Set luafun_UILoopItem_Awake = luaEnv.Global.GetInPath<UILoopItem_Set>(awakefunctionName);
         if (luafun_UILoopItem_Awake != null) luafun_UILoopItem_Awake(itemIndex, transform, GetData());

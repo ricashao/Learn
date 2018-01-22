@@ -33,7 +33,17 @@ namespace XLua.CSObjectWrap
 				
 				translator.DelayWrapLoader(typeof(LuaSocketBehaviour), LuaSocketBehaviourWrap.__Register);
 				
+				translator.DelayWrapLoader(typeof(ZhuYuU3d.LuaAnimationCtrl), ZhuYuU3dLuaAnimationCtrlWrap.__Register);
+				
 				translator.DelayWrapLoader(typeof(ZhuYuU3d.LuaBaseBehaviour), ZhuYuU3dLuaBaseBehaviourWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(ZhuYuU3d.LuaEventCallBack), ZhuYuU3dLuaEventCallBackWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(ZhuYuU3d.LuaSceneClick), ZhuYuU3dLuaSceneClickWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(ZhuYuU3d.LuaSceneClickRelease), ZhuYuU3dLuaSceneClickReleaseWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(ZhuYuU3d.LuaUGUIEvent), ZhuYuU3dLuaUGUIEventWrap.__Register);
 				
 				translator.DelayWrapLoader(typeof(ZhuYuU3d.LuaUpdateBehaviour), ZhuYuU3dLuaUpdateBehaviourWrap.__Register);
 				
@@ -136,6 +146,12 @@ namespace XLua.CSObjectWrap
 				translator.DelayWrapLoader(typeof(UnityEngine.RuntimePlatform), UnityEngineRuntimePlatformWrap.__Register);
 				
 				translator.DelayWrapLoader(typeof(UnityEngine.PlayerPrefs), UnityEnginePlayerPrefsWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(UnityEngine.EventSystems.EventTriggerType), UnityEngineEventSystemsEventTriggerTypeWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(UnityEngine.EventSystems.BaseEventData), UnityEngineEventSystemsBaseEventDataWrap.__Register);
+				
+				translator.DelayWrapLoader(typeof(UnityEngine.EventSystems.PointerEventData), UnityEngineEventSystemsPointerEventDataWrap.__Register);
 				
 				translator.DelayWrapLoader(typeof(Tutorial.BaseClass), TutorialBaseClassWrap.__Register);
 				

@@ -56,6 +56,7 @@ end
 function ondestroy()
 
 	--移除消息监听
+	mr(msgCmd2.SC_SetRankList,on_msg)
 	mr(msgCmd.MessageNotify,on_msg)
 	--移除事件监听
 	--er(event.name,on_event)

@@ -1,0 +1,7 @@
+//将 cfg 文件放到 Assets 目录下 可完成配置
+copyTo=/Users/admin/Documents/unity_PRJ/loadAb/Assets1/Libs
+StreamingAssetsTo=/Users/admin/Documents/unity_PRJ/Project_XTS/Assets/StreamingAssets
+//拷贝 StreamingAssets 文件到 web root
+//1 cd /Library/WebServer/
+//2 sudo chmod -R 777 Documents
+//StreamingAssetsTo=/Library/WebServer/Documents

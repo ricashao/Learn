@@ -11,6 +11,8 @@ local RegisterPanelview =
 local this = RegisterPanelview
 
 local LuaUIManager = require 'lua/game/LuaUIManager'
+local MessageBoxManager = require 'lua/game/MessageBoxManager'
+
 function isNil(obj)
 	
 	if obj == nil then
@@ -110,7 +112,7 @@ function RegisterPanelview:OnGetCheckCode()
 	function()
 		print("Click Cancel");
 	end);--]]
-	LuaUIManager.PopMessageWindow("MessageBoxPanel",
+--[[	LuaUIManager.PopMessageWindow("MessageBoxPanel",
 	"Test Tips",
 	"Test Content",
 	0,
@@ -123,7 +125,18 @@ function RegisterPanelview:OnGetCheckCode()
 	function()
 		print("Click Cancel");
 	end);
-	
+--]]
+	MessageBoxManager:ShowModalBox("OneMessageOneButtonPanel",{
+		["Content"]={PrefabPath="txt_Info",Content="Test" },
+		["Button1Param"]=
+		{
+			["Desc"]="OK",
+			["Callback"]=function() print("Back") end,
+			PrefabPath="btn_OK",
+		}
+	}
+	,
+			"PopupCanvas");
 	
 end
 

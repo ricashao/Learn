@@ -7,6 +7,7 @@ local msgCmd2 = GameState.curRunState.MsgDefine.ZLobbyModuleCmd
 -- local data = GameState.curRunState.Data.LobbyData
 local this = scriptEnv
 local uimanager = require 'lua/game/LuaUIManager'
+local tipview_rect
 function awake()
 	--DemoListPanelView.transform = self.transform 
 	view:init(self.transform)
@@ -16,6 +17,8 @@ function awake()
 	view.backbutton.onClick:AddListener(function()
 		uimanager.CloseWindow('BagPanel')
 	end)
+	
+	tipview_rect = view.tipview.rect
 	--AddEventCode 追加事件标志
 
 	--PanelView.returnButton:GetComponent("Button").onClick:AddListener(function() 
@@ -29,8 +32,8 @@ function awake()
 	--事件监听
 	--el(event.name,on_event)
 	el(LobbyEventConst.Bag_TabChange,on_event)
-	el(LobbyEventConst.Bag_HelpPress,on_msg)
-	el(LobbyEventConst.Bag_HelpRelease,on_msg)
+	el(LobbyEventConst.Bag_HelpPress,on_event)
+	el(LobbyEventConst.Bag_HelpRelease,on_event)
 end	
 
 local datas = {
@@ -55,8 +58,8 @@ function ondestroy()
 	--移除事件监听
 	--er(event.name,on_event)
 	er(LobbyEventConst.Bag_TabChange,on_event)
-	er(LobbyEventConst.Bag_HelpPress,on_msg)
-	er(LobbyEventConst.Bag_HelpRelease,on_msg)
+	er(LobbyEventConst.Bag_HelpPress,on_event)
+	er(LobbyEventConst.Bag_HelpRelease,on_event)
 
 	--EventManager.RemoveListener("OnButtonClicked",on_click)
 	view:on_destroy()
@@ -83,16 +86,25 @@ function update_info(index)
 end
 
 
-function update_tipview_position()
-	local press_position = CS.UnityEngine.Input.mouseposition
-	print('x '.. press_position.x..' y '..press_position.y)
-	view.tipview.position = press_position
+function update_tipview_position(data)
+	local press_position = CS.UnityEngine.Input.mousePosition
+	local canvas = uimanager.getlayer('PopupCanvas'):GetComponent('Canvas')
+	local pos = CS.ZhuYuU3d.LuaCallCsFun.ScreenPointToLocalPointInRectangle(canvas.transform,
+                    press_position.x,press_position.y, canvas.worldCamera)
+	local movx,movy=0,0
+	if(pos.x>0) then
+		movx = pos.x - tipview_rect.width/2 - 10
+	else
+		movx = pos.x + tipview_rect.width/2 + 10
+	end
+	view.tipview.localPosition = CS.UnityEngine.Vector3(movx,view.tipview.localPosition.y,0)
+	view.tiptext.text = data[2]
 end
 
 
 --消息处理函数
 function on_msg(key,decode)
-	print(" rank on_msg >> "..key)
+	print(" bag on_msg >> "..key)
 	-- if(key == msgCmd2.SC_SetRankList) then
 		-- if(decode.type == 'GOLD') then
 			-- view:set_state('gold_state')
@@ -112,9 +124,9 @@ function on_event(event,param)
 	if(event == LobbyEventConst.Bag_TabChange) then
 		update_info(param)
 	elseif(event == LobbyEventConst.Bag_HelpPress) then
-		view:set_state('tip_show')
-		update_tipview_position()
+		view:set_state('help_show')
+		update_tipview_position(param)
 	elseif(event == LobbyEventConst.Bag_HelpRelease) then
-		view:set_state('tip_hide')
+		view:set_state('help_hide')
 	end
 end		

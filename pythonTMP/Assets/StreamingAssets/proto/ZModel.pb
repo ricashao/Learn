@@ -1,6 +1,6 @@
 
-î
-ZModel.protoZProto"Œ
+‰
+ZModel.protoZProtoZEnum.proto"Œ
 M_User
 id (Rid
 gold (Rgold
@@ -19,4 +19,19 @@ M_GameInfo
 id (Rid
 name (	Rname
 status (Rstatus
-sort (Rsort
+sort (Rsort"B
+M_Item
+id (Rid
+mid (Rmid
+amount (Ramount"Ç
+
+M_ItemInfo
+mid (Rmid
+name (	Rname
+price (Rprice2
+
+price_type (2.ZProto.E_MoneyTypeR	priceType
+amount (Ramount
+
+amount_max (R	amountMax
+sort (Rsort

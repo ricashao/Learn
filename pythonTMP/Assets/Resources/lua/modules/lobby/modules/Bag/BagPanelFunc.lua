@@ -28,13 +28,7 @@ function bag_good_awake(index,transform,data)
 	buybutton.onClick:AddListener(function()
 		print('select>>>>>>>>> '..selectitem.itemIndex)
 	end)
-	local helpbutton = transform:Find('HelpButton'):GetComponent('ButtonExt')
-	helpbutton.onPress:AddListener(function()
-		es(LobbyEventConst.Bag_HelpPress)
-	end)
-	helpbutton.onRelease:AddListener(function()
-		es(LobbyEventConst.Bag_HelpRelease)
-	end)
+	
 end
 
 function bag_good_onselect(index,transform,data)

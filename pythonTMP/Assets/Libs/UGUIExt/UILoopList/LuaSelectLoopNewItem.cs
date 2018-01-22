@@ -10,6 +10,7 @@ public class LuaSelectLoopNewItem : LuaLoopItem,ISelectAble
 {
     internal LuaEnv luaEnv;
 
+    public bool isAutoListener = false;
     [CSharpCallLua]
     public delegate void OnSelectItem(int indexd, Transform transform, object data);
 
@@ -35,14 +36,18 @@ public class LuaSelectLoopNewItem : LuaLoopItem,ISelectAble
                 luafun_UILoopItem_Set = luaEnv.Global.GetInPath<UILoopItem_Set>(functionName);
             }
         }
-        Button[] btns = this.transform.GetComponentsInChildren<Button>();
-        SelectGroup group = this.transform.parent.GetComponent<SelectGroup>();
-        group.AddItem(this);
-        foreach(Button btn in btns)
+        if(isAutoListener)
         {
-            btn.onClick.AddListener(() => { group.SelectByIndex(this.index); });
-        }
 
+            Button[] btns = this.transform.GetComponentsInChildren<Button>();
+            SelectGroup group = this.transform.parent.GetComponent<SelectGroup>();
+            group.AddItem(this);
+            foreach (Button btn in btns)
+            {
+                btn.onClick.AddListener(() => { group.SelectByIndex(this.index); });
+            }
+
+        }
         if (luafun_OnSelect == null)
         {
             luaEnv = LuaManager.GetInstance().LuaEnvGetOrNew();

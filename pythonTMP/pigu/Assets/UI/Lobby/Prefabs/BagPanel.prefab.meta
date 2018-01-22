@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 2cb08923cf1ddb44aa89b7090873b289
+timeCreated: 1516254884
+licenseType: Free
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: prefab
+  assetBundleName: ui/lobby/prefabs/bagpanel
+  assetBundleVariant: prefab_ab

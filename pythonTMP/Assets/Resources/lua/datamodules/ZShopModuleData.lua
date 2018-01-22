@@ -27,7 +27,7 @@ function ZShopModuleData.register(tcpClinet,MsgDefine)
 	local protobuf = tcpClinet.proto
     --local luaPath = CS.UnityEngine.Application.dataPath..'/Resources'
     --protobuf.register_file(luaPath..'/proto/ZCommon.pb')
-    --protobuf.register_file(luaPath..'/proto/ZEnum.pb')
+    protobuf.register_file(PbPtah()..'/proto/ZShop.pb')
 	
 	local luaPath = PbPtah()
 	--映射协议号 -> protobuf 
@@ -60,19 +60,23 @@ function ZShopModuleData.clear(tcpClinet)
  	--tcpClinet.removelistener(Cmd.$MsgName$,ZShopModuleData.on_msg)
 end 	
 
-function ZShopModuleData.send_CS_GetItemList()
+function ZShopModuleData.send_CS_GetItemList(version)
 	local CS_GetItemList = {}
+	CS_GetItemList.version = version
 	GameState.tcpClinet.sendmsg(Cmd.CS_GetItemList,CS_GetItemList)
 end
-function ZShopModuleData.send_CS_GetItem(mid,amount)
+function ZShopModuleData.send_CS_GetItem(uid,mid,amount)
 	local CS_GetItem = {}
+	CS_GetItem.uid = uid
 	CS_GetItem.mid = mid
 	CS_GetItem.amount = amount
 	GameState.tcpClinet.sendmsg(Cmd.CS_GetItem,CS_GetItem)
 end
-function ZShopModuleData.send_CS_ExchangeItem(mid,realname,phone,code,postcode,address)
+function ZShopModuleData.send_CS_ExchangeItem(uid,mid,amount,realname,phone,code,postcode,address)
 	local CS_ExchangeItem = {}
+	CS_ExchangeItem.uid = uid
 	CS_ExchangeItem.mid = mid
+	CS_ExchangeItem.amount = amount
 	CS_ExchangeItem.realname = realname
 	CS_ExchangeItem.phone = phone
 	CS_ExchangeItem.code = code
@@ -80,8 +84,9 @@ function ZShopModuleData.send_CS_ExchangeItem(mid,realname,phone,code,postcode,a
 	CS_ExchangeItem.address = address
 	GameState.tcpClinet.sendmsg(Cmd.CS_ExchangeItem,CS_ExchangeItem)
 end
-function ZShopModuleData.send_CS_UseItem(id,amount)
+function ZShopModuleData.send_CS_UseItem(uid,id,amount)
 	local CS_UseItem = {}
+	CS_UseItem.uid = uid
 	CS_UseItem.id = id
 	CS_UseItem.amount = amount
 	GameState.tcpClinet.sendmsg(Cmd.CS_UseItem,CS_UseItem)
@@ -105,7 +110,7 @@ function ZShopModuleData.on_msg(key,decode)
 		print("ZShop >> on_msg >> user_para >>  ".. Cmd.SC_SetItem)
 
 		ZShopModuleData.SC_SetItem = decode
-		print("SC_SetItem.item ".. decode.item)
+		print("SC_SetItem.items ".. decode.items)
 	end
 	if key == Cmd.SC_SetBag then
 		print("ZShop >> on_msg >> user_para >>  ".. Cmd.SC_SetBag)

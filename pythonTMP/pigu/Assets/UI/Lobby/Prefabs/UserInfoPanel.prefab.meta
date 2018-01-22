@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: a95a9b5cdfc0d394ba8682dbb90f71cc
+timeCreated: 1516012596
+licenseType: Pro
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: prefab
+  assetBundleName: ui/lobby/prefabs/userinfopanel
+  assetBundleVariant: prefab_ab

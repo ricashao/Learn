@@ -170,6 +170,7 @@ function on_event(event,param)
 		view.UserNameText.text = param
 	elseif event == "LoginSuccess" then
 		updateCommonInfo()
+		
 	end
 
 end		

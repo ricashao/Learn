@@ -20,6 +20,7 @@ function $ModuleName$ModuleData.register(tcpClinet,MsgDefine)
     --local luaPath = CS.UnityEngine.Application.dataPath..'/Resources'
     --protobuf.register_file(luaPath..'/proto/ZCommon.pb')
     --protobuf.register_file(luaPath..'/proto/ZEnum.pb')
+    protobuf.register_file(PbPtah()..'/proto/$ModuleName$.pb')
 	
 	local luaPath = PbPtah()
 	--映射协议号 -> protobuf 

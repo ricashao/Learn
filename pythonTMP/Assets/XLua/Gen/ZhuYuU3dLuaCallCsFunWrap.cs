@@ -31,7 +31,7 @@ namespace XLua.CSObjectWrap
 			Utils.EndObjectRegister(type, L, translator, null, null,
 			    null, null, null);
 
-		    Utils.BeginClassRegister(type, L, __CreateInstance, 8, 0, 0);
+		    Utils.BeginClassRegister(type, L, __CreateInstance, 9, 0, 0);
 			Utils.RegisterFunc(L, Utils.CLS_IDX, "JumpScene", _m_JumpScene_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "JumpSceneName", _m_JumpSceneName_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "JumpToRun", _m_JumpToRun_xlua_st_);
@@ -39,6 +39,7 @@ namespace XLua.CSObjectWrap
             Utils.RegisterFunc(L, Utils.CLS_IDX, "JumpToLauncher", _m_JumpToLauncher_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "ReadByte", _m_ReadByte_xlua_st_);
             Utils.RegisterFunc(L, Utils.CLS_IDX, "ReadByteForLua", _m_ReadByteForLua_xlua_st_);
+            Utils.RegisterFunc(L, Utils.CLS_IDX, "ScreenPointToLocalPointInRectangle", _m_ScreenPointToLocalPointInRectangle_xlua_st_);
             
 			
             
@@ -233,6 +234,36 @@ namespace XLua.CSObjectWrap
                     
                         byte[] __cl_gen_ret = ZhuYuU3d.LuaCallCsFun.ReadByteForLua( fileName );
                         LuaAPI.lua_pushstring(L, __cl_gen_ret);
+                    
+                    
+                    
+                    return 1;
+                }
+                
+            } catch(System.Exception __gen_e) {
+                return LuaAPI.luaL_error(L, "c# exception:" + __gen_e);
+            }
+            
+        }
+        
+        [MonoPInvokeCallbackAttribute(typeof(LuaCSFunction))]
+        static int _m_ScreenPointToLocalPointInRectangle_xlua_st_(RealStatePtr L)
+        {
+		    try {
+            
+                ObjectTranslator translator = ObjectTranslatorPool.Instance.Find(L);
+            
+            
+            
+                
+                {
+                    UnityEngine.RectTransform rect = (UnityEngine.RectTransform)translator.GetObject(L, 1, typeof(UnityEngine.RectTransform));
+                    float x = (float)LuaAPI.lua_tonumber(L, 2);
+                    float y = (float)LuaAPI.lua_tonumber(L, 3);
+                    UnityEngine.Camera cam = (UnityEngine.Camera)translator.GetObject(L, 4, typeof(UnityEngine.Camera));
+                    
+                        UnityEngine.Vector2 __cl_gen_ret = ZhuYuU3d.LuaCallCsFun.ScreenPointToLocalPointInRectangle( rect, x, y, cam );
+                        translator.PushUnityEngineVector2(L, __cl_gen_ret);
                     
                     
                     

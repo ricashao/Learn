@@ -3,7 +3,7 @@ LoginPanelCtrl={};
 this=LoginPanelCtrl;
 
 local LoginPanelview = require 'lua/modules/Login/View/LoginPanelView'
-
+							
 LuaUIManager = require 'lua/game/LuaUIManager'
 
 --本模块消息号

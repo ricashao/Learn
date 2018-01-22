@@ -323,6 +323,10 @@ function LuaUIManager.layerregister()
 	layer['GuideCanvas']   =  CS.UnityEngine.GameObject.Find('GuideCanvas')
 end
 
+function LuaUIManager.getlayer(layername)
+	return layer[layername]
+end
+
 function LuaUIManager.register(name,resInfo)
 	-- body
 	res[name] = resInfo

@@ -1,0 +1,16 @@
+//拷贝ui
+CopyFiles=D://U3D/u3d_res_project/Assets/StreamingAssets/ui->D://U3D/u3d_xlua_project/Assets/StreamingAssets/ui
+
+//拷贝 AssetsName2AssetBundleAll 文件
+CopyFile=D://U3D/u3d_res_project/Assets/StreamingAssets/StreamingAssets_u3d_res_project_AssetsName2AssetBundleAll.txt->D://U3D/u3d_xlua_project/Assets/StreamingAssets/StreamingAssets_u3d_res_project_AssetsName2AssetBundleAll.txt
+
+//拷贝 StreamingAssets 文件
+CopyFile=D://U3D/u3d_res_project/Assets/StreamingAssets/StreamingAssets_u3d_res_project->D://U3D/u3d_xlua_project/Assets/StreamingAssets/StreamingAssets_u3d_res_project
+
+//将 cfg 文件放到 Assets 目录下 可完成配置
+//copyTo=/Users/admin/Documents/unity_PRJ/loadAb/Assets1/Libs
+//StreamingAssetsTo=/Users/admin/Documents/unity_PRJ/Project_XTS/Assets/StreamingAssets
+//拷贝 StreamingAssets 文件到 web root
+//1 cd /Library/WebServer/
+//2 sudo chmod -R 777 Documents
+//StreamingAssetsTo=/Library/WebServer/Documents
