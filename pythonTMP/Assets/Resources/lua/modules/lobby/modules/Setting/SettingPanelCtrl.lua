@@ -13,7 +13,9 @@ local this=SettingPanelCtrl;
 LuaUIManager = require 'lua/game/LuaUIManager'
 
 function awake()
-	
+
+	print("Port:"..Define.port);
+
 	SettingPanelview:init(self.transform);
 	
 	if(SettingPanelview.Slider_Volume_Right~=nil)then
@@ -66,9 +68,17 @@ function awake()
 	SettingPanelview:VolumeSize(SettingData:GetVolumeSize());
 	
 	SettingPanelview:SoundToggleState(SettingData:IsSoundEffectEnable());
+
+	el("C2C_LoginModule2SettingModule_Close",SettingPanelCtrl.HandleMessage);
 	
 	
-end	
+end
+
+function SettingPanelCtrl.HandleMessage(strMessageName,param)
+	if strMessageName=="C2C_LoginModule2SettingModule_Close" then
+		LuaUIManager:ClosePageWithName("SettingPanel");
+	end
+end
 
 function SettingPanelCtrl:OnImgMusicClk(UIWidgetSender)
 	print("Send Name:"..UIWidgetSender.name);
@@ -96,6 +106,8 @@ end
 function ondestroy()
 	
 	 SettingData:Write();
+
+	er("C2C_LoginModule2SettingModule_Close",SettingPanelCtrl.HandleMessage);
 	
 end
 

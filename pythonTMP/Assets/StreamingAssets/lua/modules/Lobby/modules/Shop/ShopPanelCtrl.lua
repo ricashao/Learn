@@ -32,17 +32,6 @@ function awake()
 	el(LobbyEventConst.Shop_TabChange,on_event)
 end	
 
-local datas = {
-	{{'zs1','zs1'},{'zs2','zs2'},{'zs2','zs2'},{'zs3','zs3'},{'zs4','zs4'},{'zs5','zs5'},{'zs6','zs6'},{'zs7','zs7'},{'zs8','zs8'},{'zs9','zs9'},{'zs10','zs10'},{'zs11','zs11'}
-	},
-	{{'jb1','jb1'},{'jb2','zs2'},{'jb2','zs2'},{'jb3','zs3'},{'jb4','zs4'},{'jb5','zs5'},{'jb6','jb6'},{'jb7','jb7'},{'jb8','jb8'},{'jb9','jb9'},{'jb10','jb10'},{'jb11','jb11'}
-	},
-	{{'dj1','jb1'},{'dj2','zs2'},{'dj2','zs2'},{'dj3','zs3'},{'dj4','zs4'},{'dj5','zs5'},{'dj6','jb6'},{'dj7','jb7'},{'dj8','jb8'},{'dj9','jb9'},{'dj10','jb10'},{'dj11','jb11'}
-	},
-	{{'dh1','jb1'},{'dh2','zs2'},{'dh2','zs2'},{'dh3','zs3'},{'dh4','zs4'},{'dh5','zs5'}
-	}
-}
-
 
 function start()
 	view.tabgroup:SelectByIndex(0)
@@ -76,23 +65,39 @@ end
 
 
 function update_info(index)
-	local data = datas[index+1]
+	local data;
 	if index == 0 then
 		view:set_state('buygem_state')
+		data = GoodsConfigs.getItemsByType(4)
+		table.sort(data,sortFunc)
 		view.list1:Data(data)
 		view.list1_selectgroup.Index = 0
 	elseif index == 1 then
 		view:set_state('buygold_state')
+		data = GoodsConfigs.getItemsByType(2)
+		table.sort(data,sortFunc)
 		view.list2:Data(data)
 		view.list2_selectgroup.Index = 0
 	elseif index == 2 then
 		view:set_state('buygood_state')
+		data = GoodsConfigs.getItemsByType(1)
+		table.sort(data,sortFunc)
 		view.list3:Data(data)
 		view.list3_selectgroup.Index = 0
 	else
 		view:set_state('buyreal_state')
+		data = GoodsConfigs.getItemsByType(3)
+		table.sort(data,sortFunc)
 		view.list4:Data(data)
 		view.list4_selectgroup.Index = 0
+	end
+end
+
+function sortFunc(a,b)
+	if a.sort<b.sort then
+		return true
+	else
+		return false
 	end
 end
 

@@ -15,7 +15,7 @@
 CS_LoginByPlatform2
 platform (2.ZProto.E_PlatformTypeRplatform
 token (	Rtoken,
-device (2.ZProto.E_DeviceTypeRdevice"
+device (2.ZProto.E_DeviceTypeRdevice"
 enumID
 IDê"y
 SC_LoginSuccess"

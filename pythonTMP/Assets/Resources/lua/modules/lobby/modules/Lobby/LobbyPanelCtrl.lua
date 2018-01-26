@@ -1,8 +1,12 @@
 --当前视图
 local view = require 'lua/modules/Lobby/modules/Lobby/LobbyPanelView'
+--数据层
+local ZLobbyModuleData = require 'lua/datamodules/ZLobbyModuleData'
+
 --本模块消息号
 local msgCmd = GameState.curRunState.MsgDefine.ZLobbyModuleCmd
 local lobbyModuleData = GameState.curRunState.Data.ZLobbyModuleData
+local shopModuleData = GameState.curRunState.Data.ZShopModuleData
 --本模块数据层
 --local data = GameState.curRunState.Data.LobbyData
 
@@ -47,7 +51,8 @@ function awake()
 	print('onClick:'..'BottomRightButton')
 	end)
 	view.BottomButton0:GetComponent("Button").onClick:AddListener(function()
-	print('onClick:'..'BottomButton0')
+		print('onClick:'..'BottomButton0-->MailPanelOpen');
+		uimanager.open("MailPanel",nil,nil);
 	end)
 	view.BottomButton1:GetComponent("Button").onClick:AddListener(function()
 		uimanager.open('TaskPanel')
@@ -71,14 +76,19 @@ function awake()
 	--事件监听
 	--el(event.name,on_event)
 	el(LobbyEventConst.UserInfo_ChangeName_Success,on_event)
+	el(CommonEventConst.Money_Update,on_event)
+	el(LobbyEventConst.Change_Head,on_event)
 	el("LoginSuccess",on_event)
 
 	timer:Add(6,scriptEnv,'timerUpdateMarqueeText','timerUpdateMarqueeText')
+	timer:Add(18,scriptEnv,'timerSendMarquee','timerSendMarquee')
 end	
 
 local curMarqueeIndex = 1
 --跑马灯 更新
 function timerUpdateMarqueeText(timerInfo)
+
+	print("Call timerUpdateMarqueeText()")
 
 	if lobbyModuleData.SC_SetMarquee == nil then
 		return
@@ -95,8 +105,28 @@ function timerUpdateMarqueeText(timerInfo)
 	print(" timerUpdate_MarqueeText  >> "..timerInfo.className.." curMarqueeIndex  >> "..curMarqueeIndex)
 end	
 
+function timerSendMarquee(timerInfo)
+
+	print("请求跑马灯！")
+	ZLobbyModuleData.send_CS_GetMarquee()
+end	
+
 function start()
 	updateCommonInfo()
+	if CommonData.user ~= nil then
+		shopModuleData.send_CS_GetBag(CommonData.user.id)
+	end
+	
+	if(GameState.curRunState.Data.ZLobbyModuleData.SC_SetTask == nil) then
+		lobbyModuleData.send_CS_GetTask()
+	end
+	--跑马灯 
+	ZLobbyModuleData.send_CS_GetMarquee()
+end
+
+function updateface()
+	if CommonData.user.face == '' then CommonData.user.face = 'ui/icon/defaulthead/default_head_0.jpg' end
+	view.headimg:Url(CommonData.user.face)
 end
 
 function updateCommonInfo()
@@ -118,10 +148,12 @@ function updateCommonInfo()
 	if lobbyModuleData.SC_SetMarquee ~= nil then
 		view.MarqueeText.text = lobbyModuleData.SC_SetMarquee.msgs[1] 
 	end
+	updateface()
 end
 
 function ondestroy()
 
+	timer:Rem('timerSendMarquee')
 	timer:Rem('timerUpdateMarqueeText')
 	timer = nil
 	--消息监听
@@ -130,6 +162,8 @@ function ondestroy()
 	--el(event.name,on_event)
 	er(LobbyEventConst.UserInfo_ChangeName_Success,on_event)
 	er("LoginSuccess",on_event)
+	er(CommonEventConst.Money_Update,on_event)
+	er(LobbyEventConst.Change_Head,on_event)
 
 	--移除消息监听
 	--mr(msgCmd.user_para,on_msg)
@@ -170,7 +204,14 @@ function on_event(event,param)
 		view.UserNameText.text = param
 	elseif event == "LoginSuccess" then
 		updateCommonInfo()
-		
+		shopModuleData.send_CS_GetBag(CommonData.user.id)
+		lobbyModuleData.send_CS_GetTask()
+	end
+	if(event == CommonEventConst.Money_Update) then
+		updateCommonInfo()
+	end
+	if event == LobbyEventConst.Change_Head then	
+		updateface()
 	end
 
 end		

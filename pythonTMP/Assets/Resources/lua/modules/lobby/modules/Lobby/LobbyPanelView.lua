@@ -32,6 +32,7 @@ function LobbyPanelView:init(transform)
 	self.BottomButton4 = self.transform:Find('BottomButton4')
 	self.BottomButton5 = self.transform:Find('BottomButton5')
 	self.MarqueeText = self.transform:Find('Marquee/bg/Text0'):GetComponent("Text")
+	self.headimg = self.HaedImageButton:GetComponent('WebImg')
 	--AddRefCode 追加引用标志
 	
 	self:set_state('init_state')

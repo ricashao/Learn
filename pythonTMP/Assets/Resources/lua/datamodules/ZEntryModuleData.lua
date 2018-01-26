@@ -9,7 +9,8 @@ $pbCode
 ]]
 local ZEntryModuleData = {}
 local uimanager = require 'lua/game/LuaUIManager'
-local Cmd = {
+local Cmd =
+{
 	CS_Login = sib(1000),
 	CS_LoginByAccount = sib(1001),
 	CS_LoginByPlatform = sib(1002),
@@ -47,10 +48,10 @@ function ZEntryModuleData.register(tcpClinet,MsgDefine)
 	--监听处理事件
 	tcpClinet.addlistener(Cmd.SC_LoginSuccess,ZEntryModuleData.on_msg)
 	
-	RegisterPanelServices= require 'lua/modules/Register/services/RegisterPanelServices';
+	RegisterPanelServices= require 'lua/modules/Lobby/modules/Register/services/RegisterPanelServices';
 	RegisterPanelServices.Init(MsgDefine.ZEntryModuleCmd,ZEntryModuleData);
 	
-	LoginPanelServices= require 'lua/modules/Login/services/LoginPanelServices';
+	LoginPanelServices= require 'lua/modules/Lobby/modules/Login/services/LoginPanelServices';
 	LoginPanelServices.Init(MsgDefine.ZEntryModuleCmd,ZEntryModuleData);
 	
 
@@ -73,6 +74,10 @@ function ZEntryModuleData.clear(tcpClinet)
 	tcpClinet.removelistener(Cmd.SC_LoginSuccess,ZEntryModuleData.on_msg)
 	tcpClinet.removelistener(Cmd.MessageNotify,ZEntryModuleData.on_msg)
  	--tcpClinet.removelistener(Cmd.$MsgName$,ZEntryModuleData.on_msg)
+	RegisterPanelServices.Clear();
+
+	LoginPanelServices.Clear();
+
 end 	
 
 function ZEntryModuleData.send_CS_Login(token,platform)

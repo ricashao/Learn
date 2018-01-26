@@ -112,7 +112,7 @@ public class LaunchMeditor :Mediator
 		void BeginUpdateResource()
 		{
 			AssetsUpdateManager.getInstance ().Check 
-			(mstrRemoteMD5Url,// "file:///D:/StreamingAssets/md5filelist.txt",
+				(mstrRemoteMD5Url,// "file:///D:/StreamingAssets/md5filelist.txt",
 				OnAssetsUpdateCmp,
 				OnAssetsUpdateProgress
 			);

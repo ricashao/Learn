@@ -21,6 +21,23 @@ public class LuaLoopItem : UILoopItem
     public string functionName;
     [SerializeField]
     public string awakefunctionName;
+    [SerializeField]
+    string mstrOnSetSelectedFunName = "";
+
+
+    LuaTable mLTItem;
+
+    [LuaCallCSharp]
+    public void SetLTItem(LuaTable lt)
+    {
+        mLTItem = lt;
+    }
+
+    [LuaCallCSharp]
+    public LuaTable GetLTItem()
+    {
+        return mLTItem;
+    }
 
     void Awake()
     {
@@ -43,6 +60,12 @@ public class LuaLoopItem : UILoopItem
             }
             UILoopItem_Set luafun_UILoopItem_Awake = luaEnv.Global.GetInPath<UILoopItem_Set>(awakefunctionName);
             if (luafun_UILoopItem_Awake != null) luafun_UILoopItem_Awake(itemIndex, transform, GetData());
+
+            if (mstrOnSetSelectedFunName != "")
+            {
+                luaSetSelected = luaEnv.Global.GetInPath<OnSetSelected>(mstrOnSetSelectedFunName);
+            }
+
         }
     }
 
@@ -60,4 +83,22 @@ public class LuaLoopItem : UILoopItem
 		}
 		*/
     }
+
+
+    [CSharpCallLua]
+    public delegate void OnSetSelected(Transform t, bool bs);
+
+    protected OnSetSelected luaSetSelected = null;
+
+    public override void SetSelected(bool selected)
+    {
+        base.SetSelected(selected);
+        if (luaSetSelected != null)
+        {
+            luaSetSelected(transform, selected);
+        }
+
+    }
+
+
 }

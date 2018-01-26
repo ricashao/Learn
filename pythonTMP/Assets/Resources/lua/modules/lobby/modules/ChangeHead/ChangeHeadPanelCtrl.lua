@@ -33,12 +33,14 @@ function awake()
 end	
 
 function start()
-	if CommonData.user.face == '' then CommonData.user.face = '0' end
+	if CommonData.user.face == '' then CommonData.user.face = 'ui/icon/defaulthead/default_head_0.jpg' end
 	updateinfo()
 end
 
 function updateinfo()
-	local data = {'','0','1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17'}
+	local data = {'','ui/icon/defaulthead/default_head_0.jpg','ui/icon/defaulthead/default_head_1.png','ui/icon/defaulthead/default_head_2.png','ui/icon/defaulthead/default_head_3.png',
+				'ui/icon/defaulthead/default_head_4.png','ui/icon/defaulthead/default_head_5.png','ui/icon/defaulthead/default_head_6.png',
+				'ui/icon/defaulthead/default_head_7.png','ui/icon/defaulthead/default_head_8.png'}
 	local list = view.headlist:GetComponent("UILoopList");
 	list:Data(data)
 end
@@ -73,6 +75,7 @@ function on_msg(key,decode)
 				CommonData.user.face = group.SelectData
 				local list = view.headlist:GetComponent("UILoopList");
 				list:refreshWithoutPosChange()
+				es(LobbyEventConst.Change_Head,group.SelectData)
 			end
 			uimanager.ToastTip('修改成功',3,30)
 		end

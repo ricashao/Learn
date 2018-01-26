@@ -1,15 +1,6 @@
 
-´	
-ZLobby.protoZProtoZEnum.protoZModel.proto"5
-CS_GetUserData
-uid (Ruid"
-enumID
-IDò"x
-SC_SetUserData"
-user (2.ZProto.M_UserRuser/
-	user_info (2.ZProto.M_UserInfoRuserInfo"
-enumID
-ID‚V"6
+Ã
+ZLobby.protoZProtoZEnum.protoZModel.proto"6
 CS_GetUserState
 uid (Ruid"
 enumID
@@ -52,7 +43,24 @@
 SC_SetMarquee
 msgs (	Rmsgs"
 enumID
-ID V"#
+ID V" 
+CS_GetEmail"
+enumID
+ID‘"I
+SC_SetEmail'
+emails (2.ZProto.M_EmailRemails"
+enumID
+ID¡V"g
+CS_SetEmailStatus
+ids (Rids-
+status (2.ZProto.E_EmailStatusRstatus"
+enumID
+ID’"g
+SC_SetEmailStatus
+ids (Rids-
+status (2.ZProto.E_EmailStatusRstatus"
+enumID
+ID¢V"#
 CS_GetActivity"
 enumID
 IDš"7
@@ -66,4 +74,21 @@
 SC_SetGameList(
 games (2.ZProto.M_GameInfoRgames"
 enumID
-ID´V
+ID´V"
+
+CS_GetTask"
+enumID
+ID®"E
+
+SC_SetTask$
+tasks (2.ZProto.M_TaskRtasks"
+enumID
+ID¾V"–
+CS_ProcessTask4
+op (2$.ZProto.CS_ProcessTask.E_ProcessTypeRop
+id (Rid"
+enumID
+ID¯"+
+E_ProcessType
+PT_STEP
+	PT_REWARD

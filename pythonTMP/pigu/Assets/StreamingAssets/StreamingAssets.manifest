@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 3577541628
+CRC: 4136037090
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -52,4 +52,25 @@ AssetBundleManifest:
       Dependencies: {}
     Info_16:
       Name: ui/lobby/prefabs/taskpanel.prefab_ab
+      Dependencies: {}
+    Info_17:
+      Name: ui/messageboxcontainer
+      Dependencies: {}
+    Info_18:
+      Name: ui/messageboxcontent/onemessageonebuttonpanel
+      Dependencies: {}
+    Info_19:
+      Name: ui/lobby/prefabs/exchangepanel.prefab_ab
+      Dependencies: {}
+    Info_20:
+      Name: ui/lobby/prefabs/rechargepanel.prefab_ab
+      Dependencies: {}
+    Info_21:
+      Name: ui/mailpanel
+      Dependencies: {}
+    Info_22:
+      Name: ui/mailcontentpanel
+      Dependencies: {}
+    Info_23:
+      Name: ui/lobby/prefabs/safeboxpanel.prefab_ab
       Dependencies: {}

@@ -3,6 +3,7 @@ local view = require 'lua/modules/Lobby/modules/Lobby/LobbyPanelView'
 --本模块消息号
 local msgCmd = GameState.curRunState.MsgDefine.ZLobbyModuleCmd
 local lobbyModuleData = GameState.curRunState.Data.ZLobbyModuleData
+local shopModuleData = GameState.curRunState.Data.ZShopModuleData
 --本模块数据层
 --local data = GameState.curRunState.Data.LobbyData
 
@@ -97,6 +98,9 @@ end
 
 function start()
 	updateCommonInfo()
+	if CommonData.user ~= nil then
+		shopModuleData.send_CS_GetBag(CommonData.user.id)
+	end
 end
 
 function updateCommonInfo()
@@ -170,6 +174,7 @@ function on_event(event,param)
 		view.UserNameText.text = param
 	elseif event == "LoginSuccess" then
 		updateCommonInfo()
+		shopModuleData.send_CS_GetBag(CommonData.user.id)
 	end
 
 end		

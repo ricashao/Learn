@@ -1,3 +1,5 @@
+//拷贝图片文件
+CopyFiles=D://U3D/u3d_res_project/Assets/UI/icon->D://U3D/u3d_res_project/Assets/StreamingAssets/ui/icon
 //拷贝ui
 CopyFiles=D://U3D/u3d_res_project/Assets/StreamingAssets/ui->D://U3D/u3d_xlua_project/Assets/StreamingAssets/ui
 

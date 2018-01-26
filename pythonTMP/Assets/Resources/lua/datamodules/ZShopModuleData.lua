@@ -27,7 +27,7 @@ function ZShopModuleData.register(tcpClinet,MsgDefine)
 	local protobuf = tcpClinet.proto
     --local luaPath = CS.UnityEngine.Application.dataPath..'/Resources'
     --protobuf.register_file(luaPath..'/proto/ZCommon.pb')
-    protobuf.register_file(PbPtah()..'/proto/ZShop.pb')
+    protobuf.register(CS.ZhuYuU3d.LuaCallCsFun.ReadByteForLua('/proto/ZShop.pb'))
 	
 	local luaPath = PbPtah()
 	--映射协议号 -> protobuf 
@@ -109,14 +109,23 @@ function ZShopModuleData.on_msg(key,decode)
 	if key == Cmd.SC_SetItem then
 		print("ZShop >> on_msg >> user_para >>  ".. Cmd.SC_SetItem)
 
-		ZShopModuleData.SC_SetItem = decode
-		print("SC_SetItem.items ".. decode.items)
+		if CommonData.bags == nil then CommonData.bags = {} end
+		for _,v in pairs(decode.items) do
+			CommonData.bags[v.id] = v;
+		end
+		ZShopModuleData.clearBag()
+		es(LobbyEventConst.Bag_Update)
+		--print("SC_SetItem.items ".. decode.items)
 	end
 	if key == Cmd.SC_SetBag then
 		print("ZShop >> on_msg >> user_para >>  ".. Cmd.SC_SetBag)
-
-		ZShopModuleData.SC_SetBag = decode
-		print("SC_SetBag.items ".. decode.items)
+		if CommonData.bags == nil then CommonData.bags = {} end
+		if decode.items ~= nil then
+			for _,v in pairs(decode.items)  do
+				CommonData.bags[v.id] = v
+			end
+		end
+		--print("SC_SetBag.items ".. decode.items)
 	end
 	
 --[[
@@ -130,5 +139,15 @@ function ZShopModuleData.on_msg(key,decode)
 	end
 ]]
 end 	
+
+function ZShopModuleData.clearBag()
+	local tmp ={}
+	for k,v in pairs(CommonData.bags) do
+		if v.amount ~= 0 then
+			tmp[k] = v
+		end
+    end
+	CommonData.bags = tmp
+end
 
 return 	ZShopModuleData

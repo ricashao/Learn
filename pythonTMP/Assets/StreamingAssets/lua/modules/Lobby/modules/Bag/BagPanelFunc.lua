@@ -18,8 +18,9 @@ end
 function bag_good_setdata(index,transform,data)
 	local counttext = transform:Find('CountText'):GetComponent('Text')
 	local pricetext = transform:Find('PriceText'):GetComponent('Text')
-	counttext.text = data[1]
-	pricetext.text = data[2]
+	local cfg = GoodsConfigs.getItemByID(data.mid)
+	counttext.text = cfg.name
+	pricetext.text = ''
 end
 
 function bag_good_awake(index,transform,data)
@@ -28,15 +29,7 @@ function bag_good_awake(index,transform,data)
 	buybutton.onClick:AddListener(function()
 		print('select>>>>>>>>> '..selectitem.itemIndex)
 	end)
-	--[[
-	local helpbutton = transform:Find('HelpButton'):GetComponent('ButtonExt')
-	helpbutton.onPress:AddListener(function()
-		es(LobbyEventConst.Bag_HelpPress)
-	end)
-	helpbutton.onRelease:AddListener(function()
-		es(LobbyEventConst.Bag_HelpRelease)
-	end)
-	]]
+	
 end
 
 function bag_good_onselect(index,transform,data)

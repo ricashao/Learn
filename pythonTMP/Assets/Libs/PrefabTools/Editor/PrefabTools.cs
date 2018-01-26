@@ -20,7 +20,7 @@ public class PrefabTools  {
         //设置打包路径
         AssetImporter assetImporter = AssetImporter.GetAtPath(assetPath);
         //设置Bundle文件名
-        assetImporter.assetBundleName = assetPath.Substring(0,assetPath.LastIndexOf("."));
+        assetImporter.assetBundleName = assetPath.Substring(0,assetPath.LastIndexOf(".")).Replace("Assets/", "");
         //设置Bundle文件的扩展名  
         assetImporter.assetBundleVariant = suffix + "_ab";//"prefab";
         assetImporter.userData = suffix;

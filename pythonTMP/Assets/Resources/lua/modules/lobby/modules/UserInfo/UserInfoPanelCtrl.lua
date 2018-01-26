@@ -43,6 +43,7 @@ function awake()
 	ml(msgCmd.MessageNotify,on_msg)
 	--事件监听
 	--el(event.name,on_event)
+	el(LobbyEventConst.Change_Head,on_event)
 end	
 
 function updateinfo()
@@ -60,9 +61,15 @@ function updateinfo()
 	view.uidtext.text = CommonData.user.id
 end
 
+function updateface()
+	if CommonData.user.face == '' then CommonData.user.face = 'ui/icon/defaulthead/default_head_0.jpg' end
+	view.headimg:Url(CommonData.user.face)
+end
+
 function start()
 	updateinfo()
 	checkState()
+	updateface()
 end
 
 function checkState()
@@ -85,6 +92,7 @@ function ondestroy()
 	mr(msgCmd.MessageNotify,on_msg)
 	--移除事件监听
 	--er(event.name,on_event)
+	er(LobbyEventConst.Change_Head,on_event)
 
 	--EventManager.RemoveListener("OnButtonClicked",on_click)
 	view:on_destroy()
@@ -109,5 +117,7 @@ end
 --事件处理函数
 function on_event(event,param)
 	print(" on_event >> "..event)
-
+	if event == LobbyEventConst.Change_Head then
+		updateface()
+	end
 end		

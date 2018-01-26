@@ -44,13 +44,13 @@ function on_asset_cmp(name,gotp)
 		LuaUIManager.register('RegisterPanel',{
 											name = 'RegisterPanel',
 											layer = 'PopupCanvas',
-											path = 'lua/modules/Register/Ctrl/RegisterPanelCtrl.lua' 
+											path = 'lua/modules/Lobby/modules/Register/Ctrl/RegisterPanelCtrl.lua'
 											})
 											
 		LuaUIManager.register('LoginPanel',{
 											name = 'LoginPanel',
 											layer = 'PopupCanvas',
-											path = 'lua/modules/Login/Ctrl/LoginPanelCtrl.lua' 
+											path = 'lua/modules/Lobby/modules/Login/Ctrl/LoginPanelCtrl.lua'
 											})
 		LuaUIManager.register('ChangeHeadPanel',{
 											name = 'ChangeHeadPanel',
@@ -83,7 +83,23 @@ function on_asset_cmp(name,gotp)
 											name = 'TaskPanel',
 											layer = 'PopupCanvas',
 											path = 'lua/modules/Lobby/modules/Task/TaskPanelCtrl.lua' 
-											})										
+											})
+		LuaUIManager.register('ExchangePanel',{
+											name = 'ExchangePanel',
+											layer = 'PopupCanvas',
+											path = 'lua/modules/Lobby/modules/Exchange/ExchangePanelCtrl.lua' 
+											})	
+		LuaUIManager.register('RechargePanel',{
+											name = 'RechargePanel',
+											layer = 'PopupCanvas',
+											path = 'lua/modules/Lobby/modules/Recharge/RechargePanelCtrl.lua' 
+											})
+
+		LuaUIManager.register('MailPanel',{
+			name = 'MailPanel',
+			layer = 'PopupCanvas',
+			path = 'lua/modules/Lobby/modules/Mail/MailPanelCtrl.lua'
+		})
 									
 								
 

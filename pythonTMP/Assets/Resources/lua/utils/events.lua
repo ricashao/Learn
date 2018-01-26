@@ -38,8 +38,22 @@ function Event.AddListener(event,handler)
 		--events[event] = EventLib:new(event)
 		events[event] = {}
 	end
+
+	local handlerList = events[event]
+
+	local isAdded = false
+   	for i=#handlerList, 1, -1 do 
+        if handlerList[i] == handler then 
+            -- table.remove(handlerList,i) 
+            error("handler not find event name:"..event);
+            isAdded = true
+        end 
+    end 
+
 	--conn this handler
-	table.insert(events[event],handler)
+	if isAdded == false then 
+		table.insert(events[event],handler)
+	end
 	--events[event]:connect(handler)
 end
 --发送到事件队列
@@ -53,7 +67,7 @@ function Event.Update()
 		curList = events[eventItem[1]]
 
 		if curList == nil then
-			error("handler not find event name:"..eventItem[1])
+			print("handler not find event name:"..eventItem[1])
 		else
 			for k,handler in ipairs(curList) do
     			--print(k,v)

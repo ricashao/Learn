@@ -164,7 +164,7 @@ function game_state_loading()
 		GameState.curRunState = require 'lua/modules/Lobby/LobbyState'
 		GameState.curRunState:init(GameState, GameState.tcpClinet,GameData)
 		
-		LoginWhenToLobby=require 'lua/modules/Login/services/LoginCommand';
+		LoginWhenToLobby=require 'lua/modules/Lobby/modules/Login/services/LoginCommand';
 		LoginWhenToLobby.Excute(function()
 			GameState.curState ='Lobby'
 			CS.ZhuYuU3d.LuaCallCsFun.JumpToRun()

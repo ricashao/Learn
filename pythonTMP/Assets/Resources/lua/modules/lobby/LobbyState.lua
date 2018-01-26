@@ -4,6 +4,7 @@ local MsgDefine = {}
 
 local Data = {}
 
+require 'lua/modules/Lobby/LobbyEventConst'
 local ZEntryModuleData = require 'lua/datamodules/ZEntryModuleData'
 local ZLobbyModuleData = require 'lua/datamodules/ZLobbyModuleData'
 local CommonModuleData = require 'lua/datamodules/CommonModuleData'
@@ -14,7 +15,8 @@ require 'lua/modules/Lobby/modules/Shop/ShopPanelFunc'
 require 'lua/modules/Lobby/modules/Bag/BagPanelFunc'
 require 'lua/modules/Lobby/modules/Task/TaskPanelFunc'
 require 'lua/config/Iteminfo'
-require 'lua/modules/Lobby/LobbyEventConst'
+require 'lua/modules/Lobby/modules/Task/TaskPanelService'
+require 'lua/modules/Lobby/modules/Mail/MailGlobalEntry'
 --导入子模块数据层
 
 local tcpClinet
@@ -34,6 +36,7 @@ function LobbyState:init(gameState,curTcpClinet,gameData)
 	ZEntryModuleData.register(tcpClinet,MsgDefine)
 	ZLobbyModuleData.register(tcpClinet,MsgDefine)
 	ZShopModuleData.register(tcpClinet,MsgDefine)
+
 end 
 -- 清除化游戏全局状态对象
 function LobbyState:clear()
@@ -51,5 +54,13 @@ function LobbyState:clear()
 	--Data.DemoModuleData = nil
 	
 end 
+
+function LobbyState:getstate_byname(name)
+	return LobbyState[name]
+end
+
+function LobbyState:setstate_byname(name,value)
+	LobbyState[name] =value
+end
 
 return LobbyState 

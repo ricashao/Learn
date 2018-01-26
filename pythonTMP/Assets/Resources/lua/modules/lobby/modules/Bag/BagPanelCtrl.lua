@@ -34,16 +34,8 @@ function awake()
 	el(LobbyEventConst.Bag_TabChange,on_event)
 	el(LobbyEventConst.Bag_HelpPress,on_event)
 	el(LobbyEventConst.Bag_HelpRelease,on_event)
+	el(LobbyEventConst.Bag_Update,on_event)
 end	
-
-local datas = {
-	{{'zs1','zs1'},{'zs2','zs2'},{'zs2','zs2'},{'zs3','zs3'},{'zs4','zs4'},{'zs5','zs5'},{'zs6','zs6'},{'zs7','zs7'},{'zs8','zs8'},{'zs9','zs9'},{'zs10','zs10'},{'zs11','zs11'},
-	{'zs1','zs1'},{'zs2','zs2'},{'zs2','zs2'},{'zs3','zs3'},{'zs4','zs4'},{'zs5','zs5'},{'zs6','zs6'},{'zs7','zs7'},{'zs8','zs8'},{'zs9','zs9'},{'zs10','zs10'},{'zs11','zs11'},
-	{'zs1','zs1'},{'zs2','zs2'},{'zs2','zs2'},{'zs3','zs3'},{'zs4','zs4'},{'zs5','zs5'},{'zs6','zs6'},{'zs7','zs7'},{'zs8','zs8'},{'zs9','zs9'},{'zs10','zs10'},{'zs11','zs11'}
-	},
-	{{'jb1','jb1'},{'jb2','zs2'},{'jb2','zs2'},{'jb3','zs3'},{'jb4','zs4'},{'jb5','zs5'},{'jb6','jb6'},{'jb7','jb7'},{'jb8','jb8'},{'jb9','jb9'},{'jb10','jb10'},{'jb11','jb11'}
-	}
-}
 
 
 function start()
@@ -51,7 +43,6 @@ function start()
 end
 
 function ondestroy()
-
 	--移除消息监听
 	-- mr(msgCmd2.SC_SetRankList,on_msg)
 	-- mr(msgCmd.MessageNotify,on_msg)
@@ -60,6 +51,7 @@ function ondestroy()
 	er(LobbyEventConst.Bag_TabChange,on_event)
 	er(LobbyEventConst.Bag_HelpPress,on_event)
 	er(LobbyEventConst.Bag_HelpRelease,on_event)
+	er(LobbyEventConst.Bag_Update,on_event)
 
 	--EventManager.RemoveListener("OnButtonClicked",on_click)
 	view:on_destroy()
@@ -73,15 +65,26 @@ end
 
 
 function update_info(index)
-	local data = datas[index+1]
 	if index == 0 then
 		view:set_state('good_state')
-		view.goodlist:Data(data)
+		view.goodlist:Data(getPairsTable(CommonData.bags or {},sortFunc))
 		view.goodlist_selectgroup.Index = 0
 	elseif index == 1 then
 		view:set_state('backup_state')
-		view.backuplist:Data(data)
+		view.backuplist:Data({})
 		view.backuplist_selectgroup.Index = 0
+	end
+end
+
+
+
+function sortFunc(a,b)
+	local acfg = GoodsConfigs.getItemByID(a.mid)
+	local bcfg = GoodsConfigs.getItemByID(b.mid)
+	if acfg.sort<bcfg.sort then
+		return true
+	else
+		return false
 	end
 end
 
@@ -98,7 +101,13 @@ function update_tipview_position(data)
 		movx = pos.x + tipview_rect.width/2 + 10
 	end
 	view.tipview.localPosition = CS.UnityEngine.Vector3(movx,view.tipview.localPosition.y,0)
-	view.tiptext.text = data[2]
+	local cfg = GoodsConfigs.getItemByID(data.mid)
+	view.tiptext.text = cfg.name
+end
+
+function update_bag()
+	local index = view.tabgroup.Index
+	update_info(index)
 end
 
 
@@ -128,5 +137,7 @@ function on_event(event,param)
 		update_tipview_position(param)
 	elseif(event == LobbyEventConst.Bag_HelpRelease) then
 		view:set_state('help_hide')
+	elseif(event == LobbyEventConst.Bag_Update) then
+		update_bag()
 	end
 end		

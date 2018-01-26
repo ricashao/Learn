@@ -5,6 +5,7 @@ function changeHead_onSelect(index,transform,data)
 		ZLobbyModuleData.send_CS_ChangeUserFace(CommonData.user.id,data)
 	else
 	end
+	es(LobbyEventConst.Change_Head,data)
 end
 
 function changeHead_unSelect(index,transform,data)
@@ -22,6 +23,8 @@ function changeHead_setData(index,transform,data)
 		type1.gameObject:SetActive(false)
 		type2.gameObject:SetActive(true)
 		--TODO换头像
+		local head = type2:Find('HeadImage'):GetComponent('WebImg')
+		head:Url(data)
 	end
 	if CommonData.user.face == (data)then
 		selected.gameObject:SetActive(true)

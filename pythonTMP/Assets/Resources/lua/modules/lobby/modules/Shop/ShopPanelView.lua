@@ -3,10 +3,10 @@
 1.保持视图子对象引用
 2.管理视图状态
 ]]--
-local ShopkPanelView = {}
-local this = ShopkPanelView
+local ShopPanelView = {}
+local this = ShopPanelView
 --初始化方法
-function ShopkPanelView:init(transform)
+function ShopPanelView:init(transform)
 	
 	this.transform = transform
 	--self.button = self.transform:Find('Button')
@@ -36,18 +36,18 @@ function ShopkPanelView:init(transform)
 end	
 
 --销毁方法
-function ShopkPanelView:on_destroy()
+function ShopPanelView:on_destroy()
 	
 	this.transform = nil
 
-	print('ShopkPanelView:ondestroy!')
+	print('ShopPanelView:ondestroy!')
 end
 --视图状态
-function ShopkPanelView:set_state(viewState)
+function ShopPanelView:set_state(viewState)
 	
 	self.viewState = viewState
 
-	print('>>> ShopkPanelView:setstate'..viewState)
+	print('>>> ShopPanelView:setstate'..viewState)
 	-- body
 	if viewState == 'init_state' then
 		--DemoPanelview.image.gameObject:SetActive(false)
@@ -80,4 +80,4 @@ function ShopkPanelView:set_state(viewState)
 	end
 end
 
-return ShopkPanelView
+return ShopPanelView

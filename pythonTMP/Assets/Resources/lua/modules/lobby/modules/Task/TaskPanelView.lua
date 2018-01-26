@@ -21,6 +21,7 @@ function TaskPanelView:init(transform)
 	self.backuplistgo = self.transform:Find('BackupList').gameObject
 	self.backuplist = self.transform:Find('BackupList/Viewport/Content'):GetComponent("UILoopList")
 	self.backuplist_selectgroup = self.transform:Find('BackupList/Viewport/Content'):GetComponent("SelectGroup")
+	self.testbutton = self.transform:Find('Button'):GetComponent('Button')
 	--AddRefCode 追加引用标志
 
 	self:set_state('init_state')

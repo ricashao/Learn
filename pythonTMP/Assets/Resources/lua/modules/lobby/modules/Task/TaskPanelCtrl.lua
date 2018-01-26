@@ -5,6 +5,7 @@ local msgCmd = GameState.curRunState.MsgDefine.CommonModuleCmd
 local msgCmd2 = GameState.curRunState.MsgDefine.ZLobbyModuleCmd
 --本模块数据层
 -- local data = GameState.curRunState.Data.LobbyData
+local ZLobbyModuleData = require 'lua/datamodules/ZLobbyModuleData'
 local this = scriptEnv
 local uimanager = require 'lua/game/LuaUIManager'
 function awake()
@@ -15,6 +16,11 @@ function awake()
 	
 	view.backbutton.onClick:AddListener(function()
 		uimanager.CloseWindow('TaskPanel')
+	end)
+	
+	view.testbutton.onClick:AddListener(function()
+		local data = TaskPanelService.getDataInMDByMid(2000,2)
+		ZLobbyModuleData.send_CS_ProcessTask('PT_STEP',data.id)
 	end)
 	--AddEventCode 追加事件标志
 
@@ -29,15 +35,8 @@ function awake()
 	--事件监听
 	--el(event.name,on_event)
 	el(LobbyEventConst.Task_TabChange,on_event)
+	el(LobbyEventConst.Task_Update,on_event)
 end	
-
-local datas = {
-	{{'zs1','zs1',0},{'zs2','zs2',1},{'zs2','zs2',1},{'zs3','zs3',0},{'zs4','zs4',1},{'zs5','zs5',1},{'zs6','zs6',0},{'zs7','zs7'},{'zs8','zs8'},{'zs9','zs9'},{'zs10','zs10'},{'zs11','zs11'}
-	},
-	{{'jb1','jb1'},{'jb2','zs2'},{'jb2','zs2'},{'jb3','zs3'},{'jb4','zs4',1},{'jb5','zs5'},{'jb6','jb6',1},{'jb7','jb7'},{'jb8','jb8'},{'jb9','jb9'},{'jb10','jb10'},{'jb11','jb11'}
-	}
-}
-
 
 function start()
 	view.tabgroup:SelectByIndex(0)
@@ -51,6 +50,7 @@ function ondestroy()
 	--移除事件监听
 	--er(event.name,on_event)
 	er(LobbyEventConst.Task_TabChange,on_event)
+	er(LobbyEventConst.Task_Update,on_event)
 
 	--EventManager.RemoveListener("OnButtonClicked",on_click)
 	view:on_destroy()
@@ -64,18 +64,27 @@ end
 
 
 function update_info(index)
-	local data = datas[index+1]
 	if index == 0 then
 		view:set_state('daily_state')
+		local data = TaskPanelService.getCurDailyTask()
 		view.dailylist:Data(data)
 		view.dailylist_selectgroup.Index = 0
 	elseif index == 1 then
 		view:set_state('backup_state')
+		local data = TaskPanelService.getCfgsByType(3)
 		view.backuplist:Data(data)
 		view.backuplist_selectgroup.Index = 0
 	end
 end
 
+function task_update()
+	local index = view.tabgroup.Index
+	if index == 0 then
+		view.dailylist:refreshWithoutPosChange()
+	elseif index == 1 then
+		view.backuplist:refreshWithoutPosChange()
+	end
+end
 
 
 --消息处理函数
@@ -99,5 +108,8 @@ function on_event(event,param)
 	print(" on_event >> "..event)
 	if(event == LobbyEventConst.Task_TabChange) then
 		update_info(param)
+	end
+	if(event == LobbyEventConst.Task_Update) then
+		task_update()
 	end
 end		

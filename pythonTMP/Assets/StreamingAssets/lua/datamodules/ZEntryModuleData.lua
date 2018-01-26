@@ -47,10 +47,10 @@ function ZEntryModuleData.register(tcpClinet,MsgDefine)
 	--监听处理事件
 	tcpClinet.addlistener(Cmd.SC_LoginSuccess,ZEntryModuleData.on_msg)
 	
-	RegisterPanelServices= require 'lua/modules/Register/services/RegisterPanelServices';
+	RegisterPanelServices= require 'lua/modules/Lobby/modules/Register/services/RegisterPanelServices';
 	RegisterPanelServices.Init(MsgDefine.ZEntryModuleCmd,ZEntryModuleData);
 	
-	LoginPanelServices= require 'lua/modules/Login/services/LoginPanelServices';
+	LoginPanelServices= require 'lua/modules/Lobby/modules/Login/services/LoginPanelServices';
 	LoginPanelServices.Init(MsgDefine.ZEntryModuleCmd,ZEntryModuleData);
 	
 

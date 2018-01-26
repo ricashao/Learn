@@ -23,6 +23,7 @@ function UserInfoPanelView:init(transform)
 	self.gemtext = self.userview.transform:Find('GemText'):GetComponent("Text")
 	self.goldbanktext = self.userview.transform:Find('GoldBankText'):GetComponent("Text")
 	self.uidtext = self.userview.transform:Find('UidText'):GetComponent("Text")
+	self.headimg = self.userview.transform:Find('HeadImage'):GetComponent("WebImg")
 	--AddRefCode 追加引用标志
 
 	self:set_state('init_state')

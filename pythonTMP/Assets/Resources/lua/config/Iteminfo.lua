@@ -25,5 +25,29 @@ Iteminfo ={
 	{mid=24,name="680钻石",price=68,price_type=4,collect=0,amount_max=0,sort=24,rewards="2,680"},
 	{mid=25,name="1680钻石",price=168,price_type=4,collect=0,amount_max=0,sort=25,rewards="2,1680"},
 	{mid=26,name="3280钻石",price=328,price_type=4,collect=0,amount_max=0,sort=26,rewards="2,3280"},
-	{mid=27,name="5000钻石",price=500,price_type=4,collect=0,amount_max=0,sort=27,rewards="2,5000"}
+	{mid=27,name="5000钻石",price=500,price_type=4,collect=0,amount_max=0,sort=27,rewards="2,5000"},
+	{mid=28,name="电饭煲",price=100,price_type=3,collect=0,amount_max=0,sort=25,rewards="2,1680"},
+	{mid=29,name="充气娃娃",price=250,price_type=3,collect=0,amount_max=0,sort=26,rewards="2,3280"},
+	{mid=30,name="蛋白粉",price=300,price_type=3,collect=0,amount_max=0,sort=26,rewards="2,3280"}
 }
+--write by hand
+GoodsConfigs = {}
+GoodsConfigs.init = function()
+	GoodsConfigs.itemData = Iteminfo
+	GoodsConfigs.itemDataType = {}
+	for k,v in pairs(Iteminfo) do
+		if GoodsConfigs.itemDataType[v.price_type] == nil then GoodsConfigs.itemDataType[v.price_type] = {} end
+		table.insert(GoodsConfigs.itemDataType[v.price_type],v)
+	end
+end
+
+function GoodsConfigs.getItemsByType(itemtype)
+	return GoodsConfigs.itemDataType[itemtype] or {}
+end
+
+function GoodsConfigs.getItemByID(mid)
+	return GoodsConfigs.itemData[mid]
+end
+
+GoodsConfigs.init()
+

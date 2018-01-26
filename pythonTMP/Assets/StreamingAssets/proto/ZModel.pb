@@ -1,5 +1,5 @@
 
-‰
+‘
 ZModel.protoZProtoZEnum.proto"Œ
 M_User
 id (Rid
@@ -34,4 +34,15 @@ price_type (2.ZProto.E_MoneyTypeR	priceType
 amount (Ramount
 
 amount_max (R	amountMax
-sort (Rsort
+sort (Rsort"Ï
+M_Email
+id (Rid'
+type (2.ZProto.E_EmailTypeRtype
+title (	Rtitle
+content (	Rcontent-
+status (2.ZProto.E_EmailStatusRstatus
+rewards (	Rrewards
+time (	Rtime"4
+EntryDto
+type (Rtype
+value (Rvalue

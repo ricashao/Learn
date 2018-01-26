@@ -13,6 +13,7 @@ require 'lua/modules/Lobby/modules/Rank/RankPanelFunc'
 require 'lua/modules/Lobby/modules/Shop/ShopPanelFunc'
 require 'lua/modules/Lobby/modules/Bag/BagPanelFunc'
 require 'lua/modules/Lobby/modules/Task/TaskPanelFunc'
+require 'lua/config/Iteminfo'
 require 'lua/modules/Lobby/LobbyEventConst'
 --导入子模块数据层
 

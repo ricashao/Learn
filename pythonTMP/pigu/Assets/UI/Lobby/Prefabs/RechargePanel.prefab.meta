@@ -1,0 +1,9 @@
+fileFormatVersion: 2
+guid: 2fa5be93ed86b6f4b9579f403d778f24
+timeCreated: 1516795332
+licenseType: Free
+NativeFormatImporter:
+  mainObjectFileID: 100100000
+  userData: prefab
+  assetBundleName: ui/lobby/prefabs/rechargepanel
+  assetBundleVariant: prefab_ab
