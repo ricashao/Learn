@@ -10,12 +10,14 @@ namespace ZhuYuU3d
 	public class LuaUpdateBehaviour :LuaBaseBehaviour {
 
 		private Action luaUpdate;
+		private Action luaLateUpdate;
 
 		public override void Init(){
 
 			base.Init ();
 
 			scriptEnv.Get("update", out luaUpdate);
+			scriptEnv.Get("lateUpdate", out luaLateUpdate);
 		}
 		// Use this for initialization
 		void Start () {
@@ -28,6 +30,15 @@ namespace ZhuYuU3d
 			if (luaUpdate != null)
 			{
 				luaUpdate();
+			}
+		}
+
+		// Update is called once per frame
+		void LateUpdate () {
+
+			if (luaLateUpdate != null)
+			{
+				luaLateUpdate();
 			}
 		}
 

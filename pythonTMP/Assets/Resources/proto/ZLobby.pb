@@ -1,5 +1,5 @@
 
-Ã
+é
 ZLobby.protoZProtoZEnum.protoZModel.proto"6
 CS_GetUserState
 uid (Ruid"
@@ -74,7 +74,16 @@
 SC_SetGameList(
 games (2.ZProto.M_GameInfoRgames"
 enumID
-ID´V"
+ID´V"<
+CS_GetRoomList
+game_id (RgameId"
+enumID
+ID¥"f
+SC_SetRoomList
+game_id (RgameId(
+rooms (2.ZProto.M_GameRoomRrooms"
+enumID
+IDµV"
 
 CS_GetTask"
 enumID

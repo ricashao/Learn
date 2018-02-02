@@ -311,7 +311,7 @@ public class PBLuaTp  {
 		protoPath = PBFile.curPath + "/ZTest.proto";
 
 		PBFile.curPath = "C:/Users/Administrator.PC-20171226GAHY/Desktop/proto";
-		protoPath = "C:/Users/Administrator.PC-20171226GAHY/Desktop/proto/ZCommon.proto";
+		protoPath = "C:/Users/Administrator.PC-20171226GAHY/Desktop/proto/ZBank.proto";
 
 		string LuaCodeOutPath = "/Project/Editor/LuaCodeOut/";
 

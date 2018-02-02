@@ -28,6 +28,10 @@ function MailPanelItemContentView:init(trans)
 
 	this.trans_BottomPanel=GetComponentInPath(trans,"content/BottomPanel",typeof(CS.UnityEngine.Transform));
 
+	this.trans_reward_content=GetComponentInPath(trans,"content/BottomPanel/Scroll View/Viewport/Content",typeof(CS.UnityEngine.Transform));
+
+	this.trans_reward_content_template=GetComponentInPath(trans,"content/BottomPanel/Scroll View/Viewport/Content/MailRewardItem",typeof(CS.UnityEngine.Transform));
+
 
 end
 

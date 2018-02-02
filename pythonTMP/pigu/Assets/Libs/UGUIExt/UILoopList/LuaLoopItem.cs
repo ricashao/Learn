@@ -65,7 +65,7 @@ public class LuaLoopItem : UILoopItem
             {
                 luaSetSelected = luaEnv.Global.GetInPath<OnSetSelected>(mstrOnSetSelectedFunName);
             }
-
+            
         }
     }
 
@@ -88,14 +88,14 @@ public class LuaLoopItem : UILoopItem
     [CSharpCallLua]
     public delegate void OnSetSelected(Transform t, bool bs);
 
-    protected OnSetSelected luaSetSelected = null;
+    protected OnSetSelected luaSetSelected=null;
 
     public override void SetSelected(bool selected)
     {
         base.SetSelected(selected);
         if (luaSetSelected != null)
         {
-            luaSetSelected(transform, selected);
+            luaSetSelected( transform, selected);
         }
 
     }

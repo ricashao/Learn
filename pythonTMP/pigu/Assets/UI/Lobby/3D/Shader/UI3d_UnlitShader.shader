@@ -12,6 +12,11 @@ SubShader {
 	Cull Off
 	Lighting Off
 
+	//ZWrite Off
+	//ZTest Off
+
+	Offset 1,1
+
 	Blend SrcAlpha OneMinusSrcAlpha
 
 	Pass {  
@@ -54,8 +59,10 @@ SubShader {
 			fixed4 frag (v2f i) : SV_Target
 			{
 				fixed4 col = tex2D(_MainTex, i.texcoord);
+
+				//color.a *= UnityGet2DClipping(IN.worldPosition.xy, _ClipRect);
 				clip(col.a - _Cutoff);
-				col.a = _Alpha;
+				col.a = col.a * _Alpha;
 				//UNITY_APPLY_FOG(i.fogCoord, col);
 				return col;
 			}

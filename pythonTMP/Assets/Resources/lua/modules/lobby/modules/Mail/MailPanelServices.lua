@@ -48,7 +48,7 @@ end
 function MailPanelServices:SetMailListStatus(tblMailID,mailStatus)
 	local sndMailStatus={};
 	sndMailStatus.ids=tblMailID;
-	sndMailStatus.status=Define.E_EmailStatus[mailStatus];-- E_EmailStatus[mailStatus];
+	sndMailStatus.status=LobbyEventConst.E_EmailStatus[mailStatus];-- E_EmailStatus[mailStatus];
 	print("Snd Status:"..sndMailStatus.status);
 	ms(this.MsgCmd.CS_SetEmailStatus,sndMailStatus);
 end
@@ -77,6 +77,10 @@ function MailPanelServices.OnNetMessageCallback(strMessageHead,objMessageObj)
 		print("Mail Request Callback,Mail Total Have:"..tostring(#objMessageObj.emails) );
 
 		if(#objMessageObj.emails>=2)then
+
+			--RewardServices= require 'lua/modules/Lobby/modules/Mail/RewardServices';
+            --
+			--RewardServices.AddReward(objMessageObj.emails[2].rewards);
 
 			print("Email Status:"..objMessageObj.emails[1].rewards);
 
@@ -110,7 +114,7 @@ function MailPanelServices.OnNetMessageCallback(strMessageHead,objMessageObj)
 end
 
 function MailPanelServices.S2C_SetMailListStatus(tblMail,mailStatus)
-	if(mailStatus~=Define.E_EmailStatus.ES_DISCARD)then
+	if(mailStatus~=LobbyEventConst.E_EmailStatus.ES_DISCARD)then
 		for k,v in pairs(tblMail) do
 
 			local mailobj=this.GetDataByID(v);
@@ -165,9 +169,9 @@ function MailPanelServices.ParseMailType(tblMailList)
 	local tblSystemMail={};
 	local tblService={};
 	for k,v in pairs(tblMailList) do
-		if(v.type==Define.E_EmailType.ET_SYSTEM)then
+		if(v.type==LobbyEventConst.E_EmailType.ET_SYSTEM)then
 			table.insert(tblSystemMail,v);
-		elseif v.type==Define.E_EmailType.ET_SERVICE then
+		elseif v.type==LobbyEventConst.E_EmailType.ET_SERVICE then
 			table.insert(tblService,v);
 		end
 	end
@@ -204,7 +208,7 @@ function MailPanelServices.HandleMessage(strMessageName,objMessage)
 				table.insert(tblid,v.id);
 			end
 
-			this:SetMailListStatus(tblid,Define.E_EmailStatus.ES_DISCARD);
+			this:SetMailListStatus(tblid,LobbyEventConst.E_EmailStatus.ES_DISCARD);
 
 		end
 
@@ -221,7 +225,7 @@ function MailPanelServices.HandleMessage(strMessageName,objMessage)
 				table.insert(tblid,v.id);
 			end
 
-			this:SetMailListStatus(tblid,Define.E_EmailStatus.ES_REWARD);
+			this:SetMailListStatus(tblid,LobbyEventConst.E_EmailStatus.ES_REWARD);
 
 		end
 
@@ -240,11 +244,11 @@ function MailPanelServices.GetAllOpenMailButNoReward()
 				v.rewards=="" or
 				v.rewards=="0"
 		then
-			if(v.status==Define.E_EmailStatus.ES_READ) then
+			if(v.status==LobbyEventConst.E_EmailStatus.ES_READ) then
 				table.insert(retmail,v);
 			end
 		else
-			if(v.status==Define.E_EmailStatus.ES_REWARD) then
+			if(v.status==LobbyEventConst.E_EmailStatus.ES_REWARD) then
 				table.insert(retmail,v);
 			end
 		end
@@ -261,7 +265,7 @@ function MailPanelServices.GetAllNoGetRewardMail()
 				v.rewards~="0"
 		then
 
-			if(v.status~=Define.E_EmailStatus.ES_REWARD and v.status~=Define.E_EmailStatus.ES_DISCARD ) then
+			if(v.status~=LobbyEventConst.E_EmailStatus.ES_REWARD and v.status~=LobbyEventConst.E_EmailStatus.ES_DISCARD ) then
 				table.insert(retmail,v);
 			end
 

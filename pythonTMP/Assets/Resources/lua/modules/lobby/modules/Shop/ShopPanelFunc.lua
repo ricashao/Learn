@@ -18,9 +18,12 @@ end
 function shop_buygem_setdata(index,transform,data)
 	local counttext = transform:Find('CountText'):GetComponent('Text')
 	local pricetext = transform:Find('PriceText'):GetComponent('Text')
+	local icon = transform:Find('IconImage'):GetComponent('WebImg')
 	local cfg = GoodsConfigs.getItemByID(data.mid)
 	counttext.text = cfg.name
 	pricetext.text = cfg.price/100 .. '元'
+	icon:Url('ui/icon/item/item_'..cfg.mid..'.png')
+	
 end
 
 function shop_buygem_awake(index,transform,data)
@@ -46,9 +49,11 @@ end
 function shop_buygold_setdata(index,transform,data)
 	local counttext = transform:Find('CountText'):GetComponent('Text')
 	local pricetext = transform:Find('PriceText'):GetComponent('Text')
+	local icon = transform:Find('IconImage'):GetComponent('WebImg')
 	local cfg = GoodsConfigs.getItemByID(data.mid)
 	counttext.text = cfg.name
 	pricetext.text = cfg.price .. '钻石'
+	icon:Url('ui/icon/item/item_'..cfg.mid..'.png')
 end
 
 function shop_buygold_awake(index,transform,data)
@@ -80,9 +85,15 @@ end
 function shop_buygood_setdata(index,transform,data)
 	local counttext = transform:Find('CountText'):GetComponent('Text')
 	local pricetext = transform:Find('PriceText'):GetComponent('Text')
+	local icon = transform:Find('IconImage'):GetComponent('WebImg')
 	local cfg = GoodsConfigs.getItemByID(data.mid)
 	counttext.text = cfg.name
-	pricetext.text = cfg.price .. '金币'
+	if cfg.price_type == 1 then
+		pricetext.text = cfg.price .. '金币'	
+	elseif cfg.price_type == 2 then
+		pricetext.text = cfg.price .. '钻石'
+	end
+	icon:Url('ui/icon/item/item_'..cfg.mid..'.png')
 end
 
 function shop_buygood_awake(index,transform,data)
@@ -107,9 +118,11 @@ end
 function shop_buyreal_setdata(index,transform,data)
 	local counttext = transform:Find('CountText'):GetComponent('Text')
 	local pricetext = transform:Find('PriceText'):GetComponent('Text')
+	local icon = transform:Find('IconImage'):GetComponent('WebImg')
 	local cfg = GoodsConfigs.getItemByID(data.mid)
 	counttext.text = cfg.name
 	pricetext.text = cfg.price .. '点券'
+	icon:Url('ui/icon/item/item_'..cfg.mid..'.png')
 end
 
 function shop_buyreal_awake(index,transform,data)

@@ -75,25 +75,25 @@ function update_info(index)
 	local data;
 	if index == 0 then
 		view:set_state('buygem_state')
-		data = GoodsConfigs.getItemsByType(4)
+		data = GoodsConfigs.getCfdsByRewardType('2')
 		table.sort(data,sortFunc)
 		view.list1:Data(data)
 		view.list1_selectgroup.Index = 0
 	elseif index == 1 then
 		view:set_state('buygold_state')
-		data = GoodsConfigs.getItemsByType(2)
+		data = GoodsConfigs.getCfdsByRewardType('1')
 		table.sort(data,sortFunc)
 		view.list2:Data(data)
 		view.list2_selectgroup.Index = 0
 	elseif index == 2 then
 		view:set_state('buygood_state')
-		data = GoodsConfigs.getItemsByType(1)
+		data = GoodsConfigs.getCfdsByRewardType('5')
 		table.sort(data,sortFunc)
 		view.list3:Data(data)
 		view.list3_selectgroup.Index = 0
 	else
 		view:set_state('buyreal_state')
-		data = GoodsConfigs.getItemsByType(3)
+		data = GoodsConfigs.getCfdsByRewardType('6')
 		table.sort(data,sortFunc)
 		view.list4:Data(data)
 		view.list4_selectgroup.Index = 0
@@ -101,9 +101,11 @@ function update_info(index)
 	local state = GameState.curRunState:getstate_byname('bagtoshop')
 	if state then	
 		local cfg = GoodsConfigs.getItemByID(state.mid)
-		if cfg.price_type == 2 then
-			list = view.list2
-			group = view.list2_selectgroup
+		local rewards = split(cfg.rewards,',')
+		local list
+		if rewards[1] == '5' then
+			list = view.list3
+			group = view.list3_selectgroup
 		end
 		index = list:GetIndexByData(state,'mid')
 		if(index ~= -1) then
@@ -119,10 +121,11 @@ function goto_dataindex(data)
 	local listdata
 	local list
 	local group 
-	if cfg.price_type == 2 then
-		view.tabgroup:SelectByIndex(1)
-		list = view.list2
-		group = view.list2_selectgroup
+	local rewards = split(cfg.rewards,',')
+	if rewards[1] == '5' then
+		view.tabgroup:SelectByIndex(2)
+		list = view.list3
+		group = view.list3_selectgroup
 	end
 	
 	index = list:GetIndexByData(data,'mid')

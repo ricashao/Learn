@@ -47,6 +47,13 @@ namespace ZhuYuU3d{
 			return ReadRes.ReadByte (fileName);
 			#endif
 		}
+        public static Vector2 ScreenPointToLocalPointInRectangle(RectTransform rect, float x,float y, Camera cam)
+        {
+            Vector2 _pos = Vector2.one;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(rect,
+                        new Vector2(x,y), cam, out _pos);
+            return _pos;
+        }
 
-	}
+    }
 }

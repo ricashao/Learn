@@ -2,12 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.UI;
 using ZhuYuU3d;
 using XLua;
+using ZhuYuU3d.Game;
 
 namespace ZhuYuU3d{
 
 	public class Loading : MonoBehaviour {
+
+		Slider slider;
 
 		LuaEnv env;
 		LuaManager luaManager;
@@ -17,6 +21,40 @@ namespace ZhuYuU3d{
 		void Awake(){
 
 			Debug.LogWarning ("Loading Awake!");
+
+			string strFileName = "ui/launchpanel.panel";
+
+			/*
+			Libs.AM.I.CreateFromCache("launchpanel.panel", delegate (string eventName, Object objInstantiateTp){
+				GameObject objInstantiate = Instantiate(objInstantiateTp as GameObject);
+
+				objInstantiate.transform.SetParent(GameObject.Find("Canvas").transform);
+			});
+			*/
+
+			Libs.ABM.I.LoadOne (strFileName,delegate (string name,AssetBundle assetBundle){
+				GameObject go = assetBundle.LoadAsset<GameObject>("LaunchPanel");
+				GameObject objInstantiate = Instantiate (go);
+
+				objInstantiate.transform.SetParent(GameObject.Find("Canvas").transform,false);
+
+				slider = objInstantiate.transform.GetComponentInChildren<Slider>();
+
+				RunState ();
+			});
+
+			/*
+			ABLoaderHelper.Instance.LoadAB
+			(
+				strFileName, GameObject.Find("Canvas") , "LaunchPanel", (GameObject go) =>
+				{
+					//go.AddComponent<LaunchPage>();
+					slider = go.transform.GetComponentInChildren<Slider>();
+				
+				}
+			);
+			*/
+
 
 			if (isCopyCmp) {
 				luaManager = LuaManager.GetInstance ();
@@ -35,10 +73,10 @@ namespace ZhuYuU3d{
 		void Start () {
 
 			Debug.LogWarning ("Loading Start!");
-			/* 执行 */ 
+			/* 执行 
 			if (isCopyCmp) 
 				RunState ();
-
+			*/ 
 			Debug.LogWarning ("Loading Start end!");
 		}
 
@@ -172,9 +210,13 @@ namespace ZhuYuU3d{
 		}
 
 		// Update is called once per frame
-		//void Update () {
-
-		//}
+		void Update () {
+			
+			if (slider != null) {
+		
+				slider.value += Time.deltaTime * 2f;
+			}
+		}
 
 		void OnDestroy()
 		{

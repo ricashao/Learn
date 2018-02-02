@@ -16,6 +16,8 @@ public class WebImg : MonoBehaviour {
 		if(image == null)
 		image = GetComponent<Image> ();
 	}
+    [SerializeField]
+    private bool isSetNative = false;
 
 	// Use this for initialization
 	void Start () {
@@ -46,8 +48,9 @@ public class WebImg : MonoBehaviour {
 
 			Sprite sprite = Sprite.Create(texture2D,new Rect(0, 0, texture2D.width, texture2D.height), new Vector2(0, 0));
 			image.sprite = sprite;
-			
-		});
+            if (this.isSetNative) image.SetNativeSize();
+
+        });
 	}
 
 	IEnumerator DownloadImage(string url, Image image)  
@@ -62,21 +65,35 @@ public class WebImg : MonoBehaviour {
 		File.WriteAllBytes( PathTools.Combine( Application.persistentDataPath , url.GetHashCode().ToString()) , pngData);  
 
 		Sprite m_sprite = Sprite.Create(tex2d, new Rect(0, 0, tex2d.width, tex2d.height), new Vector2(0, 0));  
-		image.sprite = m_sprite;  
-	}  
+		image.sprite = m_sprite;
+        if (this.isSetNative) image.SetNativeSize();
+    }  
 
 	IEnumerator LoadLocalImage(string path, Image image)  
 	{  
-		string filePath = PathTools.GetAssetPath(path);
+		string streamingAssetsFileName = path;
+		WWW www;
+		if (PathTools.ExistsPersistentPath (streamingAssetsFileName)) {
+			www = new WWW("file://"+PathTools.GetPersistentPath (streamingAssetsFileName)); 
+			//fileText = System.IO.File.ReadAllText (PathTools.GetPersistentPath (streamingAssetsFileName)).Trim ();
+		}  else {
+			if (Application.platform == RuntimePlatform.Android) {
+				www = new WWW (PathTools.GetAppContentPath (streamingAssetsFileName));
+			} else {
+				www = new WWW ("file://" + PathTools.GetAppContentPath (streamingAssetsFileName));
+			}
+		}
+		//string filePath = PathTools.GetAssetPath(path);
 
-		Debug.Log("getting local image:" + filePath);  
-		WWW www = new WWW(filePath);  
+		Debug.Log("getting local image:" + www.url);  
+		///WWW www = new WWW(filePath);  
 		yield return www;  
 
 		Texture2D texture = www.texture;  
 		Sprite m_sprite = Sprite.Create(texture,new Rect(0, 0, texture.width, texture.height), new Vector2(0, 0));  
-		image.sprite = m_sprite;  
-	}  
+		image.sprite = m_sprite;
+        if (this.isSetNative) image.SetNativeSize();
+    }  
 			
 	public void PbName (string name) {
 		if (name != null && !name.Equals (this.pbName)) {

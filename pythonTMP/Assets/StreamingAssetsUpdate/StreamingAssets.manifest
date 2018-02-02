@@ -1,0 +1,76 @@
+ManifestFileVersion: 0
+CRC: 3461440212
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: ui/lobby/prefabs/rankpanel.prefab_ab
+      Dependencies: {}
+    Info_1:
+      Name: ui/messageboxpanel
+      Dependencies: {}
+    Info_2:
+      Name: ui/lobby/prefabs/changeheadpanel.prefab_ab
+      Dependencies: {}
+    Info_3:
+      Name: ui/hotfixpanel
+      Dependencies: {}
+    Info_4:
+      Name: ui/lobby/prefabs/modifypasswordpanel.prefab_ab
+      Dependencies: {}
+    Info_5:
+      Name: ui/loginpanel
+      Dependencies: {}
+    Info_6:
+      Name: ui/launchpanel.panel
+      Dependencies: {}
+    Info_7:
+      Name: ui/common/uiroot
+      Dependencies: {}
+    Info_8:
+      Name: ui/toastpanel
+      Dependencies: {}
+    Info_9:
+      Name: ui/lobby/prefabs/userinfopanel.prefab_ab
+      Dependencies: {}
+    Info_10:
+      Name: ui/lobby/prefabs/lobbypanel.prefab_ab
+      Dependencies: {}
+    Info_11:
+      Name: ui/registerpanel
+      Dependencies: {}
+    Info_12:
+      Name: ui/lobbyroot
+      Dependencies: {}
+    Info_13:
+      Name: ui/settingpanel
+      Dependencies: {}
+    Info_14:
+      Name: ui/messageboxcontainer
+      Dependencies: {}
+    Info_15:
+      Name: ui/messageboxcontent/onemessageonebuttonpanel
+      Dependencies: {}
+    Info_16:
+      Name: ui/lobby/prefabs/bagpanel.prefab_ab
+      Dependencies: {}
+    Info_17:
+      Name: ui/lobby/prefabs/shoppanel.prefab_ab
+      Dependencies: {}
+    Info_18:
+      Name: ui/lobby/prefabs/taskpanel.prefab_ab
+      Dependencies: {}
+    Info_19:
+      Name: ui/lobby/prefabs/exchangepanel.prefab_ab
+      Dependencies: {}
+    Info_20:
+      Name: ui/lobby/prefabs/rechargepanel.prefab_ab
+      Dependencies: {}
+    Info_21:
+      Name: ui/mailpanel
+      Dependencies: {}
+    Info_22:
+      Name: ui/mailcontentpanel
+      Dependencies: {}
+    Info_23:
+      Name: ui/lobby/prefabs/safeboxpanel.prefab_ab
+      Dependencies: {}

@@ -289,6 +289,26 @@ namespace ZhuYuU3d
 			
 		}
 		*/
+
+		public void OpenWebView(string url){
+			//CS.ZhuYuU3d.instance:OpenWebView()
+
+			if (Application.platform == RuntimePlatform.Android) {
+
+				AndroidJavaClass jc = new AndroidJavaClass("com.runrain.platform.UnityPlayerActivity");
+				AndroidJavaObject jo = jc.GetStatic<AndroidJavaObject>("currentActivity");
+				if (jo != null) {
+					jo.Call ("StartWebView", url);
+				}
+			}
+			else
+			if (Application.platform == RuntimePlatform.IPhonePlayer) {
+
+			}
+
+			Debug.LogWarningFormat ("url -> {0}",url);
+					
+		}
 	}
 
 }

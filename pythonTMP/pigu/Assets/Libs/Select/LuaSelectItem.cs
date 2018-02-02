@@ -53,15 +53,20 @@ public class LuaSelectItem : SelectItem {
         if (luafun_UILoopItem_Awake != null) luafun_UILoopItem_Awake(index, transform, GetData());
     }
 
+     
+
 	public override void OnSelect ()
     {
         if (luafun_OnSelect != null)
             luafun_OnSelect (index,transform,data);
+
         if(sprits!=null && sprits.Length > 1)
         {
             img.sprite = sprits[1];
             img.SetNativeSize();
         }
+
+
 
 	}
 

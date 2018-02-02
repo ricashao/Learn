@@ -68,6 +68,9 @@ namespace ZhuYuU3d
 
 		public virtual void Init()
 		{
+			if (scriptEnv != null)
+				return;
+
 			if (string.IsNullOrEmpty( luaPath )) {
 
 				luaFilePathDic.TryGetValue (gameObject,out luaPath);

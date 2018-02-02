@@ -29,14 +29,17 @@ function awake()
 		uimanager.open('UserInfoPanel',nil,nil)
 	end)
 	view.NumberAddButton0:GetComponent("Button").onClick:AddListener(function()
-	print('onClick:'..'NumberAddButton0')
+		print('onClick:'..'NumberAddButton0')
+		uimanager.open('ShopPanel')
 	end)
 	view.NumberAddButton1:GetComponent("Button").onClick:AddListener(function()
-	print('onClick:'..'NumberAddButton1')
+		print('onClick:'..'NumberAddButton1')
+		uimanager.open('ShopPanel')
 	end)
-	view.NumberAddButton2:GetComponent("Button").onClick:AddListener(function()
-	print('onClick:'..'NumberAddButton2')
-	end)
+	-- view.NumberAddButton2:GetComponent("Button").onClick:AddListener(function()
+		-- print('onClick:'..'NumberAddButton2')
+		-- uimanager.open('ShopPanel')
+	-- end)
 	view.SettingButton:GetComponent("Button").onClick:AddListener(function()
 		print("Setting Click");
 		uimanager.open('SettingPanel',nil,nil);--,"","");
@@ -58,7 +61,8 @@ function awake()
 		uimanager.open('TaskPanel')
 	end)
 	view.BottomButton2:GetComponent("Button").onClick:AddListener(function()
-	print('onClick:'..'BottomButton2')
+		print('onClick:'..'BottomButton2')
+		CS.ZhuYuU3d.PlatformAPI.instance:OpenWebView('url')
 	end)
 	view.BottomButton3:GetComponent("Button").onClick:AddListener(function()
 		uimanager.open('BagPanel')
@@ -67,7 +71,7 @@ function awake()
 		uimanager.open('RankPanel',nil,nil);
 	end)
 	view.BottomButton5:GetComponent("Button").onClick:AddListener(function()
-	print('onClick:'..'BottomButton5')
+		uimanager.open('SafeBoxPanel',nil,nil);
 	end)
 	--AddEventCode 追加事件标志
 
@@ -78,6 +82,7 @@ function awake()
 	el(LobbyEventConst.UserInfo_ChangeName_Success,on_event)
 	el(CommonEventConst.Money_Update,on_event)
 	el(LobbyEventConst.Change_Head,on_event)
+	el(CommonEventConst.User_Update,on_event)
 	el("LoginSuccess",on_event)
 
 	timer:Add(6,scriptEnv,'timerUpdateMarqueeText','timerUpdateMarqueeText')
@@ -164,6 +169,7 @@ function ondestroy()
 	er("LoginSuccess",on_event)
 	er(CommonEventConst.Money_Update,on_event)
 	er(LobbyEventConst.Change_Head,on_event)
+	er(CommonEventConst.User_Update,on_event)
 
 	--移除消息监听
 	--mr(msgCmd.user_para,on_msg)
@@ -210,8 +216,8 @@ function on_event(event,param)
 	if(event == CommonEventConst.Money_Update) then
 		updateCommonInfo()
 	end
-	if event == LobbyEventConst.Change_Head then	
-		updateface()
+	if event == CommonEventConst.User_Update then	
+		updateCommonInfo()
 	end
 
 end		

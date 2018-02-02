@@ -1,0 +1,42 @@
+ManifestFileVersion: 0
+CRC: 3886824715
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 071d70b6c1f23f91c56e9668af49e69e
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 196f0a7bed704f098d3fb5a4cde96e04
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: -113659843, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 41d32d9bc72715849befacc92a315803, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 286f2cffd24904b46a72ca5107c22399, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+Assets:
+- Assets/UI/Prefabs/LaunchPanel.prefab
+Dependencies: []

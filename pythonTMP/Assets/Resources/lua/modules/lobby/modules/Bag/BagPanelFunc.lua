@@ -19,8 +19,10 @@ end
 function bag_good_setdata(index,transform,data)
 	local counttext = transform:Find('CountText'):GetComponent('Text')
 	local pricetext = transform:Find('PriceText'):GetComponent('Text')
+	local icon = transform:Find('IconImage'):GetComponent('WebImg')
 	local cfg = GoodsConfigs.getItemByID(data.mid)
 	counttext.text = cfg.name..'X'..data.amount
+	icon:Url('ui/icon/item/item_'..data.mid..'.png')
 	if cfg.price_type == 4 then
 		pricetext.text = cfg.price/100 ..'元'
 	elseif cfg.price_type == 3 then

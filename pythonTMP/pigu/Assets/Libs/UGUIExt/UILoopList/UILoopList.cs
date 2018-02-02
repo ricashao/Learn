@@ -295,7 +295,37 @@ public class UILoopList : MonoBehaviour
                 lastPositionY = scale * DirectionPos;
             }
         }
+
+        if (isAutoAlign) this.AutoAlign();
     }
+
+    private void AutoAlign()
+    {
+        if (scale * DirectionPos != lastPosition)
+        {
+            lastPosition = scale * DirectionPos;
+            time += Time.deltaTime;
+        }
+        else
+        {
+            if (time > 1)
+            {
+                float cell = direction == Direction.Horizontal ? CellRect.x : CellRect.y;
+                int cellNum = (int)(lastPosition / cell);
+                float offset = cellNum - (lastPosition / cell);
+                int moveNum = Mathf.Abs(cellNum) + Mathf.RoundToInt(Mathf.Abs(offset));
+                m_Rect.localPosition = direction == Direction.Horizontal ? new Vector2(moveNum * CellRect.x + autoAlignOffset, m_Rect.localPosition.y) : new Vector2(m_Rect.localPosition.x, moveNum * CellRect.y + autoAlignOffset);
+                time = 0;
+            }
+        }
+    }
+
+    private float lastPosition = 0f;
+    [SerializeField]
+    private bool isAutoAlign = false;
+    [SerializeField]
+    private int autoAlignOffset = 0;
+    private float time = 0f;
 
     private float lastPositionY = 0f;
 
@@ -349,12 +379,13 @@ public class UILoopList : MonoBehaviour
             {
                 lit.SetSelected(false);
             }
-            if (lit.GetComponent<Button>() != null && onSelectedEvent != null && addClickEventList.IndexOf(lit.GetComponent<Button>()) < 0)
+            Button btnObj = lit.GetComponent<Button>();
+            if (btnObj != null)
             {
-                addClickEventList.Add(lit.GetComponent<Button>());
-                lit.GetComponent<Button>().onClick.AddListener(delegate ()
+                if (addClickEventList.IndexOf(btnObj) < 0)
                 {
-                    if (onSelectedEvent != null)
+                    addClickEventList.Add(btnObj);
+                    btnObj.onClick.AddListener(delegate ()
                     {
                         if (selectedItem != null && selectedItem != item.GetComponent<UILoopItem>())
                         {
@@ -363,9 +394,8 @@ public class UILoopList : MonoBehaviour
                         selectedItem = item.GetComponent<UILoopItem>();
                         selectedObject = selectedItem.GetData();
                         selectedItem.SetSelected(true);
-                        onSelectedEvent(selectedItem);
-                    }
-                });
+                    });
+                }
             }
         }
     }
@@ -420,7 +450,7 @@ public class UILoopList : MonoBehaviour
         }
     }
 
-    public void movoToIndex(int index)
+    public void MovoToIndex(int index)
     {
         float offset = 0f;
         if (direction == Direction.Horizontal)
@@ -437,6 +467,7 @@ public class UILoopList : MonoBehaviour
 
     public void UpdateDataByIntValue(string attr, int value, LuaTable data)
     {
+        if (this.m_Datas == null) return;
         int length = this.m_Datas.Count;
         int i = 0;
         for (i = 0; i < length; i++)
@@ -457,4 +488,25 @@ public class UILoopList : MonoBehaviour
                 item.Data(data);
         }
     }
+
+    public int GetIndexByData(LuaTable data,string name)
+    {
+        if (this.m_Datas == null) return -1;
+        int length = this.m_Datas.Count;
+        int value;
+        data.Get<string, int>(name, out value);
+        int i = 0;
+        for (i = 0; i < length; i++)
+        {
+            LuaTable tp = this.m_Datas[i] as LuaTable;
+            int v;
+            tp.Get<string, int>(name, out v);
+            if(v == value)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
 }

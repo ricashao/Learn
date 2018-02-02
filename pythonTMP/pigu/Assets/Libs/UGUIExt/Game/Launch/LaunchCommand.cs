@@ -14,6 +14,9 @@ namespace ZhuYuU3d.Game
 
             Debug.Log("Load LaunchCommand");
 
+			AssetsUpdateManager.Init ();
+
+			/*
 			string md5filelist = "md5filelist.txt";
 
 			string dataPath = Application.persistentDataPath;//Util.DataPath;  //数据目录
@@ -56,6 +59,7 @@ namespace ZhuYuU3d.Game
 
 			string path = PathTools.Combine (PathTools. PersistentDataPath(), md5filelist);
 			Debug.Log(path + ","+System.IO.File.Exists(path));
+*/
 
 			string strFileName = "ui/launchpanel.panel";
 
@@ -72,7 +76,6 @@ namespace ZhuYuU3d.Game
 //					}
 //				}
 //			);
-//
             
             ABLoaderHelper.Instance.LoadAB
 			(

@@ -9,6 +9,7 @@ using ZhuYuU3d;
 public class LuaSelectLoopNewItem : LuaLoopItem,ISelectAble
 {
     internal LuaEnv luaEnv;
+
     public bool isAutoListener = false;
     [CSharpCallLua]
     public delegate void OnSelectItem(int indexd, Transform transform, object data);
@@ -37,6 +38,7 @@ public class LuaSelectLoopNewItem : LuaLoopItem,ISelectAble
         }
         if(isAutoListener)
         {
+
             Button[] btns = this.transform.GetComponentsInChildren<Button>();
             SelectGroup group = this.transform.parent.GetComponent<SelectGroup>();
             group.AddItem(this);
@@ -44,8 +46,8 @@ public class LuaSelectLoopNewItem : LuaLoopItem,ISelectAble
             {
                 btn.onClick.AddListener(() => { group.SelectByIndex(this.index); });
             }
-        }
 
+        }
         if (luafun_OnSelect == null)
         {
             luaEnv = LuaManager.GetInstance().LuaEnvGetOrNew();

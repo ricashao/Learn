@@ -39,6 +39,8 @@ namespace ZhuYuU3d{
 				objInstantiate.transform.SetParent(GameObject.Find("Canvas").transform,false);
 
 				slider = objInstantiate.transform.GetComponentInChildren<Slider>();
+
+				RunState ();
 			});
 
 			/*
@@ -71,10 +73,10 @@ namespace ZhuYuU3d{
 		void Start () {
 
 			Debug.LogWarning ("Loading Start!");
-			/* 执行 */ 
+			/* 执行 
 			if (isCopyCmp) 
 				RunState ();
-
+			*/ 
 			Debug.LogWarning ("Loading Start end!");
 		}
 

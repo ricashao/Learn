@@ -38,7 +38,7 @@ function start()
 end
 
 function updateinfo()
-	local data = {'','ui/icon/defaulthead/default_head_0.jpg','ui/icon/defaulthead/default_head_1.png','ui/icon/defaulthead/default_head_2.png','ui/icon/defaulthead/default_head_3.png',
+	local data = {'','ui/icon/defaulthead/default_head_0.png','ui/icon/defaulthead/default_head_1.png','ui/icon/defaulthead/default_head_2.png','ui/icon/defaulthead/default_head_3.png',
 				'ui/icon/defaulthead/default_head_4.png','ui/icon/defaulthead/default_head_5.png','ui/icon/defaulthead/default_head_6.png',
 				'ui/icon/defaulthead/default_head_7.png','ui/icon/defaulthead/default_head_8.png'}
 	local list = view.headlist:GetComponent("UILoopList");

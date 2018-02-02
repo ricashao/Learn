@@ -1,138 +1,65 @@
-local ZShopModuleData = require 'lua/datamodules/ZShopModuleData'
+local ZLobbyModuleData = require 'lua/datamodules/ZLobbyModuleData'
 local uimanager = require 'lua/game/LuaUIManager'
-function shop_tabselect(index,transform,data)
-	es(LobbyEventConst.Shop_TabChange,index)
+function safebox_tabselect(index,transform,data)
+	es(LobbyEventConst.SafeBox_TabChange,index)
 	local select1 = transform:Find('Select1')
 	local select2 = transform:Find('Select2')
 	select2.gameObject:SetActive(true)
 	select1.gameObject:SetActive(false)
 end
 
-function shop_tabunselect(index,transform,data)
+function safebox_tabunselect(index,transform,data)
 	local select1 = transform:Find('Select1')
 	local select2 = transform:Find('Select2')
 	select2.gameObject:SetActive(false)
 	select1.gameObject:SetActive(true)
 end
 
-function shop_buygem_setdata(index,transform,data)
-	local counttext = transform:Find('CountText'):GetComponent('Text')
-	local pricetext = transform:Find('PriceText'):GetComponent('Text')
-	local cfg = GoodsConfigs.getItemByID(data.mid)
-	counttext.text = cfg.name
-	pricetext.text = cfg.price/100 .. '元'
+function safebox_deposit_setdata(index,transform,data)
+	local webimg = transform:Find('CountImage'):GetComponent('WebImg')
+	local url =''
+	if data ~= -1 then
+		url = string.format('ui/icon/safebox/safebox_%dw.png',data)
+	else
+		url = 'ui/icon/safebox/safebox_all.png'
+	end
+	webimg:Url(url)
 end
 
-function shop_buygem_awake(index,transform,data)
-	local buybutton = transform:Find('BuyButton'):GetComponent('Button')
-	buybutton.onClick:AddListener(function()
-		local selectitem = transform:GetComponent('LuaSelectLoopNewItem')
-		local itemdata = selectitem:GetData()
-		GameState.curRunState.curbuy = itemdata
-		uimanager.open('RechargePanel')
-	end)
+function safebox_deposit_awake(index,transform,data)
 end
 
-function shop_buygem_onselect(index,transform,data)
-	local selectgo = transform:Find('Select').gameObject
+function safebox_deposit_onselect(index,transform,data)
+	local selectgo = transform:Find('IsSelect').gameObject
 	selectgo:SetActive(true)
+	es(LobbyEventConst.SafeBox_MoneySelect,data)
 end
 
-function shop_buygem_unselect(index,transform,data)
-	local selectgo = transform:Find('Select').gameObject
+function safebox_deposit_unselect(index,transform,data)
+	local selectgo = transform:Find('IsSelect').gameObject
 	selectgo:SetActive(false)
 end
 
-function shop_buygold_setdata(index,transform,data)
-	local counttext = transform:Find('CountText'):GetComponent('Text')
-	local pricetext = transform:Find('PriceText'):GetComponent('Text')
-	local cfg = GoodsConfigs.getItemByID(data.mid)
-	counttext.text = cfg.name
-	pricetext.text = cfg.price .. '钻石'
+function safebox_withdraw_setdata(index,transform,data)
+	local webimg = transform:Find('CountImage'):GetComponent('WebImg')
+	if data ~= -1 then
+		url = string.format('ui/icon/safebox/safebox_%dw.png',data)
+	else
+		url = 'ui/icon/safebox/safebox_all.png'
+	end
+	webimg:Url(url)
 end
 
-function shop_buygold_awake(index,transform,data)
-	local buybutton = transform:Find('BuyButton'):GetComponent('Button')
-	buybutton.onClick:AddListener(function()
-		local selectitem = transform:GetComponent('LuaSelectLoopNewItem')
-		local itemdata = selectitem:GetData()
-		local cfg = GoodsConfigs.getItemByID(itemdata.mid)
-		if cfg.price>CommonData.user_info.gem then
-			uimanager.ToastTip('钻石不足',3,30)
-			return
-		end
-		ZShopModuleData.send_CS_GetItem(CommonData.user.id,itemdata.mid,1)
-	end)
+function safebox_withdraw_awake(index,transform,data)
 end
 
-function shop_buygold_onselect(index,transform,data)
-	local selectgo = transform:Find('Select').gameObject
+function safebox_withdraw_onselect(index,transform,data)
+	local selectgo = transform:Find('IsSelect').gameObject
 	selectgo:SetActive(true)
-	print('selected '..index)
+	es(LobbyEventConst.SafeBox_MoneySelect,data)
 end
 
-function shop_buygold_unselect(index,transform,data)
-	local selectgo = transform:Find('Select').gameObject
-	selectgo:SetActive(false)
-	print('unselected '..index)
-end
-
-function shop_buygood_setdata(index,transform,data)
-	local counttext = transform:Find('CountText'):GetComponent('Text')
-	local pricetext = transform:Find('PriceText'):GetComponent('Text')
-	local cfg = GoodsConfigs.getItemByID(data.mid)
-	counttext.text = cfg.name
-	pricetext.text = cfg.price .. '金币'
-end
-
-function shop_buygood_awake(index,transform,data)
-	local buybutton = transform:Find('BuyButton'):GetComponent('Button')
-	buybutton.onClick:AddListener(function()
-		local selectitem = transform:GetComponent('LuaSelectLoopNewItem')
-		local itemdata = selectitem:GetData()
-		ZShopModuleData.send_CS_GetItem(CommonData.user.id,itemdata.mid,1)
-	end)
-end
-
-function shop_buygood_onselect(index,transform,data)
-	local selectgo = transform:Find('Select').gameObject
-	selectgo:SetActive(true)
-end
-
-function shop_buygood_unselect(index,transform,data)
-	local selectgo = transform:Find('Select').gameObject
-	selectgo:SetActive(false)
-end
-
-function shop_buyreal_setdata(index,transform,data)
-	local counttext = transform:Find('CountText'):GetComponent('Text')
-	local pricetext = transform:Find('PriceText'):GetComponent('Text')
-	local cfg = GoodsConfigs.getItemByID(data.mid)
-	counttext.text = cfg.name
-	pricetext.text = cfg.price .. '点券'
-end
-
-function shop_buyreal_awake(index,transform,data)
-	local buybutton = transform:Find('BuyButton'):GetComponent('Button')
-	buybutton.onClick:AddListener(function()
-		local selectitem = transform:GetComponent('LuaSelectLoopNewItem')
-		local itemdata = selectitem:GetData()
-		local cfg = GoodsConfigs.getItemByID(itemdata.mid)
-		-- if cfg.price>CommonData.user_info.ticket then
-			-- uimanager.ToastTip('点券不足',3,30)
-			-- return
-		-- end
-		GameState.curRunState.curbuy = itemdata
-		uimanager.open('ExchangePanel')
-	end)
-end
-
-function shop_buyreal_onselect(index,transform,data)
-	local selectgo = transform:Find('Select').gameObject
-	selectgo:SetActive(true)
-end
-
-function shop_buyreal_unselect(index,transform,data)
-	local selectgo = transform:Find('Select').gameObject
+function safebox_withdraw_unselect(index,transform,data)
+	local selectgo = transform:Find('IsSelect').gameObject
 	selectgo:SetActive(false)
 end

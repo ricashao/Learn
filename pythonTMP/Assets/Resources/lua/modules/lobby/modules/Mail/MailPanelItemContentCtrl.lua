@@ -1,5 +1,7 @@
 local MailPanelItemContentView = require 'lua/modules/Lobby/modules/Mail/MailPanelItemContentView'
 
+local RewardController = require 'lua/modules/Lobby/modules/Mail/RewardController'
+
 
 
 MailPanelItemContentCtrl=
@@ -40,11 +42,15 @@ function MailPanelItemContentCtrl.HandleMessage(strMessageName,objParam)
 		this:InitRewardNode();
 
 		this:InitMailStatus();
+
+        this:InitRewardController();
+
+
 	elseif strMessageName=="S2C_MailModules_SetSingleMailStatus" then
 
 		print("S2C_MailModules_SetSingleMailStatus:ContentCtrl");
 
-		if(this.Data.status==Define.E_EmailStatus.ES_REWARD)then
+		if(this.Data.status==LobbyEventConst.E_EmailStatus.ES_REWARD)then
 
 			MailPanelItemContentView.btn_getReward.gameObject:SetActive(false);
 
@@ -77,7 +83,7 @@ end
 
 function MailPanelItemContentCtrl.InitMailImg()
 	print(this.Data.type);
-	if this.Data.type==Define.E_EmailType.ET_SYSTEM then
+	if this.Data.type==LobbyEventConst.E_EmailType.ET_SYSTEM then
 		MailPanelItemContentView.Img_SystemMail.gameObject:SetActive(true);
 		MailPanelItemContentView.Img_ServiceMail.gameObject:SetActive(false);
 	else
@@ -102,8 +108,14 @@ function MailPanelItemContentCtrl.OnClkGetReward()
 
 	print("Clk Get Reward");
 
-	this:ChangeMailStatus(Define.E_EmailStatus.ES_REWARD);
+	this:ChangeMailStatus(LobbyEventConst.E_EmailStatus.ES_REWARD);
 
+
+end
+
+function MailPanelItemContentCtrl:InitRewardController()
+
+    RewardController.Init({self.Data.rewards},MailPanelItemContentView.trans_reward_content,MailPanelItemContentView.trans_reward_content_template);
 
 end
 
@@ -113,6 +125,8 @@ function ondestroy()
 
 	er("S2C_MailModules_GetDataByID",MailPanelItemContentCtrl.HandleMessage);
 	er("S2C_MailModules_SetSingleMailStatus",MailPanelItemContentCtrl.HandleMessage);
+
+    RewardController.Clear();
 end
 
 function MailPanelItemContentCtrl:IsReward()
@@ -143,15 +157,15 @@ function MailPanelItemContentCtrl:InitMailStatus()
 
 	if this.Data~=nil then
 
-		if(this.Data.status==Define.E_EmailStatus.ES_RECEIVE)then
+		if(this.Data.status==LobbyEventConst.E_EmailStatus.ES_RECEIVE)then
 
 			if EventExist("C2S_MailModules_SetSingleMailStatus") then
 				es("C2S_MailModules_SetSingleMailStatus",{["MailID"]=this.Data.id,["MailStatus"]="ES_READ"});
 			end
 
-		elseif this.Data.status==Define.E_EmailStatus.ES_READ then
+		elseif this.Data.status==LobbyEventConst.E_EmailStatus.ES_READ then
 
-		elseif this.Data.status==Define.E_EmailStatus.ES_REWARD then
+		elseif this.Data.status==LobbyEventConst.E_EmailStatus.ES_REWARD then
 
 			MailPanelItemContentView.btn_getReward.gameObject:SetActive(false);
 

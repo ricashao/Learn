@@ -295,7 +295,37 @@ public class UILoopList : MonoBehaviour
                 lastPositionY = scale * DirectionPos;
             }
         }
+
+        if (isAutoAlign) this.AutoAlign();
     }
+
+    private void AutoAlign()
+    {
+        if (scale * DirectionPos != lastPosition)
+        {
+            lastPosition = scale * DirectionPos;
+            time += Time.deltaTime;
+        }
+        else
+        {
+            if (time > 1)
+            {
+                float cell = direction == Direction.Horizontal ? CellRect.x : CellRect.y;
+                int cellNum = (int)(lastPosition / cell);
+                float offset = cellNum - (lastPosition / cell);
+                int moveNum = Mathf.Abs(cellNum) + Mathf.RoundToInt(Mathf.Abs(offset));
+                m_Rect.localPosition = direction == Direction.Horizontal ? new Vector2(moveNum * CellRect.x + autoAlignOffset, m_Rect.localPosition.y) : new Vector2(m_Rect.localPosition.x, moveNum * CellRect.y + autoAlignOffset);
+                time = 0;
+            }
+        }
+    }
+
+    private float lastPosition = 0f;
+    [SerializeField]
+    private bool isAutoAlign = false;
+    [SerializeField]
+    private int autoAlignOffset = 0;
+    private float time = 0f;
 
     private float lastPositionY = 0f;
 
@@ -459,7 +489,7 @@ public class UILoopList : MonoBehaviour
         }
     }
 
-    public int GetIndexByData(LuaTable data,string name)
+    public int GetIndexByData(LuaTable data, string name)
     {
         if (this.m_Datas == null) return -1;
         int length = this.m_Datas.Count;
@@ -471,7 +501,7 @@ public class UILoopList : MonoBehaviour
             LuaTable tp = this.m_Datas[i] as LuaTable;
             int v;
             tp.Get<string, int>(name, out v);
-            if(v == value)
+            if (v == value)
             {
                 return i;
             }

@@ -94,6 +94,11 @@ function on_asset_cmp(name,gotp)
 											layer = 'PopupCanvas',
 											path = 'lua/modules/Lobby/modules/Recharge/RechargePanelCtrl.lua' 
 											})
+		LuaUIManager.register('SafeBoxPanel',{
+											name = 'SafeBoxPanel',
+											layer = 'PopupCanvas',
+											path = 'lua/modules/Lobby/modules/SafeBox/SafeBoxPanelCtrl.lua' 
+											})
 
 		LuaUIManager.register('MailPanel',{
 			name = 'MailPanel',
@@ -121,7 +126,7 @@ function on_msg(key,decode)
 	if key == commonModuleCmd.MessageNotify then 
 
 		--if LuaUIManager ~= nil then
-			LuaUIManager.ToastTip(decode.type,2,30);
+		--	LuaUIManager.ToastTip(decode.type,2,30);
 		--end	
 	end	
 end

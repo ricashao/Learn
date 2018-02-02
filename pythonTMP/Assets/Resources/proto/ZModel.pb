@@ -1,5 +1,6 @@
 
-Ô	
+ˇ
+
 ZModel.protoZProtoZEnum.proto"å
 M_User
 id (Rid
@@ -19,7 +20,14 @@ M_GameInfo
 id (Rid
 name (	Rname
 status (Rstatus
-sort (Rsort"B
+sort (Rsort"ç
+
+M_GameRoom
+room_id (RroomId
+name (	Rname
+status (Rstatus
+sort (Rsort&
+type (2.ZProto.E_RoomTypeRtype"B
 M_Item
 id (Rid
 mid (Rmid

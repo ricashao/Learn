@@ -54,6 +54,8 @@ namespace ZhuYuU3d
 		public Animation ani;
 		public AnimationClip animationClip;
 
+		public string initPalyName;
+
 		public override void Init()
 		{
 			base.Init ();
@@ -74,6 +76,10 @@ namespace ZhuYuU3d
 
 			animationClip = ani.clip;
 
+			if (!string.IsNullOrEmpty (initPalyName)) {
+				Play (initPalyName);
+			}
+
 			base.Awake ();
 		}
 
@@ -84,6 +90,15 @@ namespace ZhuYuU3d
 
 		public void Stop(string animationClipName){
 			ani[animationClipName].speed = 0;
+		}
+
+		public void StopToStart(string animationClipName){
+			ani[animationClipName].speed = 0;
+			ani[animationClipName].time = 0;
+		}
+
+		public AnimationState GetAni(string animationClipName){
+			return ani [animationClipName];
 		}
 
 		/// <summary>

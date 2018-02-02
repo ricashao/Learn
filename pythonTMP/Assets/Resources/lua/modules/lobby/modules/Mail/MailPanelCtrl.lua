@@ -8,7 +8,7 @@ local MailPanelCtrl=
 {
     ["tblMailPanelItemView"]={},
 
-    ["CurrentSelection"]=Define.E_EmailType.ET_SYSTEM,
+    ["CurrentSelection"]=LobbyEventConst.E_EmailType.ET_SYSTEM,
 	
 };
 
@@ -156,11 +156,11 @@ function MailPanelCtrl.SetSingleMailStatus(mailID,mailStatus)
     itemview= this:GetItemViewByID(mailID);
     if itemview~=nil then
 
-        if(mailStatus==Define.E_EmailStatus.ES_READ)then
+        if(mailStatus==LobbyEventConst.E_EmailStatus.ES_READ)then
             itemview:InitMailStatus(true);
-        elseif mailStatus==Define.E_EmailStatus.ES_RECEIVE then
+        elseif mailStatus==LobbyEventConst.E_EmailStatus.ES_RECEIVE then
             itemview:InitMailStatus(false);
-		elseif mailStatus==Define.E_EmailStatus.ES_REWARD then
+		elseif mailStatus==LobbyEventConst.E_EmailStatus.ES_REWARD then
 			itemview:InitMailStatus(true);
 			--MessageBoxManager
 			--MessageBoxManager:ShowModalBox("OneMessageOneButtonPanel",{
@@ -174,7 +174,7 @@ function MailPanelCtrl.SetSingleMailStatus(mailID,mailStatus)
 			--	}
 			--}
 			--, "PopupCanvas");
-		elseif mailStatus==Define.E_EmailStatus.ES_DISCARD then
+		elseif mailStatus==LobbyEventConst.E_EmailStatus.ES_DISCARD then
 			--itemview
 		end
 
@@ -196,20 +196,20 @@ function MailPanelCtrl.SetMultiMailStatus(tblmailID,mailStatus)
 		local mailID=v;
 		local itemview= this:GetItemViewByID(mailID);
 		if itemview~=nil then
-			if(mailStatus==Define.E_EmailStatus.ES_READ)then
+			if(mailStatus==LobbyEventConst.E_EmailStatus.ES_READ)then
 				itemview:InitMailStatus(true);
-			elseif mailStatus==Define.E_EmailStatus.ES_RECEIVE then
+			elseif mailStatus==LobbyEventConst.E_EmailStatus.ES_RECEIVE then
 				itemview:InitMailStatus(false);
-			elseif mailStatus==Define.E_EmailStatus.ES_REWARD then
+			elseif mailStatus==LobbyEventConst.E_EmailStatus.ES_REWARD then
 				itemview:InitMailStatus(true);
-			elseif mailStatus==Define.E_EmailStatus.ES_DISCARD then
+			elseif mailStatus==LobbyEventConst.E_EmailStatus.ES_DISCARD then
 				--itemview
 			end
 		end
 	end
 
 --	MessageBoxManager
-	if(mailStatus==Define.E_EmailStatus.ES_REWARD) then
+	if(mailStatus==LobbyEventConst.E_EmailStatus.ES_REWARD) then
 		MessageBoxManager:ShowModalBox("OneMessageOneButtonPanel",{
 			["Content"]={PrefabPath="txt_Info",Content="你已经领取奖励！" },
 			["Button1Param"]=
@@ -249,9 +249,9 @@ function MailPanelCtrl.OnHandleTabSelected()
 
 	strTabType=this.CurrentMailEntry();
 
-	if strTabType==Define.E_EmailType.ET_SYSTEM then-- "System" then
+	if strTabType==LobbyEventConst.E_EmailType.ET_SYSTEM then-- "System" then
 		es("C2S_MailModules_GetMailTableDataByTabType",1);
-	elseif strTabType== Define.E_EmailType.ET_SERVICE then-- "Service"then
+	elseif strTabType== LobbyEventConst.E_EmailType.ET_SERVICE then-- "Service"then
 		es("C2S_MailModules_GetMailTableDataByTabType",2);
 	end
 
@@ -308,13 +308,13 @@ function MailPanelCtrl.OnHandleSetMailItemContent(tblParam)
 		tblItemView:InitTime(tblParam.Data.time);
         print("item status:"..tblParam.Data.status);
 
-		if( tblParam.Data.status==Define.E_EmailStatus.ES_READ)then
+		if( tblParam.Data.status==LobbyEventConst.E_EmailStatus.ES_READ)then
 			tblItemView:InitMailStatus(true);
-		elseif tblParam.Data.status==Define.E_EmailStatus.ES_RECEIVE then
+		elseif tblParam.Data.status==LobbyEventConst.E_EmailStatus.ES_RECEIVE then
 			tblItemView:InitMailStatus(false);
-		elseif tblParam.Data.status==Define.E_EmailStatus.ES_REWARD then
+		elseif tblParam.Data.status==LobbyEventConst.E_EmailStatus.ES_REWARD then
 			tblItemView:InitMailStatus(true);
-		elseif tblParam.Data.status==Define.E_EmailStatus.ES_DISCARD then
+		elseif tblParam.Data.status==LobbyEventConst.E_EmailStatus.ES_DISCARD then
 			tblItemView:InitMailStatus(true);
 		end
 
@@ -359,7 +359,7 @@ function MailPanelCtrl.OnHandleGetMailList(tabMailList)
 
 	local strCurMailType=this.CurrentMailEntry();
 	local tbldata={};
-	if strCurMailType==Define.E_EmailType.ET_SYSTEM then-- "System" then
+	if strCurMailType==LobbyEventConst.E_EmailType.ET_SYSTEM then-- "System" then
 		print("Is System Mail Type");
 		tbldata=tabMailList.SystemMailList;
 	else
@@ -380,7 +380,7 @@ end
 function MailPanelCtrl.StrpDiscardMail(tbldata)
 	local rettbl={};
 	for k,v in pairs(tbldata) do
-		if(v.status~=Define.E_EmailStatus.ES_DISCARD)then
+		if(v.status~=LobbyEventConst.E_EmailStatus.ES_DISCARD)then
 			table.insert(rettbl,v);
 		end
 	end
@@ -390,9 +390,9 @@ end
 function MailPanelCtrl.CurrentMailEntry()
 
 	if(MailPanelView.TabEntry_System_Service.gameObject.activeSelf==true)then
-		return Define.E_EmailType.ET_SERVICE;-- "Service";
+		return LobbyEventConst.E_EmailType.ET_SERVICE;-- "Service";
 	else
-		return Define.E_EmailType.ET_SYSTEM;--"System";
+		return LobbyEventConst.E_EmailType.ET_SYSTEM;--"System";
 	end
 
 end

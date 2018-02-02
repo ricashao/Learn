@@ -27,7 +27,7 @@ public class LuaSelectLoopItem : LuaLoopItem
                 luafun_UILoopItem_Set = luaEnv.Global.GetInPath<UILoopItem_Set>(functionName);
             }
         }
-        if (isAutoListener)
+        if(isAutoListener)
         {
             Button[] btns = this.transform.GetComponentsInChildren<Button>();
             SelectGroup group = this.transform.parent.GetComponent<SelectGroup>();

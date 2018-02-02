@@ -1,0 +1,62 @@
+ManifestFileVersion: 0
+CRC: 624911759
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 40bd127b51db7f259c8eb5cfc4669889
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: cac99233ce23a71fb5f13398db5346db
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 60
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 1392445389, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: -765806418, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: -1200242548, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: 1367256648, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: 708705254, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c4ca2a624a6d8644d95ab9b653e57e7e, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e9241fa294d2041c5933c17bbf285b86, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: df7fd2a33639f4b92a01932eb84fb9ad, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6b0c2e95b088542409e24343ddfe2f16, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 5aacd2d637cc33945be76e1ceef3893c, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 207ef55955ab9564394ac33f6f290391, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e375c89bc1ddf43b3a8f25f3e9449b90, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4391f74e7d2944a4cabe2111e8a80612, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+Assets:
+- Assets/UI/Lobby/Prefabs/BagPanel.prefab
+Dependencies: []

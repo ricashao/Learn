@@ -250,4 +250,5 @@ CommonData={}
 
 CommonEventConst={
 	Money_Update="Money_Update",
+	User_Update = "User_Update",
 }

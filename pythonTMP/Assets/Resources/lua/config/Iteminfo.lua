@@ -26,9 +26,9 @@ Iteminfo ={
 	{mid=25,name="1680钻石",price=168,price_type=4,collect=0,amount_max=0,sort=25,rewards="2,1680"},
 	{mid=26,name="3280钻石",price=328,price_type=4,collect=0,amount_max=0,sort=26,rewards="2,3280"},
 	{mid=27,name="5000钻石",price=500,price_type=4,collect=0,amount_max=0,sort=27,rewards="2,5000"},
-	{mid=28,name="电饭煲",price=100,price_type=3,collect=0,amount_max=0,sort=25,rewards="2,1680"},
-	{mid=29,name="充气娃娃",price=250,price_type=3,collect=0,amount_max=0,sort=26,rewards="2,3280"},
-	{mid=30,name="蛋白粉",price=300,price_type=3,collect=0,amount_max=0,sort=26,rewards="2,3280"}
+	{mid=28,name="电饭煲",price=100,price_type=3,collect=0,amount_max=0,sort=25,rewards="6,1680"},
+	{mid=29,name="充气娃娃",price=250,price_type=3,collect=0,amount_max=0,sort=26,rewards="6,3280"},
+	{mid=30,name="蛋白粉",price=300,price_type=3,collect=0,amount_max=0,sort=26,rewards="6,3280"}
 }
 --write by hand
 GoodsConfigs = {}
@@ -39,7 +39,20 @@ GoodsConfigs.init = function()
 		if GoodsConfigs.itemDataType[v.price_type] == nil then GoodsConfigs.itemDataType[v.price_type] = {} end
 		table.insert(GoodsConfigs.itemDataType[v.price_type],v)
 	end
+	Iteminfo = nil
 end
+
+ GoodsConfigs.getCfdsByRewardType = function(typek)
+	local tb={}
+	for _,v in pairs(GoodsConfigs.itemData) do
+		local rewards = split(v.rewards,',')
+		if rewards[1] == typek then
+			table.insert(tb,v)
+		end
+	end
+	return tb
+ end
+
 
 function GoodsConfigs.getItemsByType(itemtype)
 	return GoodsConfigs.itemDataType[itemtype] or {}

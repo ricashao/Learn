@@ -8,7 +8,7 @@ using System;
 namespace ZhuYuU3d
 {
     [LuaCallCSharp]
-    public class LuaSceneClickRelease : LuaBaseBehaviour,IPointerDownHandler,IPointerUpHandler
+    public class LuaSceneClickRelease : LuaBaseBehaviour, IPointerDownHandler, IPointerUpHandler
     {
         public PointerEventData curEventData;
         private Action luaOnPointerDown;
@@ -30,7 +30,7 @@ namespace ZhuYuU3d
         public void OnPointerUp(PointerEventData eventData)
         {
             curEventData = eventData;
-            if(luaOnPointerUp !=null)
+            if (luaOnPointerUp != null)
             {
                 luaOnPointerUp();
             }
@@ -44,8 +44,8 @@ namespace ZhuYuU3d
         {
             base.Init();
 
-            scriptEnv.Get("OnPointDown", out luaOnPointerDown);
-            scriptEnv.Get("OnPointUp", out luaOnPointerUp);
+            scriptEnv.Get("OnPointerDown", out luaOnPointerDown);
+            scriptEnv.Get("OnPointerUp", out luaOnPointerUp);
         }
     }
 }

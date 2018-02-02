@@ -75,10 +75,17 @@ function CommonModuleData.on_msg(key,decode)
 	end	
 	if key == Cmd.SC_SetUserData then
 		print("ZCommon >> on_msg >> user_para >>  ".. Cmd.SC_SetUserData)
-
-		ZCommonModuleData.SC_SetUserData = decode
-		print("SC_SetUserData.user ".. decode.user)
-		print("SC_SetUserData.user_info ".. decode.user_info)
+		
+		CommonModuleData.SC_SetUserData = decode
+		if(decode.user) then
+			CommonData.user = updateTableValue(CommonData.user,decode.user)
+		end
+		if(decode.user_info) then
+			CommonData.user_info = updateTableValue(CommonData.user_info,decode.user_info)
+		end
+		es(CommonEventConst.User_Update);
+		--print("SC_SetUserData.user ".. decode.user)
+		--print("SC_SetUserData.user_info ".. decode.user_info)
 	end
 --[[
 	if key == Cmd.$MsgName$ then

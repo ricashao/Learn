@@ -10,7 +10,7 @@ using UnityEngine.UI;
 /// |-Joystick-|
 ///            |-BasePoint 背景
 /// 
-/// 1.Joystick 接受拖拽事件
+/// 1. Joystick 接受拖拽事件
 /// 2. Thumb BasePoint 不接受事件
 /// 3. Joystick Thumb 同一为中心点布局
 /// </summary>
